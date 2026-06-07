@@ -1,0 +1,57 @@
+Module 1: Waarom kan mijn buur mij niet bereiken?
+1.1 Hoe data fysiek beweegt
+1.2 LAN vs WAN: je eigen bubbel vs de grote wereld
+1.3 Router, switch, modem: wie doet wat?
+1.4 Je thuisnetwerk opzetten en testen
+1.5 Bekabeld vs draadloos: wanneer kies je wat?
+1.6 Troubleshooten: wanneer het niet werkt
+
+Module 2: Hoe weet het internet waar naartoe?
+2.1 Wat is een IP-adres?
+2.2 IPv4: structuur en limieten
+2.3 Publiek vs privaat: wat mag men zien?
+2.4 Subnetting: wat je écht moet kennen als developer
+2.5 DHCP: adressen uitdelen zonder nadenken
+2.6 DNS: het telefoonboek van het internet
+2.7 IPv6: waarom het bestaat en wanneer je het tegenkomt
+
+Module 3: Waarom kan mijn app de database niet bereiken?
+3.0 Tools en terminal
+3.1 Wat is een poort?
+3.2 Poorten die elke developer kent
+3.3 localhost en 127.0.0.1: je eigen mini-internet
+3.4 Sockets: hoe praat code met het netwerk?
+3.5 Firewalls: bewaker aan de poort
+3.6 Port forwarding: naar binnen laten wat je wil
+3.7 Veelgemaakte fouten en hoe je je ze herkent
+
+Module 4: Hoe werkt HTTP nu écht?
+4.1 Request en response: het gesprek van het web
+4.2 HTTP methods: GET, POST en de rest
+4.3 Headers: de metadata van je request
+4.4 Statuscodes: wat bedoelt de server?
+4.5 HTTPS: waarom het slot ertoe doet
+4.6 DevTools: alles live bekijken
+
+Module 5: Welke andere protocollen moet ik kennen?
+5.1 FTP en SFTP: bestanden verplaatsen
+5.2 SSH: veilig op afstand werken
+5.3 SMTP en e-mail: hoe werkt mail onder de motorkap?
+5.4 WebSockets: wanneer HTTP niet volstaat
+5.5 Een request van A tot Z: de grote lijn
+
+Module 6: "Waarom werkt het op mijn laptop maar niet op de server?"
+6.1 Lokaal vs server: wat is het verschil?
+6.2 Client en server: een verhouding uitgelegd
+6.3 Wat gebeurt er als je iets deployt?
+6.4 Omgevingsverschillen: het "works on my machine"-probleem
+6.5 ping: leeft de server nog?
+6.6 Veelgemaakte deployment-fouten en hun oplossing
+
+Module 7: "Hoe zorg ik dat mijn app overal hetzelfde werkt?"
+7.1 Het probleem: afhankelijkheden en omgevingen
+7.2 Van fysieke server naar virtuele machine naar container
+7.3 Wat is een container precies?
+7.4 Images, containers en volumes: de kernconcepten
+7.5 Hoe praat een container met de buitenwereld?
+7.6 Docker als de standaard: waarom iedereen het gebruikt

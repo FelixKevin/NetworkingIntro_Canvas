@@ -1,0 +1,253 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_1">1.1 Variabelen &amp; Datatypes</a><br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_2">1.2 Controlestructuren &amp; Loops</a><br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_3">1.3 Functies</a><br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_4">1.4 Arrays &amp; Objecten</a><br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_5">1.5 Files</a><br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/module-1-php-basics#1_6">1.6 Ingebouwde Functies</a><br>    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+                <h5>E1: Constante en functie</h5>
+
+                <p>Schrijf een functie met de naam <span class="mono">berekenOppervlakteCirkel</span> die de oppervlakte van een cirkel berekent. Deze functie moet één parameters hebben, <span class="mono">straal</span>. De formule voor het berekenen van de oppervlakte van een cirkel is: <span class="mono">oppervlakte = π * straal * straal</span>.</p>
+
+                <p>Deze functie moet de oppervlakte van een cirkel berekenen en teruggeven. De waarde van π moet een constante zijn. Deze constante moet je zelf definiëren (en je mag veronderstellen dat pi gelijk is aan 3.1415).</p>
+
+                <hr>
+
+                <h5>E2: Meetkunde</h5>
+
+                <p>We bouwen verder op de functie van E1 en gaan de volgende functies toevoegen:
+                    <ul>
+                        <li><span class="mono">berekenOppervlakteRechthoek(zijde1, zijde2)</span></li>
+                        <li><span class="mono">berekenOppervlakteVierkant(zijde)</span></li>
+                        <li><span class="mono">berekenOppervlakteDriehoek(basis, hoogte)</span></li>
+                    </ul>
+                </p>
+
+                <p>De functie berekenOppervlakteVierkant maakt intern gebruik van de functie berekenOppervlakteRechthoek. Maak voorbeeldberekeningen gebruik makend van elk van de geschreven functies en druk de uitkomsten af, we gebruiken hiervoor <span class="mono">echo</span>.</p>
+
+                <hr>
+
+                <h5>E3: Globale variabele</h5>
+
+                <p>We kunnen een globale variabele definiëren in PHP door de variabele buiten een functie te definiëren. Van zodra we binnen een functie deze variabele willen gebruiken, moeten we deze variabele global maken. Dit doen we door <span class="mono">global $variabeleNaam;</span> te schrijven. Van zodra we dit doen zal PHP gaan zoeken in de <span class="keyword">globale scope</span> naar de variabele met de naam <span class="mono">$variabeleNaam</span>.</p>
+
+                <p>We gaan in de globale variabele <span class="mono">$functionsExecutedCounter</span> bijhouden hoeveel keer we één van de bovenstaande functies hebben aangeroepen. Elke keer wanneer er één van de hierboven gedefinieerde functies wordt aangeroepen, moet deze teller verhoogd worden. Er is slechts één centrale teller voor alle functies.</p>
+
+                <p>Druk het resultaat van de teller af.</p>
+
+                <hr>
+
+                <h5>E4: Variabelen</h5>
+
+                <p>Maak enkele variabelen aan en ken er een waarde aan toe zodat de je de volgende situaties krijgt:
+                    <ul>
+                        <li>isset($variabele1) == true</li>
+                        <li>isset($variabele2) == false</li>
+                        <li>empty($variabele3) == true</li>
+                        <li>empty($variabele4) == false</li>
+                        <li>isset($variabele5) == true && empty($variabele5) == false</li>
+                    </ul>
+                </p>
+
+                <p>Meer informatie over isset en empty vind je <a href="https://www.php.net/manual/en/function.isset.php" target="_blank">hier</a> en <a href="https://www.php.net/manual/en/function.empty.php" target="_blank">hier</a>.</p>
+
+                <hr>
+
+                <h5>E5: Controlestructuren &amp; Lussen</h5>
+
+                <p>Schrijf een PHP-functie die nagaat of een nummer gelijk is aan 30, 20 of 10. Indien het nummer gelijk is aan één van deze drie getallen, geef je het volgende weer:</p>
+                <pre class="terminal">Het nummer is gelijk aan ..</pre>
+
+                <hr>
+
+                <h5>E6: Controlestructuren &amp; Lussen</h5>
+
+                <p>Schrijf een PHP-script die de som weergeeft van alle getallen van 1 tot en met 30. Gebruik hiervoor een lus.</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+                <h5>M1: Date-object</h5>
+
+                <p>Schrijf een PHP script dat de huidige datum en tijd weergeeft in de volgende formaten:
+                    <ul>
+                        <li>2024-09-20</li>
+                        <li>20/09/24 00:00:00</li>
+                        <li>Vrijdag 20/09/2024, 14:30:00</li>
+                    </ul>
+                </p>
+
+                <p>Je kan de verschillende mogelijkheden voor het formatteren van een datum en tijd terugvinden op <a href="https://www.php.net/manual/en/datetime.format.php" target="_blank">deze pagina</a>.</p>
+
+                <hr>
+
+                <h5>M2: Date-object en controlestructuren</h5>
+
+                <p>Druk het juiste seizoen onder de datum af. Je gebruikt hiervoor de maand en hoeft dus niet de exacte data gebruiken.
+                    <ul>
+                        <li>December - Januari - Februari = Winter</li>
+                        <li>Maart - April - Mei = Lente</li>
+                        <li>Juni - Juli - Augustus = Zomer</li>
+                        <li>September - Oktober - November = Herfst</li>
+                    </ul>
+                </p>
+
+                <hr>
+
+                <h5>M3: Strings</h5>
+
+                <p>Maak een PHP applicatie die 2 functies bevat met volgende signaturen:
+                    <ul>
+                        <li>splitsNaam(naam)</li>
+                        <li>voegNamenSamen(voornaam, achternaam)</li>
+                    </ul>
+                </p>
+
+                <p>De functie splitsNaam zal op zoek gaan naar de eerste spatie in de meegegeven string, en op die plaats de meegegeven string splitsen. Daarna wordt in de functie een vaste output gegenereerd van de volgende vorm:</p>
+                <pre class="terminal"><ul>
+    <li>Voornaam: Kevin</li>
+    <li>Achternaam: Felix</li>
+</ul></pre>
+
+                <p>Wanneer de meegegeven string geen spatie bevat, stopt het programma met een foutboodschap (die).</p>
+
+                <p>De functie voegNamenSamen, plakt de achternaam achter de voornaam met de tussenvoeging van een spatie.</p>
+
+                <p>Test deze functies uit. (We veronderstellen dat er nooit een spatie in de voornaam voorkomt).</p>
+
+                <hr>
+
+                <h5>M4: Array</h5>
+
+                <p>Maak een array aan waarin enkele lidstaten van de Europese Unie bewaart. Zorg er voor dat de array alfabetisch gesorteerd wordt. Druk op het scherm het totaal aantal landen in de array af en zorg ervoor dat de volledige lijst van landen in een geordende lijst wordt afgedrukt. De uiteindelijke HTML-code die naar de client wordt gestuurd ziet er ongeveer als volgt uit:
+
+                <pre class="terminal"><h4>De Europese Unie:</h4>
+<p>De Europese Unie telt sinds 2020 in totaal 27 lidstaten.</p>
+<h5>De volledige lijst van lidstaten, alfabetisch gerangschikt</h5>
+<ol>
+    <li>België</li>
+    <li>Bulgarije</li>
+    …
+</ol></pre>
+
+                <hr>
+
+                <h5>M5: Constrolestructuren &amp; Lussen</h5>
+
+                <p>Schrijf een PHP-script dat de maaltafels van 1 tot en met 6 afdrukt. Let op: je moet de maaltafels berekenen met behulp van een lus, dus niet gewoon overtypen.</p>
+
+                <p>Dit zal er ongeveer als volgt uit zien:</p>
+
+                <pre class="terminal">1*1 = 1   2*1 = 2   3*1 = 3   4*1 = 4   5*1 = 5   6*1 = 6
+1*2 = 2   2*2 = 4   3*2 = 6   4*2 = 8   5*2 = 10  6*2 = 12
+1*3 = 3   2*3 = 6   3*3 = 9   4*3 = 12  5*3 = 15  6*3 = 18
+1*4 = 4   2*4 = 8   3*4 = 12  4*4 = 16  5*4 = 20  6*4 = 24
+1*5 = 5   2*5 = 10  3*5 = 15  4*5 = 20  5*5 = 25  6*5 = 30
+1*6 = 6   2*6 = 12  3*6 = 18  4*6 = 24  5*6 = 30  6*6 = 36</pre>
+
+                <hr>
+
+                <h5>M6: Strings &amp; Functies</h5>
+
+                <p>Maak met behulp van de <a href="https://www.php.net/manual/en/book.strings.php" target="_blank">documentatie voor strings</a> de volgende functies:
+                    <ul>
+                        <li>caseMagic($zin): Geef van de meegegeven zin de volgende versies terug
+                            <ul>
+                                <li>COMPLEET UPPERCASE</li>
+                                <li>compleet lowercase</li>
+                                <li>Enkel eerste letter van de zin uppercase</li>
+                                <li>Eerste Letters Van Alle Woorden Uppercase</li>
+                            </ul>
+                        </li>
+                        <li>shuffleWoord($woord): Geeft de letters van het woord terug in een willekeurige volgorde</li>
+                        <li>isPalindroom($woord): Zal controleren of een woord een palindroom is (kok, radar, tacocat, ...)</li>
+                        <li>isAnagram($woord1, $woord2): Zal controleren of beide woorden anagrammen zijn van elkaar, waarbij we spaties negeren (Torchwood & Doctor Who, Tom Marvolo Riddle & I am lord Voldemort)</li>
+                    </ul>
+                </p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+                <h5>H1: Arrays</h5>
+
+                <p>Kopiëer je array van M4. Zorg ervoor dat de lijst nu in een random volgorde wordt getoond aan de gebruiker.</p>
+
+                <hr>
+
+                <h5>H2: Arrays</h5>
+
+                <p>Kopiëer je array van M4. Zorg er nu voor dat enkel de landen die beginnen met de letter B op je scherm verschijnen.</p>
+
+                <hr>
+
+                <h5>H3: Arrays</h5>
+
+                <p>Kopiëer je array van M4. Zorg er nu voor dat alle landen die beginnen met de letter B niet op je scherm verschijnen. Verwijder deze elementen uit de array.</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+                <h5>@1: convertTextToNumber</h5>
+
+                <p>Schrijf een functie convertTextToNumber($text), waarbij dit een mogelijk resultaat kan zijn:</p>
+
+                <pre class="terminal">convertTextToNumber('een;vier;zes;zeven') => 1467</pre>
+
+                <hr>
+
+                <h5>@2: Fibonacci</h5>
+
+                <p>Schrijf een functie die n termen van de Fibonacci-reeks berekent. De <a href="https://nl.wikipedia.org/wiki/Rij_van_Fibonacci" target="_blank">Fibonacci-reeks</a> is een reeks getallen waarbij elk getal de som is van de twee voorgaande getallen. De reeks begint met 0 en 1.</p>
+
+                <pre class="terminal">
+                    fibbonaci(10) => 0, 1, 1, 2, 3, 5, 8, 13, 21, 34;
+                </pre>
+
+                <hr>
+
+                <h5>@3: Veelvouden</h5>
+
+                <p>Schrijf een functie die je vertelt of een gegeven integer een veelvoud is van 2. Indien dit niet het geval is, geef het veelvoud van 2 dat er het dichtste bij ligt. Schijf er ook bij tot de hoeveelste macht het is.</p>
+
+                <pre class="terminal">
+                    veelvoud(64) => 64 is een veelvoud van 2, 2^6
+veelvoud(13) => 13 is geen veelvoud van 2, het dichtste veelvoud is 16, 2^4</pre>
+
+        </div>
+        
+        
+    </div>

@@ -1,0 +1,189 @@
+h2{
+    background-color: #25b4b1;
+    color: white;
+    text-align: left;
+    padding-left: 25px;
+    text-decoration: underline;
+    margin-bottom: 50px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+div.wrapper{
+    max-width: 700px;
+    margin-left: 280px;
+}
+
+div.container{
+    border: 1px solid #25b4b1;
+    border-radius: 5px;
+    margin-bottom: 50px;
+    max-width: 700px;
+    text-align: justify;
+}
+
+.oefening, .github, .jsfiddle{
+    background-color: #25b4b1;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 700px;
+}
+
+.github{
+    margin-bottom: 50px;
+}
+
+
+
+p{
+    padding: 0px 20px;
+}
+
+h3{
+    background-color: #25b4b1;
+    color: white;
+    padding: 15px;
+    margin-top: 0px;
+}
+
+h3.letop{
+    background-color: #25b4b1;
+    color: white;
+    padding: 15px;
+    margin: 5px 0px;
+}
+
+h4{
+    color: white;
+    font-size: 24px;
+    margin: 10px;
+}
+
+h5{
+    font-size: 18px;
+    margin: 0px 25px;
+}
+
+.keyword{
+    color: #25b4b1;
+    font-style: italic;
+}
+
+img{
+    margin: 10px;
+}
+
+.terminal, .mono{
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+}
+
+.mono{
+    display: inline-block;
+    background-color: #e5e5e5;
+    border: 1px solid silver;
+    border-radius: 2px;
+    font-size: 10pt;
+    padding: 0px 2px;
+}
+.terminal{
+    padding: 10px;
+    white-space: pre-wrap;
+    background-color: black;
+    color: lime;
+    padding: 30px;
+    border-radius: 0px;
+    text-align: left;
+}
+
+.oefening > p > a, .github > p > a, .jsfiddle > p > a{
+    color: white;
+    margin-left: 5px;
+}
+
+.oef_logo, .jsf_logo{
+    float: left;
+}
+
+h3 > a{
+    float: right;
+    color: white;
+    font-size: 10pt;
+}
+
+ul{
+    list-style-type: circle;
+    margin-left: 50px;
+}
+
+img{
+    max-width: 700px;
+}
+
+.outline{
+    border: 1px solid #25b4b1;
+    border-radius: 5px;
+    width: 230px;
+    padding: 0px;
+    float: left;
+}
+
+details{
+    margin: 10px;
+}
+
+details > a{
+    margin-left: 20px;
+}
+
+.easy{
+    background-color: #36D6D2;
+}
+
+.hard{
+    background-color: #1B8280;
+}
+
+.home{
+    background-color: #073332;
+}
+
+
+.oeflink{
+    width: 100%;
+    color: white;
+    font-size: 26pt;
+    text-decoration: none;
+    display: block;
+    height: 60px;
+    margin-top: 30px;
+}
+
+table{
+    border: 1px solid #25b4b1;
+    margin: 15px;
+    border-radius: 3px;
+}
+
+tr:nth-child(odd){
+    background-color: #25b4b1;
+    color: white;
+}
+
+
+tr:first-child{
+    background-color: #0d5c5a;
+    color: white;
+}
+
+td{
+    min-width: 70px;
+}
+
+td:first-child{
+    padding-left: 7px;
+}
+
+td:last-child{
+    padding-right: 7px;
+}

@@ -1,0 +1,317 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+    
+<div class="container"><a id="1_1"></a>
+    <h3>1.1 Variabelen &amp; Datatypes
+    <a href="#top">Terug naar boven</a></h3>
+
+    <p>PHP lijkt qua syntax heel erg op JavaScript, maar er zijn toch enkele belangrijke verschillen. In deze module zullen we de basis van PHP leren, zodat we later kunnen beginnen met het bouwen van een backend voor onze website.</p>
+
+    <p>Om variabelen te gebruiken in PHP volgen we dezelfde syntax als in JavaScript. We gebruiken het <span class="keyword">$</span>-teken om een variabele te declareren en we kunnen deze variabele dan gebruiken in onze code:</p>
+
+    <pre class="terminal">$naam = 'Kevin';</pre>
+
+    <p>Net zoals in Java kunnen we variabelen van verschillende datatypes gebruiken. PHP is net zoals JavaScript een dynamisch getypeerde taal, wat betekent dat we geen datatype moeten opgeven wanneer we een variabele declareren. PHP zal zelf proberen te raden welk datatype we bedoelen. Dit kan soms handig zijn, maar kan ook voor problemen zorgen wanneer we niet goed opletten.</p>
+
+    <p>Er zijn verschillende datatypes in PHP, hieronder een overzicht van de meest gebruikte:</p>
+
+    <ul>
+        <li><span class="keyword">int</span>: een geheel getal.</li>
+        <li><span class="keyword">float</span>: een kommagetal.</li>
+        <li><span class="keyword">string</span>: een tekst.</li>
+        <li><span class="keyword">bool</span>: een boolean, kan enkel <span class="mono">true</span> of <span class="mono">false</span> zijn.</li>
+        <li><span class="keyword">array</span>: een lijst van waarden.</li>
+        <li><span class="keyword">object</span>: een object.</li>
+        <li><span class="keyword">null</span>: een variabele zonder waarde.</li>
+    </ul>
+
+    <p>We volgen de volgende richtlijnen voor naamgeving van variabelen:
+        <ul>
+            <li>De naam van een variabele moet beginnen met een letter of een underscore.</li>
+            <li>De naam van een variabele mag enkel letters, cijfers en underscores bevatten.</li>
+            <li>De naam van een variabele is case-sensitive.</li>
+        </ul>
+    </p>
+
+    <p>Hou rekening met de richtlijnen over goede naamgeving van variabelen. Dit maakt je code leesbaarder en zorgt ervoor dat je minder snel fouten maakt. Werk bij voorkeur met Engelse variabelenamen en gebruik waar mogelijk camelCase.</p>
+
+    <p>Let op met het feit dat PHP een dynamisch getypeerde taal is. Dit betekent dat PHP zelf zal proberen te raden welk datatype je bedoelt. Dit kan soms handig zijn, maar kan ook voor problemen zorgen wanneer je niet goed oplet. Probeer daarom altijd zo specifiek mogelijk te zijn wanneer je een variabele declareert.</p>
+
+    <pre class="console">$text1 = '12 uur';
+$text2 = 'uur 12';
+
+$number1 = 5;
+
+$sum1 = $text1 + $number1; // 17
+$sum2 = $text2 + $number1; // 5</pre>
+
+    <p>Deze code zal <b>géén</b> foutmelding geven wanneer je deze probeert uit te voeren, hoewel deze wel een zeer onverwacht resultaat zal geven. Dit komt omdat PHP probeert om de tekst in de variabele <span class="mono">$text1</span> om te zetten naar een getal, dit zal gebeuren van links naar rechts en omdat zowel 1 als 2 numerieke karakters zijn zal PHP hier de waarde van $text1 aanzien als 12 voor een berekening. Omdat <span class="mono">$text2</span> met een letter begint zal PHP de tekst omzetten naar <span class="mono">0</span>. <b>Dit kan voor onverwachte resultaten zorgen.</b></p>
+
+    <p>Naast normale variabelen hebben we ook in PHP constanten. Een constante is een variabele die een vaste waarde heeft en die we niet kunnen aanpassen. We kunnen een constante declareren met de <span class="keyword">define</span>-functie:</p>
+
+    <pre class="terminal">define('APIHOST', 'https://website.com/api');</pre>
+
+    <p>De naam van een constante moet in hoofdletters geschreven worden en we kunnen geen $-teken gebruiken. We kunnen een constante gebruiken in onze code door de naam van de constante te gebruiken:</p>
+
+    <pre class="terminal">echo APIHOST; // https://website.com/api</pre>
+
+</div>
+
+<div class="container"><a id="1_2"></a>
+    <h3>1.2 Controlestructuren &amp; Loops
+    <a href="#top">Terug naar boven</a></h3>
+
+    <p>Net zoals in JavaScript kunnen we in PHP gebruik maken van controlestructuren en loops. Hieronder een overzicht van de meest gebruikte:</p>
+
+    <p>Dezelfde controlestructuren zijn beschikbaar:</p>
+    <ul>
+        <li><span class="keyword">if</span>: controleert of een bepaalde voorwaarde waar is.</li>
+        <li><span class="keyword">else</span>: wordt uitgevoerd wanneer de voorwaarde van de <span class="keyword">if</span> niet waar is.</li>
+        <li><span class="keyword">elseif</span>: wordt uitgevoerd wanneer de voorwaarde van de <span class="keyword">if</span> niet waar is en een andere voorwaarde waar is.</li>
+        <li><span class="keyword">switch</span>: controleert een variabele op verschillende waarden.</li>
+    </ul>
+
+    <p>Enkele voorbeelden:</p>
+    <pre class="terminal">$a = 5;
+$b = 10;
+
+if ($a > $b) {
+    echo 'a is groter dan b';
+} elseif ($a &lt; $b) {
+    echo 'a is kleiner dan b';
+} else {
+    echo 'a is gelijk aan b';
+}
+
+switch ($a) {
+    case 5:
+        echo 'a is 5';
+        break;
+    case 10:
+        echo 'a is 10';
+        break;
+    default:
+        echo 'a is geen 5 of 10';
+}</pre>
+
+    <p>Ook de meeste loops zijn opnieuw beschikbaar:</p>
+    <ul>
+        <li><span class="keyword">for</span>: een loop die een bepaald aantal keer wordt uitgevoerd.</li>
+        <li><span class="keyword">foreach</span>: een loop die over alle elementen van een array of object loopt.</li>
+        <li><span class="keyword">while</span>: een loop die wordt uitgevoerd zolang een bepaalde voorwaarde waar is.</li>
+        <li><span class="keyword">do...while</span>: een loop die minstens één keer wordt uitgevoerd en daarna zolang een bepaalde voorwaarde waar is.</li>
+    </ul>
+
+    <p>Enkele voorbeelden:</p>
+    <pre class="terminal">$array = [1, 2, 3, 4, 5];
+
+for ($i = 0; $i &lt; count($array); $i++) {
+    echo $array[$i];
+}
+
+foreach ($array as $value) {
+    echo $value;
+}
+
+$i = 0;
+while ($i &lt; count($array)) {
+    echo $array[$i];
+    $i++;
+}
+
+$i = 0;
+do {
+    echo $array[$i];
+    $i++;
+} while ($i &lt; count($array));</pre>
+
+    <p>De <span class="keyword">foreach</span>-loop is een speciale loop die enkel gebruikt kan worden om over een array of object te loopen. Deze loop is heel handig omdat je niet moet nadenken over de lengte van de array of de index van het element dat je wil selecteren. Je kan gewoon over alle elementen van de array loopen en de waarde van het element gebruiken.</p>
+
+    <p>De <span class="keyword">foreach</span>-loop heeft twee vormen:</p>
+    <pre class="terminal">$array = [1, 2, 3, 4, 5];
+
+foreach ($array as $value) {
+    echo $value;
+}
+
+
+$assocArray = ['a' => 1, 'b' => 2, 'c' => 3];
+
+foreach($assocArray as $key => $value){
+    echo $key . ' => ' . $value;
+}</pre>
+
+</div>
+
+<div class="container"><a id="1_3"></a>
+    <h3>1.3 Functies
+        <a href="#top">Terug naar boven</a></h3>
+
+    <p>Net zoals in andere talen kunnen we in PHP gebruik maken van functies. Een functie is een stukje code dat we kunnen hergebruiken in onze applicatie. Dit is handig omdat we zo niet telkens dezelfjsonde code moeten schrijven. We kunnen een functie declareren met de <span class="keyword">function</span>-keyword:</p>
+
+    <pre class="terminal">function sayHello($name) {
+    echo 'Hello ' . $name;
+}
+
+sayHello('Kevin');</pre>
+
+    <p>We kunnen zoals hierboven ook parameters meegeven aan een functie. Deze parameters kunnen we dan gebruiken in de functie. We kunnen ook een return-waarde meegeven aan een functie:</p>
+
+    <pre class="terminal">function add($a, $b) {
+    return $a + $b;
+}
+
+$sum = add(5, 10);
+
+echo $sum; // 15</pre>
+
+    <p>Ook optionele parameters zijn weer aanwezig. Dit zijn parameters die een standaardwaarde hebben en dus niet verplicht zijn om mee te geven:</p>
+
+    <pre class="terminal">function sayHello($name = 'World') {
+    echo 'Hello ' . $name;
+}
+
+sayHello(); // Hello World
+sayHello('Kevin'); // Hello Kevin</pre>
+</div>
+
+<div class="container"><a id="1_4"></a>
+    <h3>1.4 Arrays &amp; Objecten
+        <a href="#top">Terug naar boven</a></h3>
+
+    <p>Net zoals vorig jaar in Programming Essentials 1 en 2 kunnen we in PHP gebruik maken van arrays en objecten. Een array is een lijst van waarden die we kunnen gebruiken om gegevens te groeperen. Een object is een complexere structuur die bestaat uit verschillende eigenschappen.</p>
+
+    <p>Om een array te declareren kunnen we onze waarden tussen <span class="keyword">square brackets</span> [ ] plaatsen en onze verschillende elementen scheiden met een komma:</p>
+
+    <pre class="terminal">$array = [1, 2, 3, 4, 5];</pre>
+
+    <p>Om een object te declareren moeten we gebruik maken van de <span class="keyword">new</span>-keyword en de <span class="keyword">stdClass</span>-class:</p>
+
+    <pre class="terminal">$object = new stdClass();
+
+$object->name = 'Kevin';
+$object->role = 'Teacher';</pre>
+
+    <p>Later gaan we zelf classes maken en objecten instantiëren, maar voorlopig is dit voldoende om te weten.</p>
+
+    <p>Ook zijn associatieve arrays weer van de partij. Dit zijn arrays waarbij we zelf de index van de waarden kunnen bepalen:</p>
+
+    <pre class="terminal">$assocArray = ['a' => 1, 'b' => 2, 'c' => 3];</pre>
+
+    <p>Associatieve arrays zijn heel handig wanneer we een lijst van waarden willen groeperen en we deze waarden willen kunnen selecteren aan de hand van een bepaalde index.</p>
+
+    <p>We kunnen deze arrays en objecten gebruiken in combinatie met de <span class="keyword">foreach</span>-loop om over alle elementen te loopen zoals hierboven beschreven.</p>
+
+    <p>Multidimensionale arrays zijn ook weer aanwezig. Dit zijn arrays die arrays bevatten:</p>
+
+    <pre class="terminal">$multiArray = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];</pre>
+
+</div>
+
+<div class="container"><a id="1_5"></a>
+    <h3>1.5 Files
+        <a href="#top">Terug naar boven</a></h3>
+
+    <p>Aangezien we vanaf nu gaan werken met een backend, is het belangrijk dat we kunnen werken met bestanden. In PHP kunnen we bestanden openen, lezen, schrijven en sluiten. Hieronder een overzicht van de meest gebruikte functies:</p>
+
+    <ul>
+        <li><span class="keyword">fopen</span>: opent een bestand.</li>
+        <li><span class="keyword">fclose</span>: sluit een bestand.</li>
+        <li><span class="keyword">fread</span>: leest een bestand.</li>
+        <li><span class="keyword">fwrite</span>: schrijft naar een bestand.</li>
+        <li><span class="keyword">file_get_contents</span>: leest de inhoud van een bestand.</li>
+    </ul>
+
+    <p>Enkele voorbeelden:</p>
+
+    <pre class="terminal">$file = fopen('file.txt', 'r');
+
+while (!feof($file)) {
+    echo fgets($file) . '<br>';
+}
+
+fclose($file);
+
+$file = fopen('file.txt', 'w');
+
+fwrite($file, 'Hello World');
+
+fclose($file);</pre>
+
+    <p>Met deze functies kunnen we bestanden openen, lezen, schrijven en sluiten. Dit is handig wanneer we bijvoorbeeld gegevens willen opslaan in een bestand of wanneer we gegevens willen inlezen uit een bestand.</p>
+
+    <p>We zien bij de <span class="keyword">fopen</span>-functie dat we een tweede parameter kunnen meegeven. Dit is een string die aangeeft hoe we het bestand willen openen:</p>
+
+    <ul>
+        <li><span class="keyword">r</span>: lezen.</li>
+        <li><span class="keyword">w</span>: schrijven.</li>
+        <li><span class="keyword">a</span>: schrijven aan het einde van het bestand.</li>
+        <li><span class="keyword">r+</span>: lezen en schrijven.</li>
+        <li><span class="keyword">w+</span>: lezen en schrijven, bestaande inhoud wordt overschreven.</li>
+        <li><span class="keyword">a+</span>: lezen en schrijven, schrijven aan het einde van het bestand.</li>
+    </ul>
+
+    <p>Indien we een reeds bestaand bestand willen openen en we willen de inhoud behouden, dan <b>moeten</b> we de <span class="keyword">a</span>-modus gebruiken. Als we de <span class="keyword">w</span>-modus gebruiken gaan we het huidige bestand <b>overschrijven</b>.</p>
+
+    <p>Let op met het gebruik van deze functies. Het is belangrijk dat je de juiste permissies hebt om bestanden te openen, lezen en schrijven. Denk hiervoor terug aan de file permissions die jullie hebben gezien in Desktop OS.</p>
+
+    <p>Indien je enkel de inhoud van een bestand wilt inlezen zonder dat je deze wilt aanpassen, dan kan je gebruik maken van de <span class="keyword">file_get_contents</span>-functie:</p>
+
+    <pre class="terminal">$content = file_get_contents('file.txt');
+
+echo $content;</pre>
+
+
+</div>
+
+<div class="container"><a id="1_6"></a>
+    <h3>1.6 Ingebouwde Functies
+        <a href="#top">Terug naar boven</a></h3>
+
+    <p>Er zijn zeer veel ingebouwde functies beschikbaar in PHP. Deze functies kunnen we gebruiken om bepaalde taken uit te voeren zonder dat we zelf de code moeten schrijven. Indien je ooit een bepaalde functionaliteit nodig hebt, is het altijd een goed idee om eerst te kijken of er geen ingebouwde functie bestaat die deze taak kan uitvoeren.</p>
+
+    <p>De officiële PHP-documentatie is een goede plaats om te beginnen. Hier kan je alle ingebouwde functies van PHP terugvinden en de bijhorende documentatie lezen. Dit is een goede gewoonte om aan te leren, aangezien je later in je carrière vaak zal moeten werken met verschillende programmeertalen en frameworks.</p>
+
+    <p>Je kan de officiële PHP-documentatie terugvinden op <a href="https://www.php.net/manual/en/index.php" target="_blank">php.net</a>.</p>
+
+    <p>Enkele voorbeelden van ingebouwde functies:</p>
+
+    <pre class="terminal">$string = 'Hello World';
+echo strlen($string); // 11
+echo strtoupper($string); // HELLO WORLD
+echo strtolower($string); // hello world
+
+
+$array = [1, 2, 3, 4, 5];
+echo count($array); // 5
+echo array_sum($array); // 15
+
+
+$number = 5.5;
+echo round($number); // 6
+echo floor($number); // 5
+
+
+$timestamp = time();
+echo date('Y-m-d H:i:s', $timestamp); // 2024-09-24 14:00:00</pre>
+
+    <p>Dit zijn maar enkele voorbeelden van de vele ingebouwde functies die beschikbaar zijn. Op termijn zal je deze functies leren kennen en kan je ze gebruiken in je eigen code. Indien je moet gebruik maken van deze functies in de oefeningen zal ik een link voorzien naar de documentatie zodat je deze kan raadplegen.</p>
+
+</div>
+
+
+<div class="oefening container">
+    <div class="oef_logo">
+        <img src="https://canvas.ehb.be/courses/33635/files/2499567/preview" alt="oefening logo">
+    </div>
+    <a class="oeflink" target="_blank" title="Oefeningen Module 1" href="https://canvas.ehb.be/courses/43147/pages/oefeningen-module-1">Oefeningen Module 1</a>
+</div>
+
+</div>

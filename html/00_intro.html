@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+    
+    <div class="wrapper">
+        
+    <div class="container"><a id="0_1"></a>
+        <h3>0.1 Waarom een Backend?
+        <a href="#top">Terug naar boven</a></h3>
+
+        <p>Vorig jaar hebben we ons vooral gefocust op de frontend van een website. We hebben geleerd hoe we een website kunnen opbouwen met HTML, CSS en JavaScript. We hebben geleerd hoe we een website kunnen stijlen, hoe we interactieve elementen kunnen toevoegen en hoe we de website kunnen laten reageren op gebruikersinput.</p>
+
+        <p>Met andere woorden, we hebben ons tot nutoe gefocussed op het deel van de website dat de gebruiker ziet en waarmee deze interactie heeft. We kunnen dit vergelijken met de UI van een applicatie. De frontend is echter niet in staat om gegevens op te slaan, te verwerken of te manipuleren. Zelfs toen we via een fetch-call gegevens naar een API stuurden, was het de API die de gegevens verwerkte en opslaat.</p>
+
+        <p>De backend is het deel van de website dat niet zichtbaar is voor de gebruiker. De backend is verantwoordelijk voor het verwerken van gegevens, het uitvoeren van berekeningen en het communiceren met de database, versturen van mails, genereren van PDFs, ...</p>
+
+        <p>De backend is dus een essentieel deel voor het bouwen van dynamische websites en webapplicaties. Zonder een backend zouden we geen gegevens langduren kunnen bewaren of andere complexere berekeningen maken.</p>        
+    </div>
+
+    <div class="container"><a id="0_2"></a>
+        <h3>0.2 LAMP via WSL
+            <a href="#top">Terug naar boven</a></h3>
+
+            <p>Deze cursus zal je leren hoe je een backend kan bouwen met behulp van PHP en JavaScript. We zullen gebruik maken van de LAMP-stack, die bestaat uit:
+
+                <ul>
+                    <li>Linux: het besturingssysteem</li>
+                    <li>Apache: de webserver</li>
+                    <li>MySQL: de database</li>
+                    <li>PHP: de programmeertaal</li>
+                </ul>
+            </p>
+
+            <p>Om deze stack te kunnen gebruiken, zullen we gebruik maken van WSL (Windows Subsystem for Linux). WSL is een compatibiliteitslaag voor het uitvoeren van Linux-binaries op Windows. Met WSL kunnen we een Linux-distributie installeren op Windows en kunnen we Linux-commando's uitvoeren in een terminalvenster. Eigenlijk is het een soort beperkte Virtual Machine, maar eentje dat reeds nauw geintegreerd is met Windows</p>
+
+            <p>Om WSL te installeren, volg je de instructies op <a href="https://docs.microsoft.com/en-us/windows/wsl/install">deze pagina</a>. By default zal WSL Ubuntu installeren als distro, maar indien je zelf meer ervaring hebt met andere distros kan je zonder problemen zelf eentje kiezen.</p>
+
+            <p>Na de installatie van WSL, kan je de LAMP-stack installeren door de volgende commando's uit te voeren in de terminal:</p>
+
+            <pre class="terminal">sudo apt update
+sudo apt upgrade
+sudo apt install apache2
+sudo apt install mysql-server
+sudo apt install php libapache2-mod-php php-mysql</pre>
+
+            <p>Na de installatie van de LAMP-stack, kan je de webserver starten met <span class="mono">sudo service apache2 start</span>. Je kan de status van de servers controleren met <span class="mono">sudo service apache2 status</span> en <span class="mono">sudo service mysql status</span>.</p>
+
+            <p>De bestanden van de webserver worden standaard opgeslagen in <span class="mono">/var/www/html</span>. Je kan deze map openen in Windows door <span class="mono">\\wsl$\Ubuntu\var\www\html</span> in de adresbalk van Windows Explorer in te geven.</p>
+
+            <p>Om de PHP-bestanden te kunnen uitvoeren, moet je de bestanden opslaan in de map <span class="mono">/var/www/html</span>. Van zodra deze daar staan kan je deze openen in je browser door <span class="mono">localhost</span> in te geven in de adresbalk.</p>
+
+            <p>De MySQL Server is ondertussen reeds geinstalleerd, maar we gaan deze nog niet gebruiken. We zullen later in de cursus leren hoe we een database kunnen aanmaken en hoe we gegevens kunnen opslaan en ophalen.</p>
+    </div>
+
+    <div class="container"><a id="0_3"></a>
+        <h3>0.3 Composer
+            <a href="#top">Terug naar boven</a></h3>
+
+            <p>Composer is een dependency manager voor PHP. Met Composer kan je eenvoudig externe libraries en frameworks installeren en beheren. Composer is een command-line tool die je kan gebruiken om libraries te installeren, updaten en verwijderen.</p>
+
+            <p>We gaan Composer ook installeren op WSL. Om Composer te installeren, voer je de volgende commando's uit in de terminal:</p>
+
+            <pre class="terminal">sudo apt install php-cli unzip
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+sudo mv composer.phar /usr/local/bin/composer</pre>
+
+            <p>Na de installatie van Composer kan je Composer gebruiken door <span class="mono">composer</span> in te geven in de terminal. Je kan de versie van Composer controleren door <span class="mono">composer --version</span> in te geven.</p>
+
+            <p>Composer gebruikt een bestand <span class="mono">composer.json</span> om de dependencies van je project te beheren. In dit bestand geef je aan welke libraries je wil gebruiken en welke versie van deze libraries je wil gebruiken. Composer zal deze libraries downloaden en installeren in de map <span class="mono">vendor</span>.</p>
+
+            <p>De libraries die je installeert met Composer worden opgeslagen in de map <span class="mono">vendor</span>. Deze map gaan we niet tracken in git of uploaden naar onze GitHub, omdat je deze libraries opnieuw kan installeren met Composer.</p>
+
+            <p>Dit kan je doen door in een folder met een reeds bestaande composer.json file <span class="mono">composer install</span> in te geven. Composer zal dan alle libraries (opnieuw) installeren die in de composer.json file staan.</p>
+
+            <p>Om een nieuw project aan te maken met Composer, voer je de volgende commando's uit in de terminal:</p>
+
+            <pre class="terminal">composer init
+composer require vendor/package</pre>
+    
+            <p>De eerste commando zal een nieuw project aanmaken en een <span class="mono">composer.json</span> bestand genereren. De tweede commando zal de library <span class="mono">vendor/package</span> installeren in de map <span class="mono">vendor</span>.</p>
+
+            <p>We gaan Composer gebruiken vanaf module 3, wanneer we starten met het bouwen van een backend met Laravel.</p>
+    </div>
+
+    <div class="container"><a id="0_4"></a>
+        <h3>0.4 De Portfolio
+            <a href="#top">Terug naar boven</a></h3>
+
+            <p>Placeholder. Ik maak hier ASAP werk van, ik beloof het ^_^'</p>
+        
+    </div>
+    
+</div>
