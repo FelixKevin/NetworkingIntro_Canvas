@@ -40,7 +40,7 @@ Module 5: Welke andere protocollen moet ik kennen?
 5.4 WebSockets: wanneer HTTP niet volstaat
 5.5 Een request van A tot Z: de grote lijn
 
-Module 6: "Waarom werkt het op mijn laptop maar niet op de server?"
+Module 6: Waarom werkt het op mijn laptop maar niet op de server?
 6.1 Lokaal vs server: wat is het verschil?
 6.2 Client en server: een verhouding uitgelegd
 6.3 Wat gebeurt er als je iets deployt?
@@ -48,7 +48,7 @@ Module 6: "Waarom werkt het op mijn laptop maar niet op de server?"
 6.5 ping: leeft de server nog?
 6.6 Veelgemaakte deployment-fouten en hun oplossing
 
-Module 7: "Hoe zorg ik dat mijn app overal hetzelfde werkt?"
+Module 7: Hoe zorg ik dat mijn app overal hetzelfde werkt?
 7.1 Het probleem: afhankelijkheden en omgevingen
 7.2 Van fysieke server naar virtuele machine naar container
 7.3 Wat is een container precies?
