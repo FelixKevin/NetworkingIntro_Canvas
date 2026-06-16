@@ -1,204 +1,242 @@
-# Module 3: Waarom kan mijn app de database niet bereiken?
+# Module 3: Localhost en poorten en problemen enzo
 
 ---
 
 ## 3.0 Tools en terminal
 
-Je app start, je frontend laadt, maar je query blijft hangen alsof er niets leeft aan de andere kant. Dan helpt gokken niet. Dan heb je zicht nodig.
+Net zoals dat een doktor al zijn instrumenten in zijn draagtas moeten steken alvorens hij op huisbezoek gaan moeten wij ook al onze tools in orde hebben alvorens wij beginnen. Bij ons zijn de tools gewoon iets anders dan een stethoscoop of scalpel.
 
-De basisset voor deze module is klein maar krachtig: terminal, ping, curl, nc, lsof en eventueel ss of netstat. Met die tools test je of een service draait, of een poort luistert en of je verkeer effectief aankomt.
+De commando's in deze cursus veronderstellen dat je comfortabel bent met een terminal. Geen paniek als dat nog niet helemaal het geval is, de commando's zijn eenvoudig en je leert ze kennen door ze te gebruiken. In het vak Desktop Computing gaan we ook iets dieper in deze dingen duiken.
 
-Je hoeft niet elk commando van buiten te kennen. Je moet vooral begrijpen wat je meet, en in welke volgorde je test.
+**Windows** gebruikers werken bij voorkeur met **Windows Terminal** en **PowerShell**. **macOS** en **Linux** gebruikers hebben alles al aan op voorhand geinstalleerd. Open Terminal en je bent klaar.
 
-Dit betekent voor jou: bij netwerkfouten begin je met observatie in plaats van aannames. Eerst meten, dan pas aanpassen.
+De tools die je in deze module gebruikt:
 
-### Test jezelf
+`netstat`: Toont actieve netwerkverbindingen en de poorten waarop je machine luistert. Op nieuwere systemen is `ss` het modernere alternatief met dezelfde functie.
 
-**Vraag 1.** Wat is de beste eerste reflex bij een verbindingsfout tussen app en database?
+`curl`: Stuurt HTTP-verzoeken vanuit de terminal en toont de response. Onmisbaar voor het testen van API's zonder een browser of Postman te openen.
 
-a) Met terminaltools testen wat werkt en wat niet, vóór je code wijzigt
-b) Meteen je ORM vervangen
-c) Herinstalleren van je volledige ontwikkelomgeving
-d) De database resetten zonder diagnose
+`telnet`: Maakt een quick-and-dirty TCP-verbinding naar een host en poort. Handig om te testen of een poort open staat. Op Windows moet je het apart installeren via "Windows Features".
 
-**Vraag 2.** Waarom is een vaste testvolgorde nuttig bij troubleshooten?
+`nc` (netcat): Is het Zwitserse zakmes van netwerktesting: poorten testen, data sturen, minimale servers opzetten.
 
-**Vraag 3.** Noem twee terminaltools die je kan gebruiken om te checken of een service bereikbaar is.
+`lsof -i` (Linux/macOS): Toont welk proces op welke poort luistert. Op Windows gebruik je `netstat -ano` in combinatie met Task Manager.
 
 ---
 
 ## 3.1 Wat is een poort?
 
-Je kan een server zien als een gebouw met één straatadres en heel veel deuren. Het IP-adres is het gebouw. De poort is de juiste deur.
+Je weet al dat een IP-adres aangeeft waar een machine te bereiken is op het netwerk. Maar een machine draait tientallen processen tegelijk zoals een webserver, database, mailclient of SSH-daemon. Maar hoe weet een binnenkomend pakket voor welk proces het bedoeld is? Dat regelt de **port** (of poort).
 
-Een **port** (poort) is een logisch nummer waarop een proces luistert naar netwerkverkeer. Zonder juist poortnummer kom je wel bij de machine aan, maar praat je tegen de verkeerde service, of tegen niemand.
+Je kan die machine zien als een apparementsgebouw met één adres, maar wel met allemaal verschillende deuren. Het IP-adres is het gebouw. De poort is de juiste deur.
 
-Poorten lopen van 0 tot 65535. In de praktijk krijg je vaak combinaties zoals localhost:3000, localhost:5432 of api.example.be:443.
+Een netwerkverbinding wordt altijd volledig beschreven door vier elementen: het IP-adres van de afzender, de poort van de afzender, het IP-adres van de ontvanger, en de poort van de ontvanger. Die combinatie noemen we een **socket**.
 
-Dit betekent voor jou: bij Elke verbinding controleer je altijd IP plus poort. Alleen een correct IP is niet genoeg.
+Poorten worden verdeeld in drie categorieën. De **well-known ports** (0–1023) zijn gereserveerd voor veelgebruikte diensten: HTTP op 80, HTTPS op 443, SSH op 22, ... Op de meeste systemen heb je admin (of root) nodig om een service op deze poorten te starten.
+
+De **registered ports** (1024–49151) worden gebruikt door specifieke applicaties: MySQL op 3306, PostgreSQL op 5432, Redis op 6379, ... 
+
+De **dynamic ports** of **ephemeral ports** (49152–65535) worden tijdelijk toegewezen wanneer jouw machine een verbinding initieert: de poort van jouw browser die een HTTP-verzoek stuurt, is zo'n tijdelijke poort.
+
+Poorten zijn ook protocolspecifiek. Poort 80 op **TCP** en poort 80 op **UDP** zijn technisch gezien verschillende poorten. Het meeste webverkeer gebruikt TCP; realtime toepassingen zoals DNS-queries of videogesprekken gebruiken vaak UDP. Het verschil: TCP garandeert dat data aankomt en in de juiste volgorde (maar is trager), UDP garandeert niets maar is sneller.
 
 ### Test jezelf
 
 **Vraag 1.** Wat doet een poort in netwerkcommunicatie?
 
-a) Ze stuurt verkeer naar de juiste service op een host
-b) Ze vervangt het IP-adres volledig
-c) Ze bepaalt je wifi-signaalsterkte
-d) Ze versleutelt automatisch alle data
+- Ze stuurt verkeer naar de juiste service op een host
+- Ze vervangt het IP-adres volledig
+- Ze bepaalt je wifi-signaalsterkte
+- Ze versleutelt automatisch alle data
 
-**Vraag 2.** Je app bereikt de server wel, maar krijgt connection refused. Welke poort-gerelateerde oorzaken check je eerst?
+**Vraag 2.** Waarom volstaat een IP-adres alleen niet om een webapp of database te bereiken?
 
-**Vraag 3.** Waarom volstaat een IP-adres alleen niet om een webapp of database te bereiken?
+**Vraag 3.** Je start een Express.js-server op poort 3000. Een gebruiker verbindt vanuit de browser. De verbinding gebruikt tijdelijk poort 54231 aan de kant van de browser. Wat beschrijft die combinatie van vier elementen (IP + poort aan beide kanten)?
+
+- Een socket: de volledige beschrijving van één netwerkverbinding tussen twee eindpunten
+- Een firewall-regel: de browser vraagt toestemming aan de server
+- Een MAC-adres: de hardware-identificatie van de verbinding
+- Een DNS-record: het koppelt de browsernaam aan het serveradres
 
 ---
 
-## 3.2 Poorten die elke developer kent
+## 3.2 Bekende poorten
 
-Sommige poorten kom je zó vaak tegen dat je ze best direct herkent. Dat spaart je veel tijd tijdens debuggen.
+Het is een beetje nutteloos om alle 65535 poorten en hun nut van buiten te kennen. Maar er zijn er wel een stuk of twintig die je altijd gaat zien terugkomen dat je ze herkent voordat je erover nadenkt. Daar is het wel nuttig om die even vanbuiten te leren.
 
-Klassiekers: 80 voor HTTP, 443 voor HTTPS, 22 voor SSH, 3306 voor MySQL, 5432 voor PostgreSQL, 6379 voor Redis, 27017 voor MongoDB. In development zie je ook vaak 3000, 5173, 8080 en 8000 voor lokale webservers.
+**Web traffic:** HTTP draait op **poort 80**, HTTPS op **poort 443**. Als je een website bezoekt zonder poortnummer in de URL, gebruikt je browser automatisch 80 of 443 afhankelijk van het protocol. Een development-server draait vaak op **3000**, **8000** of **8080**. Dat is geen vaste standaard, maar die getallen zie je het vaakst in tutorials en frameworks (bvb standaard 3000 voor Node.js en 8000 voor Laravel).
 
-Die nummers zijn geen heilige wet, maar conventies. Je kan veel services op een andere poort laten draaien, zolang client en server dezelfde afspraak volgen.
+**Databases:** MySQL/MariaDB luisteren op **poort 3306**, PostgreSQL op **5432**, MongoDB op **27017**, Redis op **6379**, Microsoft SQL Server op **1433**. Weet je niet meer op welke poort je database draait? Dit zijn de *defaults*. Je kunt ze aanpassen in de configuratie, maar de meeste developers laten ze staan tenzij er een goede reden is om te wijzigen.
 
-Dit betekent voor jou: leer de veelgebruikte poorten herkennen, maar vertrouw nooit blind op defaults. Controleer altijd de echte runtimeconfiguratie.
+**Remote access en file transfers:** SSH draait op **poort 22**. FTP gebruikt **poort 21** voor de controleverbinding en **poort 20** voor de dataoverdracht. **SFTP** (SSH File Transfer Protocol) loopt via SSH en gebruikt dus ook poort 22.
+
+**Mail:** SMTP (verzenden) op **poort 25** (of 587 voor authenticatie), IMAP (ontvangen) op **143** (of 993 voor IMAP over TLS).
+
+**Andere belangrijke:** DNS op **poort 53** (UDP én TCP), RDP (Remote Desktop) op **3389**.
+
+Wanneer een verbinding mislukt en je foutmelding zegt "*connection refused*" of "*connection timed out*", is de eerste vraag altijd: luistert de service op de verwachte poort en staat die poort open in de firewall?
 
 ### Test jezelf
 
 **Vraag 1.** Welke poort hoort standaard bij HTTPS?
 
-a) 443
-b) 80
-c) 22
-d) 5432
+- 443
+- 80
+- 22
+- 5432
 
-**Vraag 2.** Je PostgreSQL luistert niet op 5432 maar op 15432. Wat moet je aanpassen in je applicatieconfiguratie?
-
-**Vraag 3.** Waarom is het gevaarlijk om alleen op standaardpoorten te vertrouwen tijdens troubleshooting?
+**Vraag 2.** Waarom zou het een goed idee kunnen zijn om standaaardpoorten aan te passen, bijvoorbeeld voor SSH?
 
 ---
 
-## 3.3 localhost en 127.0.0.1: je eigen mini-internet
+## 3.3 There's no place like 127.0.0.1
 
-Als je localhost zegt, bedoel je: praat met mezelf. Handig, snel, en meestal veilig genoeg voor lokale development.
+Elke machine heeft een netwerk met zichzelf. We kunnen die gaan linken aan diep filosofische overtuigingen over eenzaamheid enzo, of we kunnen het praktisch bekijken: wanneer je een server start op je eigen device en er verbinding mee maakt vanop dat device gebruik je het **loopback-netwerk**.
 
-**localhost** verwijst naar de loopback-interface. Bij IPv4 is dat vaak 127.0.0.1. Verkeer naar dit adres verlaat je toestel niet, ook niet als je wifi uit staat.
+Het adres `127.0.0.1` is het **loopback-adres** voor IPv4, verkeer dat hiernaar gestuurd wordt verlaat de machine nooit en komt rechtstreeks terug. De naam `localhost` is de standaard hostnaam die naar `127.0.0.1` verwijst (of naar `::1` in IPv6).
 
-Dat is super voor testen, maar het zorgt ook voor verwarring. Een container, vm of tweede toestel ziet jouw localhost niet. Die kijkt naar zijn eigen loopback.
+Je kunt ze door elkaar gebruiken, al is er één subtiel verschil: `localhost` is een DNS-naam die opgezocht wordt, `127.0.0.1` is een direct adres. Op de meeste systemen maakt dat geen praktisch verschil, maar in omgevingen waar DNS traag of kapot is, werkt `127.0.0.1` altijd.
 
-Dit betekent voor jou: als iets lokaal werkt maar niet van buitenaf, check je eerst of je service alleen op localhost bindt in plaats van op een extern bereikbare interface.
+Het volledige loopback-blok is `127.0.0.0/8`. Dat betekent dat alle adressen van `127.0.0.1` tot `127.255.255.254` naar jezelf verwijzen. In de praktijk gebruik je alleen `127.0.0.1`, maar in sommige configuraties (meerdere lokale services die elk een eigen adres nodig hebben) zie je ook `127.0.0.2` of `127.0.0.3` opduiken.
+
+Wanneer je een server start op `localhost:3000`, is die server **alleen bereikbaar vanaf je eigen machine**. Wil je dat andere machines in je netwerk er ook mee kunnen verbinden, dan moet je de server laten luisteren op `0.0.0.0:3000`, dat betekent "alle beschikbare netwerkinterfaces". Als er ooit al eens een moment was waarop je lastig werd tijdens het debuggen omdat bij u alles werkt, maar andere mensen er niet aankunnen heeft dit er wel misschien iets mee te maken.
 
 ### Test jezelf
 
 **Vraag 1.** Wat betekent localhost in de praktijk?
 
-a) Verkeer naar de eigen machine via de loopback-interface
-b) Verkeer naar de router in je thuisnetwerk
-c) Verkeer naar een publieke cloudserver
-d) Verkeer dat alleen via wifi werkt
+- Verkeer naar de eigen machine via de loopback-interface
+- Verkeer naar de router in je thuisnetwerk
+- Verkeer naar een publieke cloudserver
+- Verkeer dat alleen via wifi werkt
 
 **Vraag 2.** Waarom kan je collega jouw lokale server op localhost niet bereiken?
 
-**Vraag 3.** Welke bind-instelling kan ervoor zorgen dat een service enkel lokaal bereikbaar is?
+**Vraag 3.** Wat is het verschil tussen een server starten op `127.0.0.1:8080` en op `0.0.0.0:8080`?
 
 ---
 
-## 3.4 Sockets: hoe praat code met het netwerk?
+## 3.4 Sockets
 
-Je code opent geen magisch kanaal naar de database. Ze opent een **socket** (netwerksocket): een software-eindpunt voor communicatie.
+Tot nu toe heb je netwerken bekeken vanuit het perspectief van adressen en poorten. Maar hoe maakt code eigenlijk gebruik van dat netwerk? Het antwoord is met een **socket**.
 
-Een socket combineert protocol, IP en poort. Denk aan TCP-sockets voor betrouwbare stroomgebaseerde communicatie, of UDP-sockets voor snellere maar minder strikte datagrammen.
+Een socket is een eindpunt van een netwerkverbinding: een object in je code dat je kunt openen, naar schrijven, van lezen en sluiten, net zoals een bestand. Gelukkig is het wel iets waar het besturingssysteem (meestal) het beheer van zal doen.
 
-De meeste frameworks verstoppen sockets netjes achter libraries. Dat is fijn tot er iets faalt. Dan moet je toch begrijpen wat er onder de kap gebeurt.
+Jij werkt met de socket als abstractie. Wanneer je een HTTP-verzoek doet in Python, JavaScript of Java, wordt ergens onderliggend een socket aangemaakt, de verbinding opgezet, data verstuurd en ontvangen en de socket gesloten.
 
-Dit betekent voor jou: als je time-outs, resets of broken pipe-fouten ziet, denk je in sockets en connectiestatus, niet alleen in frameworkfouten.
+Er zijn twee types sockets waar je het verschil tussen moet weten. Een **TCP-socket** (stream socket) zorgt voor een betrouwbare verbinding: data komt aan in de juiste volgorde en zonder verlies. Een **UDP-socket** (datagram socket) verstuurt afzonderlijke packets zonder garantie op volgorde of aankomst, maar met minder overhead.
+
+In de meeste programmeertalen werk je niet rechtstreeks met sockets, voor webverkeer zal je bvb gebruik maken van HTTP dat het zware werk voor je doet. Maar zodra je met WebSockets, raw TCP-verbindingen, of protocollen lager dan HTTP werkt, kom je direct in aanraking met socket-programmering. In Node.js zit de `net`-module ingebouwd voor raw TCP-sockets; Python heeft de `socket`-module.
+
+Een minimaal voorbeeld om te voelen hoe het werkt, een TCP-server in Python:
+
+```python
+import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('0.0.0.0', 9000))
+server.listen(1)
+
+conn, addr = server.accept()
+print(f"Verbinding van {addr}")
+conn.sendall(b"Hallo van de server!\n")
+conn.close()
+```
+
+Dit is enkel een voorbeeld om te laten zien wat we eigenlijk doen. We gaan letterlijk zeggen dat de server moet luisteren op *IP adres* `0.0.0.0` en *poort* `9000`. Oftewel: we krijgen een socket door een adres en poort aan elkaar te vinden (`bind`), het wacht op verbindingen (`listen`) en zal content terugsturen (`send`).
 
 ### Test jezelf
 
 **Vraag 1.** Wat is een socket?
 
-a) Een software-eindpunt waarmee processen over het netwerk communiceren
-b) Een fysieke ethernetpoort op je laptop
-c) Een DNS-record voor service discovery
-d) Een firewallregel met allow of deny
+- Een software-eindpunt waarmee processen over het netwerk communiceren
+- Een fysieke ethernetpoort op je laptop
+- Een DNS-record voor service discovery
+- Een firewallregel met allow of deny
 
-**Vraag 2.** Wanneer kies je meestal TCP boven UDP voor app-databaseverkeer?
-
-**Vraag 3.** Geef één voorbeeld van een foutmelding die op socketproblemen kan wijzen.
+**Vraag 2.** Wanneer kies je meestal TCP voor databaseverkeer?
 
 ---
 
-## 3.5 Firewalls: bewaker aan de poort
+## 3.5 The big firewall filter
 
-Je service draait, je poort klopt, en toch komt er niks door. Dan staat er vaak een bewaker in de weg: de firewall.
+Simpel samengevat: de firewall beslist of netwerkverkeer wel en niet mag passeren. Dat klinkt eenvoudig, maar de details bepalen of je applicatie (of server) bereikbaar is of niet én vooral of je server *veilig* is of niet.
 
-Een **firewall** (netwerkfilter) laat verkeer toe of blokkeert het op basis van regels. Die regels kunnen op hostniveau zitten, in je router, in cloud security groups of op meerdere plekken tegelijk.
+Iets minder samengevat: een **firewall** analyseert inkomend en uitgaand verkeer op basis van regels. Die regels kijken typisch naar het IP-adres van de zender, het IP-adres waar het naartoe moet, de poort, en het protocol (TCP of UDP). Een regel kan zijn: 
+- "sta verkeer toe van overal naar poort 443" => want je wilt een website via HTTPS beschikbaar maken voor 'het internet'
+- "blokkeer al het inkomend verkeer op poort 22 behalve van IP-adres 195.130.3.12" => want iemand moet via SSH op je server kunnen verbinden behalve verbindingen via 195.130.3.12 (het IP-adres van je kantoor of campus)
+- "hou al het inkomend verkeer tegen van IP-adres 30.2.x.x" => want er is een brute-force login aanval aan de gang vanuit die range
 
-Dat maakt debugging soms verraderlijk. Jij ziet een open service, maar onderweg zegt een regel gewoon nee.
+Er zijn twee plaatsen waar een firewall relevant is voor jou als developer. De **host-based firewall** draait op de server zelf. Op Linux is dat (meestal) `ufw` (Uncomplicated Firewall) of `iptables`. Op Windows is dat de ingebouwde Windows Firewall. Wanneer je een nieuwe poort opent op een server, moet je die ook openen in de host-based firewall, anders bereikt het verkeer de poort nooit.
 
-Dit betekent voor jou: controleer firewallregels altijd op de volledige route, niet alleen op je eigen machine.
+De **netwerkfirewall** zit tussen het internet en je server, typisch beheerd door je hostingprovider, IT-dienst of op je router thuis. Bij clouddiensten zoals AWS of Azure heet dit een **security group** of **network security group**. Hier gelden dezelfde principes: je definieert welk verkeer mag binnen- en buitenkomen.
+
+Een veelgemaakte fout: je start een service op poort 8080, de service luistert correct, maar de verbinding mislukt. Je controleert je code, geen fout. Je controleert de poort, aan het luisteren. Wat vergeet je? *De firewall*. Controleer altijd beide lagen: de host-based firewall én de netwerkfirewall. Op een nieuwe VPS staan standaard alleen poort 22 (SSH) en soms 80/443 open. Al het andere moet je expliciet toestaan.
+
+Het principe achter goede firewallconfiguratie: **whitelist, niet blacklist**. Blokkeer alles standaard en laat alleen toe wat nodig is. Niet andersom.
 
 ### Test jezelf
 
-**Vraag 1.** Wat doet een firewall in essentie?
-
-a) Verkeer toelaten of blokkeren volgens vooraf bepaalde regels
-b) Automatisch je database optimaliseren
-c) DNS vervangen door directe IP-routing
-d) Je applicatiecode compileren
+**Vraag 1.** Wat doet een firewall eigenlijk?
 
 **Vraag 2.** Waarom kan verkeer lokaal wel werken maar van buitenaf toch geblokkeerd worden?
 
-**Vraag 3.** Noem twee plaatsen waar firewallregels kunnen staan in een typische setup.
+**Vraag 3.** Waarom maakt **whitelist, niet blacklist** een server veiliger?
 
 ---
 
-## 3.6 Port forwarding: naar binnen laten wat je wil
+## 3.6 Port forwarding
 
-Stel: je draait thuis een test-API op je laptop en je wil dat een teammate die kan bereiken. Dan heb je meestal **port forwarding** nodig.
+Stel: je wilt zelf een MineCraft server hosten om samen met wat vrienden te bouwen aan een mega constructie. Je hebt de server geconfigged, kan zelf lokaal verbinden, hebt poort 25565 toegevoegd aan de firewall, maar nog altijd kunnen je vrienden niet verbinden op je server. Wat is het probleem?
 
-Bij port forwarding maakt je router een mapping van een externe poort naar een intern IP en poort. Bijvoorbeeld extern 8443 naar intern 192.168.0.25:443.
+Je thuisrouter heeft één publiek IP-adres. Achter die router zitten verschillende apparaten waaronder de machine met je server, elk met een intern IP. Wanneer iemand van buitenaf verbinding wil maken met jouw lokale server, weet de router niet naar welk apparaat hij het verkeer moet sturen. Tenzij je **port forwarding** configureert.
 
-Dat werkt, maar het opent ook een deur naar binnen. Doe dit bewust, zo beperkt mogelijk, en alleen wanneer nodig.
+Port forwarding is een instelling in je router waarbij je zegt: "Verkeer dat binnenkomt op poort X, stuur je door naar IP-adres Y op poort Z." Concreet voor je MineCraft server: "Alles wat binnenkomt op poort 25565, stuur door naar `192.168.1.105:25565`": het IP-adres van je computer waarop de MineCraft server draait.
 
-Dit betekent voor jou: voor externe bereikbaarheid denk je in drie lagen tegelijk: routermapping, firewallregels en de service die echt luistert op de doelpoort.
+De stappen zijn altijd hetzelfde. 
+1. Geef je machine een statisch IP-adres of DHCP-reservatie, anders verandert het IP na een reboot en werkt je port forwarding-regel niet meer.
+2. Log in op je router en zoek de port forwarding-instellingen (soms onder "NAT", "Virtual Server" of "Port Mapping"). 
+3. Stel de regel in met het externe poortnummer, het interne IP-adres en het interne poortnummer. 
+4. Test vanuit een extern netwerk, bvb via GSM als je niet met je WiFi verbonden bent.
+
+Er zijn twee varianten. **Port forwarding** werkt voor één specifieke poort. **DMZ** (Demilitarized Zone) stuurt al het verkeer door naar één intern apparaat, handig voor een homelab, maar gevaarlijk. Een apparaat in de DMZ staat volledig bloot aan het internet en heeft geen routerbeveiliging meer.
+
+Weet wat je doet wanneer je port forwarding instelt. Je opent letterlijk een deur in je netwerk. Zorg dat de service achter die deur up-to-date is, een sterk wachtwoord heeft en niet meer blootstelt dan nodig.
 
 ### Test jezelf
 
 **Vraag 1.** Wat doet port forwarding?
 
-a) Extern inkomend verkeer doorsturen naar een specifieke interne host en poort
-b) Alle interne poorten automatisch publiceren op internet
-c) DNS-records versleutelen
-d) DHCP-leases verlengen
+- Extern inkomend verkeer doorsturen naar een specifieke interne host en poort
+- Alle interne poorten automatisch publiceren op internet
+- DNS-records versleutelen
+- Een server op je laptop automatisch blootstellen op het internet
 
-**Vraag 2.** Waarom is port forwarding een veiligheidsrisico als je het slordig configureert?
-
-**Vraag 3.** Welke drie controles doe je na het instellen van een forwardingregel?
+**Vraag 2.** Waarom is port forwarding een veiligheidsrisico als je het slecht configureert?
 
 ---
 
-## 3.7 Veelgemaakte fouten en hoe je je ze herkent
+## 3.7 EHBOS: Eerste Hulp Bij Onbereikbare Servers
 
-De klassiekers blijven dezelfde, ook bij sterke developers. Verkeerde hostnaam. Foute poort. Service draait niet. Firewall blokkeert. Of je app probeert naar localhost te praten vanuit een container waar localhost iets anders betekent.
+"Waarom kan mijn app de database niet bereiken?" is een vraag die elke developer vroeg of laat stelt. Het antwoord zit bijna altijd in één van dezelfde vijf categorieën. Leer ze herkennen en je lost dit soort problemen in minuten op in plaats van uren.
 
-Een tweede valkuil: je test op één machine en denkt dat de keten ok is. Maar tussen client en database zitten vaak nog meerdere lagen: DNS, NAT, firewall, proxy, tls en routing.
+**1. De service luistert niet:** Je database is gestart, maar luistert op `127.0.0.1` in plaats van `0.0.0.0`. Of de service is helemaal niet gestart. Controleer met `netstat -tlnp | grep 5432` (voor PostgreSQL) of de poort actief is en op welk adres.
 
-Daarom werkt een korte diagnosechecklist beter dan heldhaftig gokken. Minder drama, meer resultaat.
+**2. De firewall blokkeert de verbinding:** De service luistert correct, maar de firewall laat het verkeer niet door. Onderscheid "*connection refused*" (de poort is bereikbaar maar weigert) van "*connection timed out*" (de poort is niet bereikbaar, waarschijnlijk geblokkeerd door firewall). `connection refused` = service probleem. `timed out` = firewallprobleem.
 
-Dit betekent voor jou: maak je eigen standaard checklist en gebruik die altijd. Professionaliteit is vaak gewoon consequent zijn onder druk.
+**3. Verkeerd IP-adres of hostnaam:** Je connectiestring verwijst naar `localhost` maar de database draait in een Docker-container met een eigen netwerk. Of je hebt een typfout in het IP-adres. Controleer de exacte connectiestring en vergelijk met het werkelijke adres van de service.
+
+**4. Verkeerde poort:** Je hebt de standaardpoort aangenomen maar de service is geconfigureerd op een andere poort. Of je verwart MySQL (3306) met PostgreSQL (5432). Controleer de configuratie van de service zelf.
+
+**5. Authenticatiefout die eruitziet als verbindingsfout:** De verbinding lukt, maar de database weigert de gebruiker. Sommige foutmeldingen zijn hier niet duidelijk over. Test de verbinding eerst met een database-client (bv. `psql` of `mysql` in de Terminal) om authenticatie los te koppelen van de netwerkverbinding.
+
+Het debuggingproces volgt altijd dezelfde logica: bevestig eerst dat de service draait en op de juiste poort luistert. Test daarna de verbinding lokaal (vanaf de server zelf). Test pas daarna van buitenaf. Zo sluit je laag voor laag mogelijke oorzaken uit.
 
 ### Test jezelf
 
-**Vraag 1.** Welke fout komt het vaakst voor bij app-database connectiviteit?
+**Vraag 1.** Stel een mini-checklist op van vijf stappen voor de foutmelding connection timed out naar een database.
 
-a) Mismatch in host, poort of bind-adres
-b) Te weinig RAM op de client
-c) Te veel tabs open in je browser
-d) Verkeerde toetsenbordlayout
-
-**Vraag 2.** Waarom is localhost in containers vaak een bron van verwarring?
-
-**Vraag 3.** Stel een mini-checklist op van vijf stappen voor de foutmelding connection timed out naar een database.
+**Vraag 2.** Wat is het verschil tussen "connection refused" en "connection timed out" als foutmelding, en wat zegt elk over de locatie van het probleem?
 
 ---
 
@@ -206,45 +244,31 @@ d) Verkeerde toetsenbordlayout
 
 ### Easy
 
-**E1.** Controleer op je eigen machine welke processen luisteren op netwerkpoorten. Noteer drie processen met poortnummer en vermoedelijke rol.
+**E1.** Controleer op je eigen machine (voer `netstat -tlnp` (Linux/macOS) of `netstat -ano` (Windows) uit) welke processen luisteren op netwerkpoorten. Noteer drie processen met poortnummer en vermoedelijke rol.
 
-**E2.** Test met nc of telnet of poort 80 en 443 bereikbaar zijn voor een publieke website. Schrijf op wat het verschil in resultaat betekent.
+**E2.** Draai lokaal een simpele webserver (bvb met XAMPP) en test die via localhost en via je lokale IP-adres. Vergelijk de resultaten.
 
-**E3.** Draai lokaal een simpele webserver en test die via localhost en via je lokale IP-adres. Vergelijk de resultaten.
+**E3.** Zoek uit welke firewall actief is op je machine. Noteer waar je regels kan bekijken.
 
-**E4.** Maak een tabel met tien veelgebruikte developerpoorten en bijhorende services.
+**E4.** Zoek op welke poorten de volgende services standaard gebruiken: MySQL, Redis, MongoDB, RabbitMQ, Elasticsearch. Noteer de poort en het protocol (TCP/UDP) voor elk.
 
-**E5.** Schrijf in je eigen woorden het verschil tussen connection refused en connection timed out.
-
-**E6.** Zoek uit welke firewall actief is op je machine. Noteer waar je regels kan bekijken.
-
-**E7.** Simuleer een fout door bewust een verkeerde poort in je appconfig te zetten. Documenteer symptoom, diagnose en fix.
-
-**E8.** Beschrijf in maximaal acht zinnen hoe localhost, IP-adres en poort samen een endpoint vormen.
+**E5.** Voer `curl -v http://google.be` uit. Lees de output. Identificeer het IP-adres waarmee verbinding gemaakt wordt, de poort, en de HTTP-statuscode die teruggegeven wordt.
 
 ---
 
 ### Medium
 
-**M1.** Schrijf een diagnoseflow voor app naar database problemen in maximaal 12 stappen, van processtatus tot firewall.
+**M1.** Zet een lokale database op en verbind ermee vanuit een aparte testapp. Toon dat verbinding op localhost werkt en leg uit wat je moet veranderen voor verbinding vanaf een tweede toestel.
 
-**M2.** Zet een lokale database op en verbind ermee vanuit een aparte testapp. Toon dat verbinding op localhost werkt en leg uit wat je moet veranderen voor verbinding vanaf een tweede toestel.
+**M2.** Onderzoek de impact van een hostfirewallregel die inkomend verkeer op één poort blokkeert.
 
-**M3.** Analyseer een case: backend werkt lokaal, maar frontend op een andere machine krijgt geen data. Geef drie hypotheses met tests.
+**M3.** Maak een overzicht van poorten die een web project gebruikt, inclusief service, protocol en risico bij blootstelling.
 
-**M4.** Vergelijk TCP en UDP op het vlak van betrouwbaarheid, latency en typische use cases. Sluit af met keuzeadvies voor databaseverkeer.
+**M4.** Start een eenvoudige TCP-server met `nc -l 9000` (netcat). Maak vanuit een tweede terminal verbinding met `nc localhost 9000`. Stuur een tekst van de ene terminal naar de andere. Beschrijf wat er op netwerkniveau gebeurt bij elke stap.
 
-**M5.** Onderzoek de impact van een hostfirewallregel die inkomend verkeer op één poort blokkeert. Documenteer hoe je de blokkering herkent.
+**M5.** Gebruik `ufw` (Linux) of de ingebouwde Windows Firewall om een specifieke poort te blokkeren op je machine. Test of de blokkering werkt met `nc` of `telnet`. Verwijder de regel daarna.
 
-**M6.** Maak een overzicht van poorten die jouw project gebruikt, inclusief service, protocol en risico bij blootstelling.
-
-**M7.** Voer een gecontroleerde port forwarding test uit in een veilige thuislabopstelling. Beschrijf setup, resultaten en beveiligingsmaatregelen.
-
-**M8.** Los een containercase op waar app en database elkaar niet vinden door fout endpoint. Beschrijf het verschil tussen localhost in host en container.
-
-**M9.** Schrijf een runbook voor een junior developer met titel database not reachable waarin je minimaal twee commando’s per diagnoselaag geeft.
-
-**M10.** Bouw een beslisboom met minimaal tien knooppunten voor connection refused versus timed out versus name not resolved.
+**M6.** Onderzoek het concept **reverse proxy**. Wat doet een reverse proxy, en welke rol spelen poorten daarin? Geef een concreet voorbeeld van hoe nginx als reverse proxy ingezet wordt voor een Node.js-applicatie op een server.
 
 ---
 
@@ -252,32 +276,16 @@ d) Verkeerde toetsenbordlayout
 
 **H1.** Ontwerp een veilige netwerkopstelling voor een webapp met database in een kleine Belgische kmo. Motiveer poortkeuzes, firewallregels en toegangsbeleid.
 
-**H2.** Werk een incidentanalyse uit: Sinds 07/06/2026 14:30 kan de app in staging de database niet bereiken. Lever hypotheses, meetplan, root cause en preventie.
+**H2.** Vergelijk drie strategieën om een lokale service extern bereikbaar te maken: port forwarding, vpn en tunnelservice. Evalueer veiligheid, beheer en complexiteit.
 
-**H3.** Schrijf een technische nota over bind-adressen zoals 127.0.0.1, 0.0.0.0 en specifieke interface-IP’s. Geef risico’s en best practices.
+**H3.** Schrijf een korte gids voor developers over hoe je incidentcommunicatie doet tijdens een netwerkstoring: wat meld je, wanneer, en met welke technische bewijsstukken.
 
-**H4.** Onderzoek hoe reverse proxies en load balancers het zicht op originele clientpoort en bronadres beïnvloeden. Leg impact op logging en debugging uit.
+**H4.** Een collega stelt voor om de SSH-poort te verplaatsen van 22 naar een willekeurig hoog poortnummer als beveiligingsmaatregel ("security through obscurity"). Schrijf een onderbouwde reactie: wat zijn de voor- en nadelen van deze aanpak?
 
-**H5.** Ontwerp een minimale zero trust benadering voor interne services met focus op poorten, segmentatie en least privilege.
-
-**H6.** Vergelijk drie strategieën om een lokale service extern bereikbaar te maken: port forwarding, vpn en tunnelservice. Evalueer veiligheid, beheer en complexiteit.
-
-**H7.** Analyseer een scenario met intermitterende time-outs naar de database. Maak onderscheid tussen netwerkproblemen, poolproblemen en queryproblemen.
-
-**H8.** Schrijf een korte gids voor developers over hoe je incidentcommunicatie doet tijdens een netwerkstoring: wat meld je, wanneer, en met welke technische bewijsstukken.
+**H5.** Analyseer de beveiligingsrisico's van de volgende configuratie: een developer heeft zijn hele thuisnetwerk in een DMZ gezet zodat hij makkelijk van buitenaf aan zijn projecten kan werken. Welke risico's introduceert dit? Welke alternatieven bestaan er die hetzelfde doel bereiken zonder de beveiliging volledig te omzeilen?
 
 ---
 
 ### At Home
 
-**AT1. Eigen diagnosekit bouwen** meerdere uren
-
-Stel je persoonlijke terminalkit samen voor netwerkdebugging. Maak een document met je standaardcommando’s, interpretatie van resultaten en een vaste diagnosevolgorde. Test de kit op minstens twee realistische foutscenario’s.
-
-**AT2. Thuislab met gecontroleerde fouten** meerdere uren over meerdere sessies
-
-Bouw een kleine labopstelling met minstens twee services die over het netwerk praten. Introduceer bewust drie fouten zoals foute poort, firewallblok en verkeerde hostnaam. Documenteer per fout hoe je die detecteert en oplost.
-
-**AT3. Bereikbaarheid en beveiliging evalueren** één dag
-
-Kies één service in je testomgeving en evalueer of die van buitenaf bereikbaar moet zijn. Werk een concreet voorstel uit met poortbeleid, firewallregels, logging en herstelplan bij misbruik.
+**AT1.** Maak een volledig overzicht van alle poorten die op jouw machine actief in gebruik zijn. Identificeer voor elke poort: het poortnummer, het protocol (TCP/UDP), het adres waarop geluisterd wordt (localhost of 0.0.0.0), het proces dat de poort in gebruik heeft, en of die poort intern of extern bereikbaar is. Beoordeel daarna je firewallconfiguratie: welke poorten zijn onnodig blootgesteld? Welke services hadden beter alleen op `127.0.0.1` mogen luisteren? Schrijf een rapport met bevindingen en aanbevelingen.

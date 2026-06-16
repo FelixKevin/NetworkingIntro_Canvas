@@ -1,159 +1,173 @@
-# Module 4: Hoe werkt HTTP nu écht?
+# Module 4: The WW..H, the Wonderful World of HTTP
 
 ---
 
-## 4.1 Request en response: het gesprek van het web
+## 4.1 Wij moeten eens praten
 
 Je klikt op een link en een pagina laadt. Eenvoudig genoeg. Maar onder die klik zit een heel gesprek: jouw browser stuurt een **request** (verzoek) naar een server, en de server antwoordt met een **response** (antwoord). Dat is alles wat HTTP is: een protocol voor dat gesprek.
 
-**HTTP** staat voor HyperText Transfer Protocol. Het is stateless: elke request staat op zichzelf. De server onthoudt niets van je vorige request, tenzij je dat zelf regelt via cookies, tokens of sessies.
+**HTTP** staat voor **HyperText Transfer Protocol**. Het is een tekstgebaseerd protocol dat werkt bovenop TCP: de browser bouwt eerst een TCP-verbinding op met de server en stuurt daarna een leesbaar tekstbericht. Een minimale HTTP-request ziet er zo uit:
 
-Elke request bevat minstens een method, een URL en headers. Elke response bevat een statuscode, headers en optioneel een body. Die structuur geldt voor elk webverzoek dat je app ooit verstuurt of ontvangt.
+```
+GET /index.html HTTP/1.1
+Host: www.voorbeeldwebsite.be
+```
 
-Dit betekent voor jou: als een API-aanroep faalt, kijk je altijd naar zowel de request als de response. De fout zit soms in wat jij verstuurt, soms in wat de server teruggeeft.
+Twee regels, meer is er niet nodig om "het internet" te laten werken. De eerste zegt wat je wil doen (`GET`), welke resource je wil (`/index.html`) en welke versie van HTTP je gebruikt (`HTTP/1.1`). De tweede zegt naar welke server je de request gaat sturen. De server antwoordt met een **response**:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<html>...</html>
+```
+
+Eerst de statusregel (versie + statuscode + beschrijving), dan headers, dan een lege regel, dan de body met de eigenlijke content. Dat patroon van request met methode, pad en headers; response met statuscode, headers en body is de backbone van het web. Alles wat je doet als developer gaat dit patroon volgen.
+
+HTTP is **stateless**: elke request staat op zichzelf. De server onthoudt niets van vorige requests, dus weet ook niet of twee requests van dezelfde persoon komen. Dat is een beperking, maar het is ook de reden waarom HTTP zo eenvoudig en schaalbaar is. In andere web-gerelateerde opleidingsonderdelen gaan we kijken naar oplossingen voor dit stateless probleem.
 
 ### Test jezelf
 
 **Vraag 1.** Wat betekent stateless in de context van HTTP?
 
-a) Elke request staat op zichzelf; de server onthoudt niets van vorige requests zonder extra mechanisme
-b) De server onthoudt alle requests automatisch in zijn cache
-c) HTTP versleutelt elke request afzonderlijk
-d) Clients mogen slechts één request per sessie sturen
+- Elke request staat op zichzelf; de server onthoudt niets van vorige requests
+- De server onthoudt alle requests automatisch in zijn cache
+- Het is een request waar geen OK-status voor kan worden teruggegeven
+- Clients mogen slechts één request per sessie sturen
 
-**Vraag 2.** Jouw fetch-aanroep geeft geen resultaat terug. Hoe bepaal je of het probleem bij de request of de response zit?
-
-**Vraag 3.** Noem de drie verplichte onderdelen van een HTTP-request.
+**Vraag 2.** Wat betekent het dat HTTP "tekstgebaseerd" is, en wat is het voordeel daarvan voor developers?
 
 ---
 
-## 4.2 HTTP methods: GET, POST en de rest
+## 4.2 GET, POST en anderen
 
-Niet elke request heeft dezelfde bedoeling. Je haalt data op anders dan je data aanmaakt. Daarvoor bestaan **HTTP methods** (HTTP-methoden): GET, POST, PUT, PATCH en DELETE zijn de meest gebruikte.
+Een HTTP-request begint altijd met een **method** (methode), het werkwoord dat zegt wat je wil doen. Die keuze is wel belangrijk, hoewel dat dat niet altijd zichtbaar is. Elke method heeft een betekenis en deze correct gebruiken maakt het developpen (zeker APIs) gemakkelijker.
 
-**GET** vraagt data op zonder bijwerkingen. **POST** stuurt data naar de server om iets nieuws aan te maken. **PUT** vervangt een bestaande resource volledig. **PATCH** past een deel ervan aan. **DELETE** verwijdert een resource.
+**GET** vraagt data op. Een GET-request heeft geen body en verandert niets op de server. Je kunt een GET-request onbeperkt herhalen zonder bijwerkingen. Gebruik GET voor alles wat je ophaalt: een lijst van producten, een profiel, een zoekopdracht, ...
 
-REST APIs volgen die conventie. Dat maakt code leesbaarder en gedrag voorspelbaarder, zolang iedereen de afspraken respecteert.
+**POST** stuurt data naar de server om iets nieuws aan te maken. Een POST heeft wel een body. Twee identieke POST-requests maken twee objecten aan. Gebruik POST wanneer je een nieuw record aanmaakt, een formulier indient, ...
 
-Dit betekent voor jou: gebruik de juiste method voor de juiste actie. GET is geen alternatief voor POST als je data aanpast, ook al werkt het soms toevallig.
+**PUT** vervangt een bestaande resource volledig. Je stuurt de volledige nieuwe versie mee. **PATCH** past een resource gedeeltelijk aan, je stuurt alleen de velden die veranderen. In een API voor gebruikersbeheer gebruik je PUT om een heel profiel te vervangen en PATCH om bvb alleen het e-mailadres bij te werken.
+
+**DELETE** verwijdert een resource. Net als GET heeft het typisch geen body.
+
+**HEAD** werkt als GET, maar de server stuurt alleen de headers terug, geen body. Handig om te controleren of een resource bestaat of hoe groot hij is zonder hem volledig te downloaden (denk aan grotere afbeeldingen of PDF bestanden).
+
+**OPTIONS** vraagt welke methods de server ondersteunt voor een bepaalde URL.
+
+In de praktijk zit de grootste valkuil hier: sommige developers gebruiken GET voor alles, inclusief acties die data wijzigen. Dat is verkeerd want GET-requests worden gecached, gelogd en kunnen opnieuw uitgevoerd worden door browsers en proxies. In de web-vakken gaan we trouwens dieper in op deze verschillen.
 
 ### Test jezelf
 
 **Vraag 1.** Welke HTTP-method gebruik je om een bestaand record gedeeltelijk aan te passen?
 
-a) PATCH
-b) PUT
-c) POST
-d) GET
+- PATCH
+- PUT
+- POST
+- GET
 
 **Vraag 2.** Waarom is een GET-request niet geschikt om wachtwoorden of gevoelige data mee te sturen?
 
-**Vraag 3.** Beschrijf het verschil tussen PUT en PATCH in één concrete situatie.
-
 ---
 
-## 4.3 Headers: de metadata van je request
+## 4.3 Je moet je headers erbij houden
 
-De body van een request bevat de data. Maar wie vertelt de server in welk formaat die data zit? Of welke taal de client verwacht? Of welk token de request autoriseert? Dat doet de **header** (koptekst).
+Een HTTP-bericht bestaat uit meer dan alleen een method en een body. De **headers** zijn de metadata (informatie over de informatie): hoe moet de boodschap geïnterpreteerd worden, wie stuurt ze, welk antwoord verwachten ze, ... Ze zijn onzichtbaar voor de eindgebruiker maar zijn voor onsals  developer wel belangrijk.
 
-Headers zijn sleutel-waardeparen die meegestuurd worden met elke request en response. Voorbeelden: `Content-Type: application/json`, `Authorization: Bearer <token>`, `Accept-Language: nl-BE`.
+Headers zijn key/value-pairs, één per regel. Hier een voorbeeld:
 
-Ze zijn onzichtbaar in de browser, maar altijd aanwezig. DevTools laat ze zien. Jij moet weten welke headers je app nodig heeft en welke de server verwacht.
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGc...
+Accept: application/json
+Cache-Control: no-cache
+```
 
-Dit betekent voor jou: veel API-fouten hebben niets met data te maken, maar met een ontbrekende of foute header. Check headers even routinematig als je statuscode.
+Een aantal headers zijn, net zoals poorten, echt overal terug te vinden dus is het goed om te weten wat ze precies doen:
+- **Content-Type**: Zegt in welk formaat de body van het bericht is. `application/json` voor JSON-data, `text/html` voor HTML, `multipart/form-data` voor bestandsuploads. Je zegt aan de ontvanger hoe de data moet bekeken worden.
+- **Authorization**: Draagt authenticatiegegevens. De meest voorkomende vorm is een **Bearer token**: `Authorization: Bearer <token>`. Dit zie je bij JWT-authenticatie en OAuth. De server controleert dit token bij elke request.
+- **Accept**: Zegt in welk formaat de client het antwoord wil. `Accept: application/json` vraagt de server om JSON terug te sturen. Een server die meerdere formaten ondersteunt, gebruikt dit om te beslissen wat hij stuurt.
+- **Cache-Control**: Bepaalt of en hoe lang een response gecached mag worden. `Cache-Control: no-cache` zegt dat de response niet gecached mag worden. `Cache-Control: max-age=3600` zegt dat hij een uur geldig is.
+- **CORS-headers**: Regelen toegang vanuit andere origins. `Access-Control-Allow-Origin: *` laat alle origins toe.
+
+Naast request-headers zijn er ook **response-headers**. `Location` vertelt de client waar hij naartoe moet na een redirect. `Set-Cookie` plaatst een cookie. `Content-Length` zegt hoe groot de body is.
 
 ### Test jezelf
 
 **Vraag 1.** Welke header gebruik je om aan de server te zeggen dat je een JSON-body stuurt?
 
-a) `Content-Type: application/json`
-b) `Accept: text/html`
-c) `Authorization: Basic`
-d) `Cache-Control: no-store`
-
-**Vraag 2.** Je POST-request geeft een 415 Unsupported Media Type terug. Welke header ontbreekt waarschijnlijk?
-
-**Vraag 3.** Leg in je eigen woorden het verschil uit tussen `Content-Type` en `Accept`.
+- `Content-Type: application/json`
+- `Accept: application/json`
+- `Authorization: json`
+- `Cache-Control: no-store`
 
 ---
 
-## 4.4 Statuscodes: wat bedoelt de server?
+## 4.4 De origine van de 404 moppen
 
-Je stuurt een request en krijgt een getal terug. Dat getal is de **statuscode** (statuscode). Die vertelt je in één oogopslag of het goed ging, fout ging, of iets anders.
+De server antwoordt altijd met een getal van drie cijfers. Dat getal is de **statuscode**, de snelste manier om te zien of een request gelukt is, mislukt is, of iets anders vereist. Ze zijn gegroepeerd per honderdtal, waarbij elke honderd responses een andere "categorië" aanduiden.
 
-De vijf reeksen:
-- **1xx**: informatief, zelden relevant voor jou
-- **2xx**: succes — 200 OK, 201 Created, 204 No Content
-- **3xx**: redirect — 301 Moved Permanently, 302 Found
-- **4xx**: clientfout — 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found
-- **5xx**: serverfout — 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable
+**1xx, Informatief:** De server heeft de request ontvangen en is bezig. In de praktijk gaan we deze boodschappen amper te zien krijgen.
 
-De meest verwarrende: 401 vs 403. 401 betekent "ik ken je niet", 403 betekent "ik ken je, maar je mag niet".
+**2xx, Succes:** `200 OK` is de standaard succesmelding. `201 Created` gebruik je na een POST die iets nieuws aanmaakt. Het bevestigt dat de resource aangemaakt is en stuurt vaak de URL van het nieuwe object mee in de `Location`-header.
 
-Dit betekent voor jou: als je API-aanroepen behandelt, reageer je op de statuscode, niet alleen op de aanwezigheid van een response body.
+**3xx, Redirect:** De resource is ergens anders. `301 Moved Permanently` zegt dat de resource definitief verhuisd is, browsers en zoekmachines onthouden dit. `302 Found` is een tijdelijke redirect. `304 Not Modified` betekent dat de gecachte versie nog geldig is en de server geen nieuwe body stuurt.
+
+**4xx, Fout van de client:** `400 Bad Request`, de server begrijpt de request niet (ontbrekende of ongeldige data). `401 Unauthorized`, je bent niet geauthenticeerd (geen of ongeldig token). `403 Forbidden`, je bent geauthenticeerd, maar hebt geen toegang tot deze resource. `404 Not Found`, de resource bestaat niet. `405 Method Not Allowed`, de methode is niet toegestaan op dit eindpunt.
+
+**5xx, Fout van de server:** `500 Internal Server Error`, er is iets fout gegaan aan de serverkant en de server weet zelf niet precies wat. `502 Bad Gateway`, de server fungeerde als proxy en het achterliggende systeem reageerde fout. `503 Service Unavailable`, de server is tijdelijk niet beschikbaar (overbelasting of onderhoud).
+
+Het verschil tussen 401 en 403 is een klassieker: 401 zegt "ik weet niet wie je bent", 403 zegt "ik weet wie je bent, maar je mag dit niet". In een goed gebouwde API gebruikt elke statuscode precies de juiste code voor de situatie. Dat maakt het debuggen en de communicatie met andere developers een stuk eenvoudiger.
+
+Dit is ook maar een kleine greep uit het aanbod van alle HTTP status codes. Zoek zelf bijvoorbeeld eens "`HTTP error 418`" op en zeg dan maar dat developers geen gevoel voor humor hebben!
 
 ### Test jezelf
 
-**Vraag 1.** Wat is het verschil tussen een 401 en een 403 statuscode?
+**Vraag 1.** Wat is het verschil tussen `401 Unauthorized` en `403 Forbidden`, en wanneer gebruik je welke?
 
-a) 401 betekent niet geauthenticeerd, 403 betekent niet geautoriseerd
-b) 401 is een serverfout, 403 is een clientfout
-c) 401 is voor GET-requests, 403 voor POST-requests
-d) Er is geen praktisch verschil
-
-**Vraag 2.** Je app krijgt een 502. Wat is een waarschijnlijke oorzaak?
-
-**Vraag 3.** Wanneer gebruik je 201 in plaats van 200 als responsecode?
+**Vraag 2.** Wanneer gebruik je 201 in plaats van 200 als responsecode?
 
 ---
 
-## 4.5 HTTPS: waarom het slot ertoe doet
+## 4.5 Lock it up!
 
-Je ziet het bijna niet meer — dat slotje in de adresbalk. Maar het maakt een fundamenteel verschil. **HTTPS** (HTTP Secure) is HTTP met een versleutelde verbinding via **TLS** (Transport Layer Security).
+Zoals we al daarjust hebben gezegd, HTTP verstuurt alles als leesbare tekst. Dat heeft wel enkele implicaties, bijvoorbeeld dat iedereen die het verkeer kan onderscheppen (op een publiek wifi-netwerk, bij je internetprovider, ergens onderweg in het netwerk, ...) je wachtwoorden, sessietokens en persoonlijke data gewoon kan lezen. **HTTPS** lost dat op.
 
-Zonder HTTPS reist data in plaintext over het netwerk. Iedereen die het verkeer kan onderscheppen, leest mee: wachtwoorden, tokens, creditcardnummers. Met HTTPS wordt alles versleuteld zodat alleen client en server de inhoud kunnen lezen.
+**HTTPS** is HTTP over **TLS** (Transport Layer Security, vroeger bekend als **SSL**). TLS voegt een versleutelde laag toe tussen TCP en HTTP. Voordat er ook maar één byte aan HTTP-data verstuurd wordt, voeren de client en server een **TLS handshake** uit: ze spreken een encryptiemethode af, de server toont zijn **certificaat** (een digitaal bewijs van identiteit) en beide kanten genereren samen een geheime sleutel waarmee alle verdere communicatie versleuteld wordt.
 
-TLS-certificaten dienen ook voor identiteitsverificatie: je bewijst dat je server echt is wie die beweert te zijn. Let's Encrypt maakt gratis certificaten bereikbaar voor iedereen.
+Een **TLS-certificaat** bevat de domeinnaam van de server en een digitale handtekening van een **Certificate Authority**, een vertrouwde organisatie die bevestigt dat de server is wie hij beweert te zijn. Je browser heeft een lijst van vertrouwde CA's ingebouwd. Staat de handtekening van een onbekende of verlopen CA op het certificaat, dan zie je een waarschuwing in de aard van "uw verbinding is niet privé".
 
-Dit betekent voor jou: gebruik altijd HTTPS, ook in development voor omgevingen die op het netwerk bereikbaar zijn. HTTP is geen valide keuze meer, ook niet tijdelijk.
+Als developer zijn er twee praktische gevolgen. Eerste en vooral, gebruik altijd HTTPS, ook in staging en testomgevingen. Browsers markeren HTTP-sites steeds vaker als "niet veilig" en sommige browser API's (zoals geolocation) weigeren te werken zonder HTTPS. Tools zoals **Let's Encrypt** geven gratis en automatisch verlengbare certificaten.
+
+Ten tweede, begrijp dat HTTPS de inhoud van het verkeer verbergt, maar niet het feit dat er verkeer is. Je internetprovider (of eigenaar van het publieke netwerk waarop je aan het surven bent) ziet nog steeds met welke server je verbindt (via de domeinnaam in het certificaat en via DNS), maar niet wat je precies stuurt of ontvangt.
 
 ### Test jezelf
 
-**Vraag 1.** Wat regelt TLS in HTTPS?
+**Vraag 1.** Wat is het praktische risico van een loginformulier dat via HTTP verstuurd wordt?
 
-a) Versleuteling en authenticatie van de verbinding
-b) Sneller laden van afbeeldingen
-c) Automatische herstransmissie van verloren packets
-d) Compressie van HTML-bestanden
-
-**Vraag 2.** Wat is het praktische risico van een loginformulier dat via HTTP verstuurd wordt?
-
-**Vraag 3.** Wat is het verschil tussen een zelfondertekend certificaat en een certificaat van een publieke CA zoals Let's Encrypt?
+**Vraag 2.** Wat is het verschil tussen een zelfondertekend certificaat en een certificaat van een publieke CA zoals Let's Encrypt?
 
 ---
 
-## 4.6 DevTools: alles live bekijken
+## 4.6 Piep eens achter de schermen
 
-Je hoeft niet te gokken wat er over de draad gaat. De browser vertelt het je zelf. Het **Network-tabblad in DevTools** toont elke request die jouw browser verstuurt: URL, method, headers, body, statuscode, timing en responsedata.
+Je moet HTTP niet zomaar geloven op basis van uitleg. Je kunt elke request en elke response die je browser maakt live bekijken, inspecteren en analyseren. De **DevTools** van je browser laten je toe om eens onder de motorkap van het internet te kijken.
 
-Open DevTools met F12 of rechtermuisknop → Inspecteren. Ga naar het tabblad Network en laad de pagina opnieuw. Je ziet nu het volledige HTTP-verkeer van je sessie.
+Open DevTools in Chrome, Edge of Firefox met `F12` of `Ctrl+Shift+I` (Windows/Linux) of `Cmd+Option+I` (macOS). Ga naar het tabblad **Network**. Laad een pagina opnieuw. Je ziet elk request dat de browser stuurt: de URL, de method, de statuscode, de grootte, de laadtijd.
 
-Filter op Fetch/XHR om alleen API-calls te zien. Klik op een request om detail te zien: Request Headers, Response Headers, Preview en Response.
+Klik op een request om de details te zien. Je vindt er de **Request Headers**, alles wat de browser meestuurt, inclusief cookies, Authorization-headers en Content-Type. Je vindt de **Response Headers**, wat de server teruggestuurd heeft. Je vindt de **Preview** of **Response**, de eigenlijke inhoud van de response en je vindt de **Timing**, hoeveel tijd elke fase van de verbinding duurde (DNS-lookup, TCP-verbinding, TLS-handshake, wachten op de server, downloaden van de response).
 
-Dit betekent voor jou: DevTools is je eerste debugtool voor alle HTTP-problemen. Kijk er altijd in vóór je code aanpast. Wat je ziet, is de waarheid — niet je aanname over wat verstuurd wordt.
+Filters maken DevTools bruikbaar bij drukke pagina's. Gebruik `XHR` of `Fetch` om alleen API-calls te zien. Gebruik `Doc` voor HTML-documenten, `JS` voor scripts, `Img` voor afbeeldingen. Je kunt ook filteren op statuscode of domeinnaam.
+
+De knop **Preserve log** zorgt dat requests niet gewist worden bij een paginanavigatie, ideaal om formuliersubmissies of redirects te debuggen. **Disable cache** zorgt dat de browser altijd de laatste versie ophaalt in plaats van een gecachte versie te tonen.
+
+`curl` is het CLI alaternatief. Hoewel DevTools visueel is en interactief heeft `curl` ook wat voordelen, het is namelijk scriptbaar en preciezer. `curl -v https://api.example.com/users` toont de volledige request en response inclusief headers. `curl -X POST -H "Content-Type: application/json" -d '{"name":"Jan"}' https://api.example.com/users` stuurt een POST met JSON-body.
 
 ### Test jezelf
 
-**Vraag 1.** Welk DevTools-tabblad gebruik je om HTTP-requests van een webpagina te inspecteren?
+**Vraag 1.** Je fetch-request stuurt een body mee, maar de server ontvangt niets. Hoe bevestig je in DevTools of de body correct verstuurd werd?
 
-a) Network
-b) Console
-c) Sources
-d) Performance
-
-**Vraag 2.** Je fetch-request stuurt een body mee, maar de server ontvangt niets. Hoe bevestig je in DevTools of de body correct verstuurd werd?
-
-**Vraag 3.** Wat toont de timing-kolom in het Network-tabblad en waarom is dat nuttig?
+**Vraag 2.** Wat toont de timing-kolom in het Network-tabblad en waarom is dat nuttig?
 
 ---
 
@@ -163,76 +177,36 @@ d) Performance
 
 **E1.** Stuur met curl een GET-request naar `https://httpbin.org/get`. Beschrijf de structuur van de response.
 
-**E2.** Maak een tabel van de vijf HTTP-methods met beschrijving, typisch gebruik en een voorbeeld-URL.
+**E2.** Zoek op welk statuscode je terugkrijgt bij een pagina die verplaatst is naar een nieuwe URL en nooit terugkomt.
 
-**E3.** Zoek in DevTools de request headers op van één API-call die je app maakt. Noteer drie headers en leg ze uit.
+**E3.** Inspecteer in DevTools het verkeer van een login op een willekeurige testwebsite. Welke method en statuscode zie je?
 
-**E4.** Verklaar in je eigen woorden het verschil tussen 200, 201, 204 en 400.
-
-**E5.** Zoek op welk statuscode je terugkrijgt bij een pagina die verplaatst is naar een nieuwe URL en nooit terugkomt.
-
-**E6.** Maak het verschil duidelijk tussen `Content-Type` en `Accept` aan de hand van een concreet voorbeeld met een JSON API.
-
-**E7.** Leg uit wat stateless betekent in HTTP en geef één voorbeeld van hoe een app dat compenseert.
-
-**E8.** Inspecteer in DevTools het verkeer van een login op een willekeurige testwebsite. Welke method en statuscode zie je?
+**E4.** Open DevTools in je browser en laad `https://www.vrt.be`. Noteer: hoeveel requests worden er gemaakt bij het laden van de pagina? Wat is de statuscode van het eerste request? Welke Content-Type heeft de HTML-response?
 
 ---
 
 ### Medium
 
-**M1.** Schrijf een mini-API-client in een taal naar keuze die GET, POST en DELETE aanroept op `https://jsonplaceholder.typicode.com`. Log statuscode en body per aanroep.
+**M1.** Maak een overzicht van alle HTTP-requests die jouw favoriete website maakt bij het laden. Hoeveel zijn er? Welke zijn kritisch?
 
-**M2.** Analyseer het verschil in gedrag bij dezelfde endpoint met en zonder `Authorization`-header. Documenteer beide responses volledig.
+**M2.** Schrijf een korte handleiding voor teamgenoten: "Hoe lees je een API-fout in DevTools in vijf stappen."
 
-**M3.** Bouw een tabel van minstens tien statuscodes die jij in je eigen projecten al bent tegengekomen. Geef per code context en hoe je erop reageert.
+**M3.** Onderzoek wat **CORS** (Cross-Origin Resource Sharing) is en wanneer het optreedt. Bouw een situatie na waarbij CORS een request blokkeert: een eenvoudige HTML-pagina die via JavaScript een fetch doet naar een andere origin. Documenteer de foutmelding en de oplossing.
 
-**M4.** Vergelijk HTTP/1.1 en HTTP/2 op het vlak van multiplexing, headers en performance. Lever een korte samenvatting voor een junior developer.
-
-**M5.** Schrijf een foutafhandelingspatroon voor fetch-aanroepen in JavaScript dat correct omgaat met 4xx, 5xx en netwerkfouten.
-
-**M6.** Analyseer een case: een POST-request geeft 400 terug, maar je bent zeker dat de data correct is. Geef drie hypotheses en bijhorende debugstappen.
-
-**M7.** Test een API met een ontbrekende `Content-Type`-header. Documenteer het gedrag van de server en de correcte oplossing.
-
-**M8.** Maak een overzicht van alle HTTP-requests die jouw favoriete Vlaamse website maakt bij het laden. Hoeveel zijn er? Welke zijn kritisch?
-
-**M9.** Schrijf een korte handleiding voor teamgenoten: "Hoe lees je een API-fout in DevTools in vijf stappen."
-
-**M10.** Vergelijk CORS-fouten met gewone HTTP-fouten. Hoe herken je een CORS-probleem in DevTools?
+**M4.** Gebruik DevTools om de laadtijd van `https://www.belgium.be` te analyseren. Identificeer de drie traagste requests. Wat laadt er traag? Is het een DNS-probleem, een serverresponstijd, of een grote payload?
 
 ---
 
 ### Hard
 
-**H1.** Ontwerp een foutafhandelingslaag voor een REST API die zinvolle statuscodes en foutberichten teruggeeft. Gebruik Belgische wetgeving als context voor privacygevoelige data.
+**H1.** Analyseer een realistisch incident: een productie-API geeft plots 502 terug. Geef vermoedelijke oorzaken, testplan en escalatielogica.
 
-**H2.** Analyseer de TLS-handshake in Wireshark tijdens een HTTPS-verbinding. Beschrijf wat je ziet in de eerste vijf pakketten.
+**H2.** Schrijf een beveiligingsaudit checklist voor een eenvoudige REST API: welke headers, methoden en statuscodes zijn verplicht vanuit securityperspectief?
 
-**H3.** Schrijf een technisch document: "Veilige API-communicatie voor beginners". Behandel HTTPS, tokens, headers en input validatie.
-
-**H4.** Bouw een testplan voor de volledige HTTP-flow van een loginformulier: request, headers, statuscode, cookie, redirect en authenticatiefout.
-
-**H5.** Onderzoek HTTP-caching met `ETag`, `Cache-Control` en `Last-Modified`. Documenteer wanneer caching nuttig is en wanneer het een debugprobleem wordt.
-
-**H6.** Maak een vergelijking van REST en GraphQL op het vlak van HTTP-gebruik, statuscodes en debugbaarheid.
-
-**H7.** Analyseer een realistisch incident: een productie-API geeft plots 502 terug. Geef vermoedelijke oorzaken, testplan en escalatielogica.
-
-**H8.** Schrijf een beveiligingsaudit checklist voor een eenvoudige REST API: welke headers, methoden en statuscodes zijn verplicht vanuit securityperspectief?
+**H3.** Een collega wil een beveiligingsprobleem oplossen door gevoelige data in HTTP-headers te verbergen in plaats van in de URL. Hij stuurt het gebruikers-ID mee in een custom header `X-User-ID`. Evalueer dit voorstel kritisch: is het veiliger dan een URL-parameter, wat zijn de risico's, en wat is de correcte aanpak voor het meesturen van authenticatie-informatie?
 
 ---
 
 ### At Home
 
-**AT1. HTTP-dagboek** meerdere uren over meerdere sessies
-
-Inspecteer gedurende drie dagen elke dag minstens vijf API-calls in DevTools. Documenteer per call de method, headers, statuscode en wat je eruit leert. Sluit af met een patroonanalyse.
-
-**AT2. Bouw een HTTP-client van nul** meerdere uren
-
-Schrijf een minimale HTTP-client zonder externe libraries in een taal naar keuze. Ondersteun minstens GET en POST. Toon dat je headers en statuscode correct verwerkt. Documenteer je keuzes.
-
-**AT3. TLS-verkenning** één dag
-
-Onderzoek het TLS-certificaat van vijf websites: wie heeft het uitgegeven, wanneer verloopt het, en welke encryptie wordt gebruikt. Schrijf een analyse van wat je ziet en wat er zou gebeuren als een certificaat verloopt.
+**AT1. Nog geen idee, is over nadenken**
