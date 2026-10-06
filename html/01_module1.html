@@ -3,315 +3,148 @@
 @@include sidebar_menu.html
 
 <div class="wrapper">
-    
+
 <div class="container"><a id="1_1"></a>
-    <h3>1.1 Variabelen &amp; Datatypes
+    <h3>1.1 Hoe data beweegt
     <a href="#top">Terug naar boven</a></h3>
 
-    <p>PHP lijkt qua syntax heel erg op JavaScript, maar er zijn toch enkele belangrijke verschillen. In deze module zullen we de basis van PHP leren, zodat we later kunnen beginnen met het bouwen van een backend voor onze website.</p>
 
-    <p>Om variabelen te gebruiken in PHP volgen we dezelfde syntax als in JavaScript. We gebruiken het <span class="keyword">$</span>-teken om een variabele te declareren en we kunnen deze variabele dan gebruiken in onze code:</p>
 
-    <pre class="terminal">$naam = 'Kevin';</pre>
+<p>Stel: je stuurt een bestand naar een vriend aan de andere kant van de wereld. Je klikt op "verzenden" en een seconde later heeft hij het. Wat is er net gebeurd? Het antwoord is minder magisch dan het lijkt en het begrijpen ervan legt de basis voor alles wat volgt.</p>
 
-    <p>Net zoals in Java kunnen we variabelen van verschillende datatypes gebruiken. PHP is net zoals JavaScript een dynamisch getypeerde taal, wat betekent dat we geen datatype moeten opgeven wanneer we een variabele declareren. PHP zal zelf proberen te raden welk datatype we bedoelen. Dit kan soms handig zijn, maar kan ook voor problemen zorgen wanneer we niet goed opletten.</p>
+<p>Data beweegt over een netwerk niet als één groot blok, maar als kleine stukjes die afzonderlijk verstuurd worden. Die stukjes noemen we <b>packets</b>. Je bestand wordt opgesplitst, elk stukje krijgt een adres mee (een beetje zoals een envelop met een bestemming) en elk stukje kan een andere weg nemen om op de bestemming aan te komen. Aan de andere kant worden de stukjes terug samengevoegd tot het originele bestand. Dat hele systeem heet <b>packet switching</b> en dat maakt het internet robuust: bij congestie of uitval kan verkeer langs een andere route gestuurd worden.</p>
 
-    <p>Er zijn verschillende datatypes in PHP, hieronder een overzicht van de meest gebruikte:</p>
+<p>Fysiek gezien beweegt die data via kabels (koper of glasvezel), draadloze signalen (WiFi, 4G/5G), of optische fiber. De technologie verschilt, maar het principe blijft hetzelfde: alle eentjes en nulletjes reizen van punt A naar punt B, via soms tientallen tussenliggende apparaten.</p>
 
-    <ul>
-        <li><span class="keyword">int</span>: een geheel getal.</li>
-        <li><span class="keyword">float</span>: een kommagetal.</li>
-        <li><span class="keyword">string</span>: een tekst.</li>
-        <li><span class="keyword">bool</span>: een boolean, kan enkel <span class="mono">true</span> of <span class="mono">false</span> zijn.</li>
-        <li><span class="keyword">array</span>: een lijst van waarden.</li>
-        <li><span class="keyword">object</span>: een object.</li>
-        <li><span class="keyword">null</span>: een variabele zonder waarde.</li>
-    </ul>
+<p>Als developer hoef je niet elk detail van die fysieke laag te kennen. Maar je moet weten dat <b>netwerkcommunicatie nooit gegarandeerd</b> is. Packets kunnen verloren gaan, vertraagd zijn of in de verkeerde volgorde aankomen. Protocollen zoals TCP vangen veel daarvan op met controles en hertransmissie, maar dat kost tijd. Je code moet daar rekening mee houden.</p>
 
-    <p>We volgen de volgende richtlijnen voor naamgeving van variabelen:
-        <ul>
-            <li>De naam van een variabele moet beginnen met een letter of een underscore.</li>
-            <li>De naam van een variabele mag enkel letters, cijfers en underscores bevatten.</li>
-            <li>De naam van een variabele is case-sensitive.</li>
-        </ul>
-    </p>
-
-    <p>Hou rekening met de richtlijnen over goede naamgeving van variabelen. Dit maakt je code leesbaarder en zorgt ervoor dat je minder snel fouten maakt. Werk bij voorkeur met Engelse variabelenamen en gebruik waar mogelijk camelCase.</p>
-
-    <p>Let op met het feit dat PHP een dynamisch getypeerde taal is. Dit betekent dat PHP zelf zal proberen te raden welk datatype je bedoelt. Dit kan soms handig zijn, maar kan ook voor problemen zorgen wanneer je niet goed oplet. Probeer daarom altijd zo specifiek mogelijk te zijn wanneer je een variabele declareert.</p>
-
-    <pre class="console">$text1 = '12 uur';
-$text2 = 'uur 12';
-
-$number1 = 5;
-
-$sum1 = $text1 + $number1; // 17
-$sum2 = $text2 + $number1; // 5</pre>
-
-    <p>Deze code zal <b>géén</b> foutmelding geven wanneer je deze probeert uit te voeren, hoewel deze wel een zeer onverwacht resultaat zal geven. Dit komt omdat PHP probeert om de tekst in de variabele <span class="mono">$text1</span> om te zetten naar een getal, dit zal gebeuren van links naar rechts en omdat zowel 1 als 2 numerieke karakters zijn zal PHP hier de waarde van $text1 aanzien als 12 voor een berekening. Omdat <span class="mono">$text2</span> met een letter begint zal PHP de tekst omzetten naar <span class="mono">0</span>. <b>Dit kan voor onverwachte resultaten zorgen.</b></p>
-
-    <p>Naast normale variabelen hebben we ook in PHP constanten. Een constante is een variabele die een vaste waarde heeft en die we niet kunnen aanpassen. We kunnen een constante declareren met de <span class="keyword">define</span>-functie:</p>
-
-    <pre class="terminal">define('APIHOST', 'https://website.com/api');</pre>
-
-    <p>De naam van een constante moet in hoofdletters geschreven worden en we kunnen geen $-teken gebruiken. We kunnen een constante gebruiken in onze code door de naam van de constante te gebruiken:</p>
-
-    <pre class="terminal">echo APIHOST; // https://website.com/api</pre>
-
+<p>Dit betekent voor jou: bouw je applicatie alsof het netwerk soms traag, onvolledig of grillig reageert. Time-outs, retries en degelijke foutmeldingen zijn geen uitzonderingen maar de regel.</p>
 </div>
 
 <div class="container"><a id="1_2"></a>
-    <h3>1.2 Controlestructuren &amp; Loops
+    <h3>1.2 LAN vs WAN
     <a href="#top">Terug naar boven</a></h3>
 
-    <p>Net zoals in JavaScript kunnen we in PHP gebruik maken van controlestructuren en loops. Hieronder een overzicht van de meest gebruikte:</p>
-
-    <p>Dezelfde controlestructuren zijn beschikbaar:</p>
-    <ul>
-        <li><span class="keyword">if</span>: controleert of een bepaalde voorwaarde waar is.</li>
-        <li><span class="keyword">else</span>: wordt uitgevoerd wanneer de voorwaarde van de <span class="keyword">if</span> niet waar is.</li>
-        <li><span class="keyword">elseif</span>: wordt uitgevoerd wanneer de voorwaarde van de <span class="keyword">if</span> niet waar is en een andere voorwaarde waar is.</li>
-        <li><span class="keyword">switch</span>: controleert een variabele op verschillende waarden.</li>
-    </ul>
-
-    <p>Enkele voorbeelden:</p>
-    <pre class="terminal">$a = 5;
-$b = 10;
-
-if ($a > $b) {
-    echo 'a is groter dan b';
-} elseif ($a &lt; $b) {
-    echo 'a is kleiner dan b';
-} else {
-    echo 'a is gelijk aan b';
-}
-
-switch ($a) {
-    case 5:
-        echo 'a is 5';
-        break;
-    case 10:
-        echo 'a is 10';
-        break;
-    default:
-        echo 'a is geen 5 of 10';
-}</pre>
-
-    <p>Ook de meeste loops zijn opnieuw beschikbaar:</p>
-    <ul>
-        <li><span class="keyword">for</span>: een loop die een bepaald aantal keer wordt uitgevoerd.</li>
-        <li><span class="keyword">foreach</span>: een loop die over alle elementen van een array of object loopt.</li>
-        <li><span class="keyword">while</span>: een loop die wordt uitgevoerd zolang een bepaalde voorwaarde waar is.</li>
-        <li><span class="keyword">do...while</span>: een loop die minstens één keer wordt uitgevoerd en daarna zolang een bepaalde voorwaarde waar is.</li>
-    </ul>
-
-    <p>Enkele voorbeelden:</p>
-    <pre class="terminal">$array = [1, 2, 3, 4, 5];
-
-for ($i = 0; $i &lt; count($array); $i++) {
-    echo $array[$i];
-}
-
-foreach ($array as $value) {
-    echo $value;
-}
-
-$i = 0;
-while ($i &lt; count($array)) {
-    echo $array[$i];
-    $i++;
-}
-
-$i = 0;
-do {
-    echo $array[$i];
-    $i++;
-} while ($i &lt; count($array));</pre>
-
-    <p>De <span class="keyword">foreach</span>-loop is een speciale loop die enkel gebruikt kan worden om over een array of object te loopen. Deze loop is heel handig omdat je niet moet nadenken over de lengte van de array of de index van het element dat je wil selecteren. Je kan gewoon over alle elementen van de array loopen en de waarde van het element gebruiken.</p>
-
-    <p>De <span class="keyword">foreach</span>-loop heeft twee vormen:</p>
-    <pre class="terminal">$array = [1, 2, 3, 4, 5];
-
-foreach ($array as $value) {
-    echo $value;
-}
 
 
-$assocArray = ['a' => 1, 'b' => 2, 'c' => 3];
+<p>Je zit momenteel op kot. Je laptop, je telefoon en de printer van je huisgenoot staan allemaal verbonden met dezelfde WiFi-router. Jullie kunnen bestanden delen, naar dezelfde printer sturen en elkaars scherm streamen zonder dat daarvoor het internet nodig is. Dat is een <b>LAN</b>, een <b>Local Area Network</b>.</p>
 
-foreach($assocArray as $key => $value){
-    echo $key . ' => ' . $value;
-}</pre>
+<p>Zodra je op een publiek toegankelijke website surft, verlaat je die bubbel en stap je het <b>WAN</b> in: het <b>Wide Area Network</b>. Het internet is het bekendste voorbeeld van een WAN, een reusachtig netwerk van netwerken dat de hele wereld bestrijkt. Je huisnetwerk is één klein eilandje dat via je internetprovider verbinding maakt met dat grotere geheel.</p>
 
+<p>Het onderscheid is praktisch belangrijk. Binnen een LAN is communicatie snel, goedkoop en min of meer privé. Buiten je LAN, zodra data door het WAN reist, gelden andere regels: het is trager, minder betrouwbaar en je hebt geen controle meer over de infrastructuur. Als developer betekent dit dat een app die "gewoon werkt op mijn computer" heel anders kan reageren zodra ze over het publieke internet communiceert.</p>
+
+<p>Een derde term die je soms tegenkomt is <b>MAN</b> (Metropolitan Area Network): een netwerk op stadsschaal, een voorbeeld hiervan is het EhB-netwerk, waarin alle campussen van Brussel verbonden zijn. In de praktijk zal je dit zelden tegenkomen als developer, maar de term bestaat.</p>
+
+<p>Dit betekent voor jou: test niet alleen lokaal. Test ook expliciet een scenario waarin client en server op verschillende netwerken zitten, want daar komen de echte verrassingen boven.</p>
 </div>
 
 <div class="container"><a id="1_3"></a>
-    <h3>1.3 Functies
-        <a href="#top">Terug naar boven</a></h3>
+    <h3>1.3 Router, switch en modem
+    <a href="#top">Terug naar boven</a></h3>
 
-    <p>Net zoals in andere talen kunnen we in PHP gebruik maken van functies. Een functie is een stukje code dat we kunnen hergebruiken in onze applicatie. Dit is handig omdat we zo niet telkens dezelfjsonde code moeten schrijven. We kunnen een functie declareren met de <span class="keyword">function</span>-keyword:</p>
 
-    <pre class="terminal">function sayHello($name) {
-    echo 'Hello ' . $name;
-}
 
-sayHello('Kevin');</pre>
+<p>In een doorsnee Belgische woning staan al minstens twee van deze apparaten, dikwijls samengeperst in één kastje van je provider. Ze doen elk iets anders en de verwarring ertussen leidt tot zinloze supportgesprekken en slecht geconfigureerde thuisnetwerken.</p>
 
-    <p>We kunnen zoals hierboven ook parameters meegeven aan een functie. Deze parameters kunnen we dan gebruiken in de functie. We kunnen ook een return-waarde meegeven aan een functie:</p>
+<p>De <b>modem</b> is het apparaat dat jouw netwerk verbindt met het netwerk van je internetprovider. "Modem" staat voor <i>modulator-demodulator</i>: het zet het digitale signaal van jouw apparaten om naar een signaal dat geschikt is voor de kabel of glasvezel van je provider en omgekeerd. Zonder modem ben je afgesneden van het internet. Meer doet een pure modem niet.</p>
 
-    <pre class="terminal">function add($a, $b) {
-    return $a + $b;
-}
+<p>De <b>router</b> is het apparaat dat beslissingen neemt over waar data naartoe moet. Het kent alle apparaten in je LAN, weet welk publiek IP-adres jouw verbinding heeft en zorgt ervoor dat data van het internet bij het juiste apparaat terechtkomt en andersom. Routen betekent letterlijk "een route bepalen". De router spreekt twee talen tegelijk: die van je lokale netwerk en die van het internet.</p>
 
-$sum = add(5, 10);
+<p>De <b>switch</b> is een verdeler binnen je LAN. Als je meerdere apparaten via kabel wil verbinden, sluit je ze aan op een switch. Een switch stuurt data alleen naar het apparaat waarvoor het bedoeld is. Thuis heb je een switch zelden apart nodig; je router heeft er al een ingebouwd. In een bedrijfsnetwerk is een switch een apart apparaat dat tientallen of honderden apparaten bedient.</p>
 
-echo $sum; // 15</pre>
+<p>Tegenwoordig levert je provider je één kastje dat modem, router en switch in één combineert. Handig, maar het maakt het onderscheid wazig. Als developer is het verschil wel degelijk relevant: als je een server wil bereikbaar maken van buitenaf, moet je aan de <b>router</b> sleutelen, niet aan de switch of modem.</p>
 
-    <p>Ook optionele parameters zijn weer aanwezig. Dit zijn parameters die een standaardwaarde hebben en dus niet verplicht zijn om mee te geven:</p>
-
-    <pre class="terminal">function sayHello($name = 'World') {
-    echo 'Hello ' . $name;
-}
-
-sayHello(); // Hello World
-sayHello('Kevin'); // Hello Kevin</pre>
+<p>Dit betekent voor jou: bij storingen of configuratievragen benoem je eerst de rol die faalt (modem, router of switch) en pas daarna het toestel. Zo analyseer je scherper en los je sneller op.</p>
 </div>
 
 <div class="container"><a id="1_4"></a>
-    <h3>1.4 Arrays &amp; Objecten
-        <a href="#top">Terug naar boven</a></h3>
+    <h3>1.4 Je thuisnetwerk
+    <a href="#top">Terug naar boven</a></h3>
 
-    <p>Net zoals vorig jaar in Programming Essentials 1 en 2 kunnen we in PHP gebruik maken van arrays en objecten. Een array is een lijst van waarden die we kunnen gebruiken om gegevens te groeperen. Een object is een complexere structuur die bestaat uit verschillende eigenschappen.</p>
 
-    <p>Om een array te declareren kunnen we onze waarden tussen <span class="keyword">square brackets</span> [ ] plaatsen en onze verschillende elementen scheiden met een komma:</p>
 
-    <pre class="terminal">$array = [1, 2, 3, 4, 5];</pre>
+<p>Theorie is mooi, maar een netwerk moet je aanraken. In deze sectie zet je een eenvoudig thuisnetwerk op en verifieer je of het werkt, met tools die je als developer sowieso nodig zult hebben.</p>
 
-    <p>Om een object te declareren moeten we gebruik maken van de <span class="keyword">new</span>-keyword en de <span class="keyword">stdClass</span>-class:</p>
+<p>Het startpunt is je router. De meeste routers zijn bereikbaar via een webbrowser op het adres <span class="mono">192.168.1.1</span> of <span class="mono">192.168.0.1</span>, dit is het <b>standaard gateway-adres</b>, de toegang tot je netwerk van binnenuit (afhankelijk van je provider kan het wel zijn dat je via hun website je device moet beheren, bvb zoals bij Telenet). Log in met de gegevens die op de onderkant van je router staan (verander die nadien, de standaard wachtwoorden zijn publiek gekend).</p>
 
-    <pre class="terminal">$object = new stdClass();
+<p>Eenmaal ingelogd zie je het <b>dashboard</b> van je router: welke apparaten verbonden zijn, welke IP-adressen ze hebben, welk publiek IP-adres jouw verbinding heeft. Verken dit. Je ziet ook instellingen voor WiFi-netwerken (SSID en wachtwoord), DHCP (meer daarover in module 2) en firewall-regels.</p>
 
-$object->name = 'Kevin';
-$object->role = 'Teacher';</pre>
+<p>Om te testen of je netwerk werkt, gebruik je de terminal. Het commando <span class="mono">ping</span> stuurt een klein pakketje naar een adres en wacht op antwoord:</p>
 
-    <p>Later gaan we zelf classes maken en objecten instantiëren, maar voorlopig is dit voldoende om te weten.</p>
+<pre class="terminal">ping 192.168.1.1</pre>
 
-    <p>Ook zijn associatieve arrays weer van de partij. Dit zijn arrays waarbij we zelf de index van de waarden kunnen bepalen:</p>
+<p>Als je router reageert, werkt je lokale verbinding. Daarna test je of het internet bereikbaar is:</p>
 
-    <pre class="terminal">$assocArray = ['a' => 1, 'b' => 2, 'c' => 3];</pre>
+<pre class="terminal">ping 8.8.8.8</pre>
 
-    <p>Associatieve arrays zijn heel handig wanneer we een lijst van waarden willen groeperen en we deze waarden willen kunnen selecteren aan de hand van een bepaalde index.</p>
+<p>(<span class="mono">8.8.8.8</span> is een publieke DNS-server van Google. Als die reageert, heb je verbinding met het internet. Reageert hij niet, maar je router wel? Dan is er een probleem tussen je router en je provider.)</p>
 
-    <p>We kunnen deze arrays en objecten gebruiken in combinatie met de <span class="keyword">foreach</span>-loop om over alle elementen te loopen zoals hierboven beschreven.</p>
+<p>Een tweede handig commando is <span class="mono">ipconfig</span> (Windows), <span class="mono">ip a</span> (Linux) of <span class="mono">ifconfig</span> (macOS). Dat toont je eigen IP-adres, je subnetmasker en je standaard gateway.</p>
 
-    <p>Multidimensionale arrays zijn ook weer aanwezig. Dit zijn arrays die arrays bevatten:</p>
-
-    <pre class="terminal">$multiArray = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-];</pre>
-
+<p>Dit betekent voor jou: als iets niet werkt, kijk je eerst naar je eigen configuratie voordat je de server of je code verdenkt.</p>
 </div>
 
 <div class="container"><a id="1_5"></a>
-    <h3>1.5 Files
-        <a href="#top">Terug naar boven</a></h3>
-
-    <p>Aangezien we vanaf nu gaan werken met een backend, is het belangrijk dat we kunnen werken met bestanden. In PHP kunnen we bestanden openen, lezen, schrijven en sluiten. Hieronder een overzicht van de meest gebruikte functies:</p>
-
-    <ul>
-        <li><span class="keyword">fopen</span>: opent een bestand.</li>
-        <li><span class="keyword">fclose</span>: sluit een bestand.</li>
-        <li><span class="keyword">fread</span>: leest een bestand.</li>
-        <li><span class="keyword">fwrite</span>: schrijft naar een bestand.</li>
-        <li><span class="keyword">file_get_contents</span>: leest de inhoud van een bestand.</li>
-    </ul>
-
-    <p>Enkele voorbeelden:</p>
-
-    <pre class="terminal">$file = fopen('file.txt', 'r');
-
-while (!feof($file)) {
-    echo fgets($file) . '<br>';
-}
-
-fclose($file);
-
-$file = fopen('file.txt', 'w');
-
-fwrite($file, 'Hello World');
-
-fclose($file);</pre>
-
-    <p>Met deze functies kunnen we bestanden openen, lezen, schrijven en sluiten. Dit is handig wanneer we bijvoorbeeld gegevens willen opslaan in een bestand of wanneer we gegevens willen inlezen uit een bestand.</p>
-
-    <p>We zien bij de <span class="keyword">fopen</span>-functie dat we een tweede parameter kunnen meegeven. Dit is een string die aangeeft hoe we het bestand willen openen:</p>
-
-    <ul>
-        <li><span class="keyword">r</span>: lezen.</li>
-        <li><span class="keyword">w</span>: schrijven.</li>
-        <li><span class="keyword">a</span>: schrijven aan het einde van het bestand.</li>
-        <li><span class="keyword">r+</span>: lezen en schrijven.</li>
-        <li><span class="keyword">w+</span>: lezen en schrijven, bestaande inhoud wordt overschreven.</li>
-        <li><span class="keyword">a+</span>: lezen en schrijven, schrijven aan het einde van het bestand.</li>
-    </ul>
-
-    <p>Indien we een reeds bestaand bestand willen openen en we willen de inhoud behouden, dan <b>moeten</b> we de <span class="keyword">a</span>-modus gebruiken. Als we de <span class="keyword">w</span>-modus gebruiken gaan we het huidige bestand <b>overschrijven</b>.</p>
-
-    <p>Let op met het gebruik van deze functies. Het is belangrijk dat je de juiste permissies hebt om bestanden te openen, lezen en schrijven. Denk hiervoor terug aan de file permissions die jullie hebben gezien in Desktop OS.</p>
-
-    <p>Indien je enkel de inhoud van een bestand wilt inlezen zonder dat je deze wilt aanpassen, dan kan je gebruik maken van de <span class="keyword">file_get_contents</span>-functie:</p>
-
-    <pre class="terminal">$content = file_get_contents('file.txt');
-
-echo $content;</pre>
+    <h3>1.5 Met ofzonder kabel
+    <a href="#top">Terug naar boven</a></h3>
 
 
+
+<p>WiFi is handig. Ethernet is beter. Dat klinkt bot, maar voor een developer heeft die keuze concrete gevolgen.</p>
+
+<p>Een <b>bekabelde verbinding</b> biedt hogere en stabielere snelheid, lagere <b>latency</b> (vertraging) en geen interferentie van andere apparaten of muren. De kabel verbindt je direct met de switch in je router.</p>
+
+<p><b>WiFi</b> werkt draadloos via radiogolven. Het is flexibel en makkelijk, maar het heeft nadelen: het signaal verzwakt door muren en afstand, meerdere apparaten delen dezelfde frequentieband en de verbinding kan tijdelijk wegvallen. Voor streams, browsen en videogesprekken merk je dat nauwelijks. Voor het debuggen van een brakke netwerkomgeving of het draaien van een lokale server die snel moet reageren, is WiFi een bron van frustraties.</p>
+
+<p>Twee veel gebruikte WiFi-standaarden zijn <b>2,4 GHz</b> en <b>5 GHz</b>. De 2,4 GHz-band draagt verder maar is trager en drukker (veel apparaten gebruiken die band). De 5 GHz-band is sneller maar heeft minder bereik. Moderne routers ondersteunen beide.</p>
+
+<p>Als developer is de praktische regel eenvoudig: sluit je ontwikkelomgeving aan via kabel als je dat kunt. Test je applicatie daarna ook op WiFi, want je gebruikers doen dat wel.</p>
+
+<p>Dit betekent voor jou: kies kabel om stabiel te ontwikkelen en te troubleshooten en gebruik WiFi bewust als realistische gebruikerstest.</p>
 </div>
 
 <div class="container"><a id="1_6"></a>
-    <h3>1.6 Ingebouwde Functies
-        <a href="#top">Terug naar boven</a></h3>
-
-    <p>Er zijn zeer veel ingebouwde functies beschikbaar in PHP. Deze functies kunnen we gebruiken om bepaalde taken uit te voeren zonder dat we zelf de code moeten schrijven. Indien je ooit een bepaalde functionaliteit nodig hebt, is het altijd een goed idee om eerst te kijken of er geen ingebouwde functie bestaat die deze taak kan uitvoeren.</p>
-
-    <p>De officiële PHP-documentatie is een goede plaats om te beginnen. Hier kan je alle ingebouwde functies van PHP terugvinden en de bijhorende documentatie lezen. Dit is een goede gewoonte om aan te leren, aangezien je later in je carrière vaak zal moeten werken met verschillende programmeertalen en frameworks.</p>
-
-    <p>Je kan de officiële PHP-documentatie terugvinden op <a href="https://www.php.net/manual/en/index.php" target="_blank">php.net</a>.</p>
-
-    <p>Enkele voorbeelden van ingebouwde functies:</p>
-
-    <pre class="terminal">$string = 'Hello World';
-echo strlen($string); // 11
-echo strtoupper($string); // HELLO WORLD
-echo strtolower($string); // hello world
+    <h3>1.6 Wat bij problemen?
+    <a href="#top">Terug naar boven</a></h3>
 
 
-$array = [1, 2, 3, 4, 5];
-echo count($array); // 5
-echo array_sum($array); // 15
 
+<p>Netwerken werken niet altijd. Dat is geen bug in het systeem, dat <i>is</i> het systeem. Als developer word je vroeg of laat geconfronteerd met een verbinding die het niet doet en dan is "<i>Hello, IT. Have you tried turning it off and on again?</i>" geen professioneel antwoord.</p>
 
-$number = 5.5;
-echo round($number); // 6
-echo floor($number); // 5
+<p>Troubleshooten doe je systematisch, van binnenuit naar buiten.</p>
 
+<p><b>Stap 1: Werkt je eigen machine?</b> Controleer of je een IP-adres hebt (<span class="mono">ipconfig</span> op Windows, <span class="mono">ip a</span> op Linux, <span class="mono">ifconfig</span> op macOS). Geen IP? Dan is er een probleem met je netwerkconfiguratie of DHCP.</p>
 
-$timestamp = time();
-echo date('Y-m-d H:i:s', $timestamp); // 2024-09-24 14:00:00</pre>
+<p><b>Stap 2: Werkt je lokale netwerk?</b> Ping je router (<span class="mono">ping 192.168.1.1</span>). Reageert die niet, dan is er een probleem tussen jouw machine en de router — kabelprobleem, WiFi-probleem, of routerprobleem.</p>
 
-    <p>Dit zijn maar enkele voorbeelden van de vele ingebouwde functies die beschikbaar zijn. Op termijn zal je deze functies leren kennen en kan je ze gebruiken in je eigen code. Indien je moet gebruik maken van deze functies in de oefeningen zal ik een link voorzien naar de documentatie zodat je deze kan raadplegen.</p>
+<p><b>Stap 3: Werkt het internet?</b> Ping een publiek IP (<span class="mono">ping 8.8.8.8</span>). Als stap 2 lukt maar stap 3 niet, zit het probleem meestal tussen je router en je provider.</p>
 
+<p><b>Stap 4: Werkt DNS?</b> Ping een domeinnaam (<span class="mono">ping google.com</span>). Als <span class="mono">8.8.8.8</span> werkt maar <span class="mono">google.com</span> niet reageert, dan is je DNS kapot. Je hebt internet, maar je computer kan domeinnamen niet omzetten naar IP-adressen.</p>
+
+<p><b>Stap 5: Werkt de specifieke dienst?</b> Gebruik <span class="mono">traceroute</span> (Linux/macOS) of <span class="mono">tracert</span> (Windows) om te zien waar packets vastlopen op hun weg naar de bestemming.</p>
+
+<p>Dit stappenplan redt je van veel frustratie. De fout zit altijd ergens in die keten. Als je meteen begint te zoeken bij de server van je app, terwijl het probleem in je eigen DNS-instellingen zit, ben je uren kwijt.</p>
+
+<p>Netwerkproblemen kunnen ook in je code zitten. Een verkeerde poort, een foute URL, een certificaat dat verlopen is, ... Dat zijn geen netwerkproblemen in de infrastructuurzin, maar ze voelen hetzelfde aan. Leer het onderscheid maken. Je bent degene die de diagnose moet stellen.</p>
+
+<p>Dit betekent voor jou: werk altijd laag per laag en noteer je observaties. Dan maak je van "het werkt niet" een diagnose die je team echt vooruithelpt.</p>
 </div>
 
 
-<div class="oefening container">
-    <div class="oef_logo">
-        <img src="https://canvas.ehb.be/courses/33635/files/2499567/preview" alt="oefening logo">
-    </div>
-    <a class="oeflink" target="_blank" title="Oefeningen Module 1" href="https://canvas.ehb.be/courses/43147/pages/oefeningen-module-1">Oefeningen Module 1</a>
-</div>
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 1" href="https://canvas.ehb.be/courses/47918/quizzes/73571">Module 1</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 1" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-1">Oefeningen Module 1</a>
+        </div>
+
 
 </div>

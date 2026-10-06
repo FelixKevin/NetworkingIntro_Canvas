@@ -1,0 +1,743 @@
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <h3>Module 2</h3>
+
+    <h5>2.1 IP-adres</h5>
+
+<p><b>Vraag 1.</b> Je laptop heeft thuis IP-adres <span class="mono">192.168.0.105</span>. Je brengt hem mee naar de school en verbindt met het schoolnetwerk. Wat is nu je IP-adres?</p>
+
+<ul>
+
+<li><b>Een ander adres, uitgedeeld door het netwerk van de school — IP-adressen zijn gekoppeld aan de netwerkverbinding, niet aan het apparaat</b></li>
+
+<li>Nog steeds <span class="mono">192.168.0.105</span> — dat adres is permanent aan je laptop gekoppeld tot je je besturingssysteem opnieuw installed</li>
+
+<li>Het MAC-adres van je laptop, omgezet naar IP-formaat</li>
+
+<li>Geen adres — je laptop heeft al een adres en kan er maar één hebben</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Noem twee situaties uit je dagelijks werk als developer waarbij een IP-adres een rol speelt, ook als je dat normaal niet bewust merkt.</p>
+
+    <hr>
+
+    <h5>2.2 IPv4</h5>
+
+<p><b>Vraag 1.</b> Wat is correct over IPv4?</p>
+
+<ul>
+
+<li><b>IPv4 gebruikt 32-bit adressen, meestal genoteerd als vier getallen tussen 0 en 255</b></li>
+
+<li>IPv4 gebruikt 64-bit adressen in hexadecimale notatie</li>
+
+<li>IPv4 bevat alleen publieke adressen</li>
+
+<li>IPv4 en MAC-adressen zijn hetzelfde</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Ongeveer hoeveel IPv4-adressen bestaan er?</p>
+
+    <hr>
+
+    <h5>2.3 Public vs private</h5>
+
+<p><b>Vraag 1.</b> Welke IPv4 adres is een private adres?</p>
+
+<ul>
+
+<li><b>`192.168.3.29</b></li>
+
+<li><span class="mono">8.8.4.4</span></li>
+
+<li><span class="mono">1.10.10.232</span></li>
+
+<li><span class="mono">91.198.174.23</span></li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom kan je collega thuis jouw lokale server op <span class="mono">192.168.1.50</span> niet direct bereiken?</p>
+
+    <hr>
+
+    <h5>2.4 Subnetting, wat je moet kennen als developer</h5>
+
+<p><b>Vraag 1.</b> Wat betekent <span class="mono">/32</span> bij een IP-adres?</p>
+
+<ul>
+
+<li><b>Het beschrijft exact één host-adres</b></li>
+
+<li>Het beschrijft een netwerk met 32.000 hosts</li>
+
+<li>Het is een alias voor DHCP</li>
+
+<li>Het is alleen geldig bij IPv6</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Je hebt twee servers: <span class="mono">10.0.1.5/24</span> en <span class="mono">10.0.2.5/24</span>. Kunnen ze rechtstreeks met elkaar communiceren zonder router?</p>
+
+<ul>
+
+<li><b>Nee, ze zitten in verschillende subnetten (<span class="mono">10.0.1.0/24</span> en <span class="mono">10.0.2.0/24</span>) en hebben een router nodig om te communiceren</b></li>
+
+<li>Ja, ze beginnen allebei met <span class="mono">10.0</span> dus zitten ze in hetzelfde netwerk</li>
+
+<li>Ja, het subnetmasker <span class="mono">/24</span> betekent dat alle <span class="mono">10.x.x.x</span>-adressen in hetzelfde netwerk zitten</li>
+
+<li>Nee, <span class="mono">10.x.x.x</span>-adressen zijn gereserveerde private adressen en kunnen nooit rechtstreeks communiceren</li>
+
+</ul>
+
+    <hr>
+
+    <h5>2.5 DHCP, zo gemakkelijk maar ook zo lastig soms</h5>
+
+<p><b>Vraag 1.</b> Wat deelt DHCP niet uit aan een client?</p>
+
+<ul>
+
+<li><b>SSL-certificaat</b></li>
+
+<li>Default gateway</li>
+
+<li>IP-adres</li>
+
+<li>Subnetmask</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Je hebt een lokale MySQL-database draaien op <span class="mono">192.168.1.45</span>. Na een herstart van je router verbindt je applicatie niet meer. Wat is de meest waarschijnlijke oorzaak?</p>
+
+<ul>
+
+<li><b>De database heeft via DHCP een nieuw IP-adres gekregen, maar je applicatieconfiguratie verwijst nog naar het oude adres</b></li>
+
+<li>MySQL ondersteunt geen dynamische IP-adressen</li>
+
+<li>De router heeft de databaseverbinding geblokkeerd na de herstart</li>
+
+<li>DHCP deelt alleen adressen uit aan bekende apparaten</li>
+
+</ul>
+
+<p><b>Vraag 3.</b> Noem een situatie waarin je bewust een statisch IP zou kiezen in plaats van DHCP.</p>
+
+    <hr>
+
+    <h5>2.6 It's always a DNS-issue</h5>
+
+<p><b>Vraag 1.</b> Wat is de kerntaak van DNS?</p>
+
+<ul>
+
+<li><b>Domeinnamen vertalen naar IP-adressen</b></li>
+
+<li>Data comprimeren voor snellere downloads</li>
+
+<li>TLS-certificaten uitgeven</li>
+
+<li>NAT-tabellen beheren</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Je kunt <span class="mono">ping 8.8.8.8</span>, maar <span class="mono">ping www.vlaanderen.be</span> faalt. Welke diagnose stel je eerst?</p>
+
+    <hr>
+
+    <h5>2.7 IPv6</h5>
+
+<p><b>Vraag 1.</b> Waarom bestaat IPv6 vooral?</p>
+
+<ul>
+
+<li><b>Omdat IPv4-adresruimte beperkt is en internet verder blijft groeien</b></li>
+
+<li>Omdat IPv6 geen NAT nodig heeft</li>
+
+<li>Omdat IPv6 geen routers nodig heeft</li>
+
+<li>Omdat IPv6 alleen voor mobiele netwerken bedoeld is</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Je start een server op <span class="mono">127.0.0.1:3000</span> en probeert er verbinding mee te maken via <span class="mono">::1:3000</span>. Lukt dat?</p>
+
+<ul>
+
+<li><b>Misschien wel, misschien niet. <span class="mono">127.0.0.1</span> is een IPv4 loopback-adres en <span class="mono">::1</span> is het IPv6-equivalent; het hangt af van de configuratie van je server</b></li>
+
+<li>Ja, want <span class="mono">127.0.0.1</span> en <span class="mono">::1</span> zijn identiek en volledig uitwisselbaar</li>
+
+<li>Nee, want IPv6-adressen werken niet op localhost</li>
+
+<li>Ja, maar enkel op Linux want op Windows werkt dit niet</li>
+
+</ul>
+
+    <hr>
+
+</div>
+
+<div class="container">
+    <h3>Module 3</h3>
+
+    <h5>3.1 Wat is een poort?</h5>
+
+<p><b>Vraag 1.</b> Wat doet een poort in netwerkcommunicatie?</p>
+
+<ul>
+
+<li>Ze stuurt verkeer naar de juiste service op een host</li>
+
+<li>Ze vervangt het IP-adres volledig</li>
+
+<li>Ze bepaalt je wifi-signaalsterkte</li>
+
+<li>Ze versleutelt automatisch alle data</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom volstaat een IP-adres alleen niet om een webapp of database te bereiken?</p>
+
+<p><b>Vraag 3.</b> Je start een Express.js-server op poort 3000. Een gebruiker verbindt vanuit de browser. De verbinding gebruikt tijdelijk poort 54231 aan de kant van de browser. Wat beschrijft die combinatie van vier elementen (IP + poort aan beide kanten)?</p>
+
+<ul>
+
+<li>Een socket: de volledige beschrijving van één netwerkverbinding tussen twee eindpunten</li>
+
+<li>Een firewall-regel: de browser vraagt toestemming aan de server</li>
+
+<li>Een MAC-adres: de hardware-identificatie van de verbinding</li>
+
+<li>Een DNS-record: het koppelt de browsernaam aan het serveradres</li>
+
+</ul>
+
+    <hr>
+
+    <h5>3.2 Bekende poorten</h5>
+
+<p><b>Vraag 1.</b> Welke poort hoort standaard bij HTTPS?</p>
+
+<ul>
+
+<li>443</li>
+
+<li>80</li>
+
+<li>22</li>
+
+<li>5432</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom zou het een goed idee kunnen zijn om standaaardpoorten aan te passen, bijvoorbeeld voor SSH?</p>
+
+    <hr>
+
+    <h5>3.3 There's no place like 127.0.0.1</h5>
+
+<p><b>Vraag 1.</b> Wat betekent localhost in de praktijk?</p>
+
+<ul>
+
+<li>Verkeer naar de eigen machine via de loopback-interface</li>
+
+<li>Verkeer naar de router in je thuisnetwerk</li>
+
+<li>Verkeer naar een publieke cloudserver</li>
+
+<li>Verkeer dat alleen via wifi werkt</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom kan je collega jouw lokale server op localhost niet bereiken?</p>
+
+<p><b>Vraag 3.</b> Wat is het verschil tussen een server starten op <span class="mono">127.0.0.1:8080</span> en op <span class="mono">0.0.0.0:8080</span>?</p>
+
+    <hr>
+
+    <h5>3.4 Sockets</h5>
+
+<p><b>Vraag 1.</b> Wat is een socket?</p>
+
+<ul>
+
+<li>Een software-eindpunt waarmee processen over het netwerk communiceren</li>
+
+<li>Een fysieke ethernetpoort op je laptop</li>
+
+<li>Een DNS-record voor service discovery</li>
+
+<li>Een firewallregel met allow of deny</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wanneer kies je meestal TCP voor databaseverkeer?</p>
+
+    <hr>
+
+    <h5>3.5 The big firewall filter</h5>
+
+<p><b>Vraag 1.</b> Wat doet een firewall eigenlijk?</p>
+
+<p><b>Vraag 2.</b> Waarom kan verkeer lokaal wel werken maar van buitenaf toch geblokkeerd worden?</p>
+
+<p><b>Vraag 3.</b> Waarom maakt <b>whitelist, niet blacklist</b> een server veiliger?</p>
+
+    <hr>
+
+    <h5>3.6 Port forwarding</h5>
+
+<p><b>Vraag 1.</b> Wat doet port forwarding?</p>
+
+<ul>
+
+<li>Extern inkomend verkeer doorsturen naar een specifieke interne host en poort</li>
+
+<li>Alle interne poorten automatisch publiceren op internet</li>
+
+<li>DNS-records versleutelen</li>
+
+<li>Een server op je laptop automatisch blootstellen op het internet</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom is port forwarding een veiligheidsrisico als je het slecht configureert?</p>
+
+    <hr>
+
+    <h5>3.7 EHBOS: Eerste Hulp Bij Onbereikbare Servers</h5>
+
+<p><b>Vraag 1.</b> Stel een mini-checklist op van vijf stappen voor de foutmelding connection timed out naar een database.</p>
+
+<p><b>Vraag 2.</b> Wat is het verschil tussen "connection refused" en "connection timed out" als foutmelding, en wat zegt elk over de locatie van het probleem?</p>
+
+    <hr>
+
+</div>
+
+<div class="container">
+    <h3>Module 4</h3>
+
+    <h5>4.1 Wij moeten eens praten</h5>
+
+<p><b>Vraag 1.</b> Wat betekent stateless in de context van HTTP?</p>
+
+<ul>
+
+<li>Elke request staat op zichzelf; de server onthoudt niets van vorige requests</li>
+
+<li>De server onthoudt alle requests automatisch in zijn cache</li>
+
+<li>Het is een request waar geen OK-status voor kan worden teruggegeven</li>
+
+<li>Clients mogen slechts één request per sessie sturen</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wat betekent het dat HTTP "tekstgebaseerd" is, en wat is het voordeel daarvan voor developers?</p>
+
+    <hr>
+
+    <h5>4.2 GET, POST en anderen</h5>
+
+<p><b>Vraag 1.</b> Welke HTTP-method gebruik je om een bestaand record gedeeltelijk aan te passen?</p>
+
+<ul>
+
+<li>PATCH</li>
+
+<li>PUT</li>
+
+<li>POST</li>
+
+<li>GET</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom is een GET-request niet geschikt om wachtwoorden of gevoelige data mee te sturen?</p>
+
+    <hr>
+
+    <h5>4.3 Je moet je headers erbij houden</h5>
+
+<p><b>Vraag 1.</b> Welke header gebruik je om aan de server te zeggen dat je een JSON-body stuurt?</p>
+
+<ul>
+
+<li><span class="mono">Content-Type: application/json</span></li>
+
+<li><span class="mono">Accept: application/json</span></li>
+
+<li><span class="mono">Authorization: json</span></li>
+
+<li><span class="mono">Cache-Control: no-store</span></li>
+
+</ul>
+
+    <hr>
+
+    <h5>4.4 De origine van de 404 moppen</h5>
+
+<p><b>Vraag 1.</b> Wat is het verschil tussen <span class="mono">401 Unauthorized</span> en <span class="mono">403 Forbidden</span>, en wanneer gebruik je welke?</p>
+
+<p><b>Vraag 2.</b> Wanneer gebruik je 201 in plaats van 200 als responsecode?</p>
+
+    <hr>
+
+    <h5>4.5 Lock it up!</h5>
+
+<p><b>Vraag 1.</b> Wat is het praktische risico van een loginformulier dat via HTTP verstuurd wordt?</p>
+
+<p><b>Vraag 2.</b> Wat is het verschil tussen een zelfondertekend certificaat en een certificaat van een publieke CA zoals Let's Encrypt?</p>
+
+    <hr>
+
+    <h5>4.6 Piep eens achter de schermen</h5>
+
+<p><b>Vraag 1.</b> Je fetch-request stuurt een body mee, maar de server ontvangt niets. Hoe bevestig je in DevTools of de body correct verstuurd werd?</p>
+
+<p><b>Vraag 2.</b> Wat toont de timing-kolom in het Network-tabblad en waarom is dat nuttig?</p>
+
+    <hr>
+
+</div>
+
+<div class="container">
+    <h3>Module 5</h3>
+
+    <h5>5.1 FTP en SFTP: bestanden verplaatsen</h5>
+
+<p><b>Vraag 1.</b> Wat is het grootste beveiligingsprobleem met FTP?</p>
+
+<ul>
+
+<li>Het stuurt data en wachtwoorden in plaintext</li>
+
+<li>Het ondersteunt geen grote bestanden</li>
+
+<li>Het werkt alleen op Windows</li>
+
+<li>Het is te traag voor moderne netwerken</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom is SFTP veiliger dan FTP, ook al klinken de namen gelijkaardig?</p>
+
+<p><b>Vraag 3.</b> Noem één moderne situatie als developer waarbij je SFTP nog zou gebruiken.</p>
+
+    <hr>
+
+    <h5>5.2 SSH</h5>
+
+<p><b>Vraag 1.</b> Hoe werkt SSH-authenticatie via een keypair?</p>
+
+<ul>
+
+<li>De private key blijft lokaal, de publieke key staat op de server; alleen bezitters van de private key kunnen verbinden</li>
+
+<li>Beide sleutels staan op de server en worden per verbinding uitgewisseld</li>
+
+<li>De public key wordt versleuteld opgeslagen in je browser</li>
+
+<li>Keypairs vervangen het wachtwoord enkel bij FTP-verbindingen</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wat is SSH tunneling en geef een concreet voorbeeld van wanneer je het als developer gebruikt?</p>
+
+<p><b>Vraag 3.</b> Waarom is authenticatie via sleutelparen veiliger dan authenticatie via wachtwoorden in SSH?</p>
+
+    <hr>
+
+    <h5>5.3 Basic Security: wat nooit in Git mag</h5>
+
+<p><b>Vraag 1.</b> Je ziet in een Pull Request van een collega dat hij een API-sleutel hardcoded in een configuratiebestand heeft gezet, maar het bestand staat in <span class="mono">.gitignore</span>. Hij zegt: "Het staat toch niet in Git, dus het is veilig." Wat klopt er niet aan die redenering?</p>
+
+<ul>
+
+<li><span class="mono">.gitignore</span> voorkomt dat het bestand gecommit wordt, maar als het bestand al eerder gecommit was of gedeeld wordt via een andere weg, is de sleutel alsnog zichtbaar — bovendien is hardcoding de gewoonte die verkeerde patronen instelt; omgevingsvariabelen zijn de correcte aanpak ongeacht <span class="mono">.gitignore</span></li>
+
+<li><span class="mono">.gitignore</span> werkt niet voor configuratiebestanden</li>
+
+<li>API-sleutels in configuratiebestanden zijn altijd versleuteld</li>
+
+<li>De redenering klopt — als het bestand niet in Git staat, is er geen risico</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wat is het verschil tussen een <span class="mono">.env</span>-bestand en een <span class="mono">.env.example</span>-bestand, en welke van de twee zet je in Git?</p>
+
+    <hr>
+
+    <h5>5.4 WebSockets: HTTP maar eigenlijk niet helemaal?</h5>
+
+<p><b>Vraag 1.</b> Je bouwt een live aandelenkoersen-dashboard dat prijzen toont die meerdere keren per seconde kunnen veranderen. Welke oplossing kies je en waarom?</p>
+
+<ul>
+
+<li>WebSockets: de server pusht actief updates naar alle verbonden clients zonder dat elke client telkens een nieuwe request moet sturen, wat efficiënter is dan polling bij frequente updates</li>
+
+<li>Polling elke seconde: eenvoudig te implementeren en genoeg om gewoon de nieuwe koers van de aandelen te kennen</li>
+
+<li>Een gewone HTTP GET-request bij elke pagerefresh</li>
+
+<li>Server-Sent Events: want de koersen worden alleen door de server verstuurd, niet door de client</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Hoe start een WebSocket-verbinding, en welke HTTP-statuscode geeft de server terug als hij akkoord gaat met de upgrade?</p>
+
+    <hr>
+
+    <h5>5.5 Requests. Wie zijn ze? Wat doen ze? Hoe werken ze?</h5>
+
+<p><b>Vraag 1.</b> Waarom stuurt de browser meerdere requests na het ontvangen van de eerste HTML-response, en hoe maakt HTTP/2 dit efficiënter dan HTTP/1.1?</p>
+
+<p><b>Vraag 2.</b> In stap 5 staat er typisch een reverse proxy voor de applicatieserver. Noem een reden waarom grote websites dat doen in plaats van de applicatieserver direct bloot te stellen aan het internet.</p>
+
+    <hr>
+
+</div>
+
+<div class="container">
+    <h3>Module 6</h3>
+
+    <h5>6.1 Staat het nu wel op mijn eigen machine?</h5>
+
+<p><b>Vraag 1.</b> Je applicatie gebruikt lokaal een <span class="mono">.env</span>-bestand met databasecredentials. Na deployment naar een server werkt de databaseverbinding niet. Wat is de meest waarschijnlijke oorzaak?</p>
+
+<ul>
+
+<li>Het <span class="mono">.env</span>-bestand staat niet op de server — omgevingsvariabelen moeten apart geconfigureerd worden in de serveromgeving, los van je lokale bestanden</li>
+
+<li>Servers ondersteunen geen <span class="mono">.env</span>-bestanden</li>
+
+<li>De database draait niet op de server</li>
+
+<li>De databasecredentials zijn verlopen na de deployment</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Hoe documenteer je je lokale omgeving zodat anderen die kunnen reproduceren?</p>
+
+    <hr>
+
+    <h5>6.2 Hoe krijg ik dezelfde data bij verschillende users?</h5>
+
+<p><b>Vraag 1.</b> In een typische webapplicatie, wat is de relatie tussen frontend, backend en database?</p>
+
+<ul>
+
+<li>Frontend is client van de backend; backend is tegelijk server voor de frontend en client van de database</li>
+
+<li>Frontend en backend zijn beide servers, database is de client</li>
+
+<li>Database is de centrale server voor zowel frontend als backend direct</li>
+
+<li>De rollen zijn altijd vast en kunnen niet wisselen afhankelijk van context</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Een Node.js-applicatie maakt verbinding met een Redis-cache. Op welk moment is de Node.js-applicatie een server, en op welk moment een client?</p>
+
+    <hr>
+
+    <h5>6.3 Wat gebeurt er als je iets deployt?</h5>
+
+<p><b>Vraag 1.</b> Welke stap mag tijdens een deployment nooit overgeslagen worden?</p>
+
+<ul>
+
+<li>Databasemigraties uitvoeren vóór de nieuwe code actief wordt</li>
+
+<li>De repository publiek zetten</li>
+
+<li>Alle logs wissen vóór de start</li>
+
+<li>De server handmatig herstarten zonder checklist</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom gebruik je een lockfile (<span class="mono">package-lock.json</span>, <span class="mono">Pipfile.lock</span>) bij het installeren van afhankelijkheden op een server, in plaats van gewoon de laatste versies te installeren?</p>
+
+    <hr>
+
+    <h5>6.4 "Maar het werkt bij mij thuis"</h5>
+
+<p><b>Vraag 1.</b> Wat is de beste manier om omgevingsspecifieke configuratie te beheren?</p>
+
+<ul>
+
+<li>Via omgevingsvariabelen of .env-bestanden, niet hardcoded in de broncode</li>
+
+<li>Via commentaar in de code dat je voor productie aanpast</li>
+
+<li>Via een aparte branch voor elk omgeving</li>
+
+<li>Via een README die collega's handmatig volgen</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Geef twee concrete voorbeelden van hardcoded aannames die problemen geven op een productieserver.</p>
+
+    <hr>
+
+    <h5>6.5 Is de server dood?</h5>
+
+<p><b>Vraag 1.</b> Wat toont een succesvolle ping-respons aan?</p>
+
+<ul>
+
+<li>De machine is bereikbaar via het netwerk en ICMP is niet geblokkeerd</li>
+
+<li>De webserver is actief en antwoordt HTTP-requests</li>
+
+<li>De database is bereikbaar en queries werken</li>
+
+<li>De TLS-certificaten zijn geldig</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom is een mislukte ping geen bewijs dat een server volledig offline is?</p>
+
+<p><b>Vraag 3.</b> Waarom is het nuttig om dezelfde connectiviteitstests zowel van buitenaf als van binnenuit de server uit te voeren?</p>
+
+    <hr>
+
+    <h5>6.6 EHBD: Eerste Hulp Bij Deploymentissues</h5>
+
+<p><b>Vraag 1.</b> Wat is de meest risicovolle deployment die je kan doen?</p>
+
+<ul>
+
+<li>Een deployment zonder rollback-plan, vlak voor een weekend of piekperiode</li>
+
+<li>Een deployment van een nieuw kleurenschema</li>
+
+<li>Een deployment met extra logging</li>
+
+<li>Een deployment waarbij alleen CSS aangepast is</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wat is een rollback en wanneer voer je die uit?</p>
+
+<p><b>Vraag 3.</b> Noem drie punten op een deployment checklist die elke developer zou moeten hanteren.</p>
+
+    <hr>
+
+</div>
+
+<div class="container">
+    <h3>Module 7</h3>
+
+    <h5>7.2 Servers? VMs? Containers?</h5>
+
+<p><b>Vraag 1.</b> Wat is het grootste verschil tussen een VM en een container?</p>
+
+<ul>
+
+<li>Een container deelt het host-OS en is lichter; een VM draait een volledig eigen besturingssysteem</li>
+
+<li>Een container is altijd trager dan een VM</li>
+
+<li>Een VM kan geen netwerk gebruiken, een container wel</li>
+
+<li>VMs zijn alleen voor Windows, containers voor Linux</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom startte een container sneller op dan een VM?</p>
+
+<p><b>Vraag 3.</b> Wanneer kies je toch voor een VM in plaats van een container?</p>
+
+    <hr>
+
+    <h5>7.3 Maar wat is die container dan juist?</h5>
+
+<p><b>Vraag 1.</b> Welke twee Linux-mechanismen vormen de basis van containerisatie?</p>
+
+<ul>
+
+<li>Namespaces voor isolatie en cgroups voor resource limiting</li>
+
+<li>Firewalls en DNS-filters</li>
+
+<li>SSH-tunnels en port forwarding</li>
+
+<li>Virtuele interfaces en NAT-tabellen</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Waarom gedraagt een container zich overal hetzelfde?</p>
+
+<p><b>Vraag 3.</b> Wat is het verschil tussen een container die draait en een image?</p>
+
+    <hr>
+
+    <h5>7.4 De basics van Docker</h5>
+
+<p><b>Vraag 1.</b> Waarom verlies je data als je een container stopt zonder volume?</p>
+
+<p><b>Vraag 2.</b> Noem twee situaties waarin je zeker een volume nodig hebt.</p>
+
+    <hr>
+
+    <h5>7.5 Hello container</h5>
+
+<p><b>Vraag 1.</b> Wat doet port mapping bij containers?</p>
+
+<ul>
+
+<li>Het koppelt een poort op de host aan een poort in de container zodat extern verkeer de service bereikt</li>
+
+<li>Het versleutelt automatisch alle netwerkcommunicatie</li>
+
+<li>Het vervangt DNS voor containerresolutie</li>
+
+<li>Het beperkt het netwerk tot alleen inkomend verkeer</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Je app in een container luistert op poort 5000 maar je krijgt connection refused via localhost. Wat check je eerst?</p>
+
+    <hr>
+
+    <h5>7.6 Docker is precies wel cool</h5>
+
+<p><b>Vraag 1.</b> Wat is het voornaamste voordeel van Docker Compose voor een developer?</p>
+
+<ul>
+
+<li>Een volledige multi-container omgeving beschrijven en opstarten met één commando</li>
+
+<li>Automatisch CI/CD-pipelines genereren</li>
+
+<li>Docker vervangen door een lichtere runtime</li>
+
+<li>Kubernetes overbodig maken voor alle omgevingen</li>
+
+</ul>
+
+<p><b>Vraag 2.</b> Wat is Docker Hub?</p>
+
+    <hr>
+
+</div>
+
+</div>

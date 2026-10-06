@@ -1,0 +1,160 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+
+<div class="container"><a id="6_1"></a>
+    <h3>6.1 Staat het nu wel op mijn eigen machine?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Je hebt weken aan je applicatie gewerkt. Alles werkt. De tests slagen, de pagina laadt, de data komt binnen. Dan deploy je naar een server... én niets werkt meer. Hoera, je bent nu een echte developer want je bent bij deployment-issues terecht gekomen!</p>
+
+<p>Het probleem zit zelden in je code zelf. Het zit in het verschil tussen de omgeving waarin je ontwikkelt en de omgeving waarin je applicatie draait. Je laptop is een vertrouwde, geconfigureerde, persoonlijke machine vol tools, instellingen en bestanden die er gewoon zijn omdat jij ze ooit geïnstalleerd hebt. Een server is een blanco, gedeelde, geautomatiseerde omgeving die niets weet van jouw gewoonten.</p>
+
+<p><b>Lokaal</b> betekent: jouw machine, jouw besturingssysteem, jouw versie van Node.js, Python, ..., jouw databaseconfiguratie, jouw omgevingsvariabelen, jouw mappenstructuur. Alles staat precies zoals jij het neergezet hebt.</p>
+
+<p><b>Op een server</b> draait (meestal) een minimale Linux install zonder grafische interface, met beperkte schijfruimte, beperkt geheugen en alleen de software die er expliciet op gezet is. De server heeft geen idee wat jij lokaal hebt staan.</p>
+
+<p>De kloof tussen die twee omgevingen is de bron van verreweg de meeste deployment-problemen. Begrijpen wat er op een server anders is dan op jouw laptop is de eerste stap naar het oplossen en voorkomen van die problemen.</p>
+</div>
+
+<div class="container"><a id="6_2"></a>
+    <h3>6.2 Hoe krijg ik dezelfde data bij verschillende users?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>De termen "client" en "server" duiken overal op in deze cursus, maar de verhouding ertussen is eigenlijk ingewikkelder dan dat het er op het eerste zicht uit ziet. Het is geen vast onderscheid tussen twee soorten machines, het is een <b>rol</b> die een machine of een stuk software op een bepaald moment speelt. Een machine kan een server zijn voor één service, maar een client voor een andere.</p>
+
+<p>Een <b>server</b> is elk programma dat wacht op verbindingen en verzoeken beantwoordt. Een <b>client</b> is elk programma dat een verbinding initieert en een verzoek stuurt. Je browser is een client ten opzichte van een webserver. Maar die webserver is zelf een client ten opzichte van een databaseserver. En die databaseserver kan zelf een verzoek sturen naar een back-upserver.</p>
+
+<p>Dit onderscheid heeft praktische gevolgen. <b>Servers luisteren</b>, ze binden zich aan een poort en wachten op inkomende verbindingen. <b>Clients verbinden</b>, ze openen een verbinding naar een server op een specifiek adres en poort. Die richting bepaalt wie verantwoordelijk is voor wat: de server moet bereikbaar zijn (juist IP, open poort, firewall), de client moet weten waar hij naartoe moet (correct adres en poort in de configuratie).</p>
+
+<p>In een typische webapplicatie zijn er minstens drie lagen. De <b>frontend</b> draait in de browser van de gebruiker (een client). De <b>backend</b> (je API of webserver) draait op een server en ontvangt requests van de frontend. Maar diezelfde backend is een client ten opzichte van de <b>database</b>, die op zijn beurt als server luistert op een poort.</p>
+
+<p>Wanneer je een verbindingsprobleem debugt, is de eerste vraag altijd: wie is hier de client en wie de server? De client heeft een foutmelding, maar de oorzaak ligt bij de server. Dat is de meest voorkomende verwarring bij beginners.</p>
+</div>
+
+<div class="container"><a id="6_3"></a>
+    <h3>6.3 Wat gebeurt er als je iets deployt?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>"Deployen" klinkt groot en magisch. In de werkelijkheid is het veel minder sexy en is het eerder een grote checklist aan dingen die je moet ondernemen om je applicatie draaiende te krijgen. Begrijpen wat er achter de schermen gebeurt maakt het verschil tussen deployment als black box en deployment als iets wat je controleert.</p>
+
+<p>De basisstappen van een deployment zijn altijd hetzelfde, losstaand van de tool die je gebruikt.</p>
+
+<ol>
+
+<li><b>Code overdragen:</b> Je code moet op de server komen. Dat kan via <span class="mono">git pull</span>, via een CI/CD-pipeline die automatisch deployt (later in de opleiding meer hierover) na een push naar een branch, of via directe bestandsoverdracht met SCP of SFTP (niet gewenst, maar soms nog gebruikt).</li>
+
+<li><b>Dependencies installeren:</b> Je applicatie heeft libraries nodig. Op de server voer je bijvoorbeeld <span class="mono">npm install</span> en <span class="mono">pip install -r requirements.txt</span> uit. Dit installeert precies de versies die in je lockfile staan.</li>
+
+<li><b>Omgevingsvariabelen instellen:</b> Wachtwoorden, API-sleutels, databaseurls, ... staan hopelijk niet in je code en niet in je Git-repository. Ze worden apart geconfigureerd op de server, via een <span class="mono">.env</span>-bestand, via omgevingsvariabelen in het OS, of via een secret manager.</li>
+
+<li><b>Migrations uitvoeren:</b> Als je database een nieuwe structuur nodig heeft, voer je de migraties uit voor je de nieuwe versie van de applicatie start.</li>
+
+<li><b>Applicatie starten of herstarten:</b> De applicatie wordt gestart als een achtergrondproces. Tools zoals <b>PM2</b> (Node.js), <b>Gunicorn</b> (Python), of <b>systemd</b>-services zorgen dat de applicatie blijft draaien, automatisch herstart na een crash en opnieuw opstart na een server reboot.</li>
+
+<li><b>Verkeer doorsturen:</b> Een reverse proxy zoals <b>nginx</b> of <b>Caddy</b> ontvangt het inkomende verkeer op poort 80 of 443 en stuurt het door naar de applicatie op een interne poort (bv. 3000). Zo hoeft de applicatie zelf niet als root te draaien en kun je meerdere applicaties op één server hosten.</li>
+
+</ol>
+
+<p>Elke stap die je overslaat of vergeet, is een potentiële oorzaak van een deployment die niet werkt.</p>
+</div>
+
+<div class="container"><a id="6_4"></a>
+    <h3>6.4 "Maar het werkt bij mij thuis"
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>"Máár het werkt op mijn machine" is de frustrerende zin in softwareontwikkeling. Ze wordt gezegd met een mengeling van oprechte verwarring en lichte schaamte en ze is bijna altijd het begin van tranen, frustraties en debugpogingen.</p>
+
+<p>De oorzaken zijn altijd variaties op hetzelfde thema: de omgeving op de server is anders dan de omgeving op jouw eigen toesten.</p>
+
+<p><b>Versieverschillen</b> zijn de meest voorkomende oorzaak. Je ontwikkelt op Node.js 20, de server draait Node.js 16. Je gebruikt een Python 3.11-feature, de server heeft Python 3.9. Een library gedraagt zich anders in versie 4.x dan in versie 3.x. Pinning van versies in je configuratiebestanden helpt, maar lost het probleem niet volledig op als de runtime zelf verschilt.</p>
+
+<p><b>Besturingssysteemverschillen</b> zijn moeiijker te achterhalen. Je ontwikkelt op macOS of Windows, de server draait Linux. Bestandspaden gebruiken een andere scheidingsteken (<span class="mono">\</span> vs <span class="mono">/</span>). Bestandsnamen zijn hoofdlettergevoelig op Linux maar niet op macOS — je bestand heet <span class="mono">Foto.jpg</span>, je code verwijst naar <span class="mono">foto.jpg</span> en lokaal werkt het toevallig maar op de server niet.</p>
+
+<p><b>Ontbrekende enviornment variables</b> ken je ondertussen. Maar er zijn subtielere vormen: een variabele die lokaal aanwezig is omdat je hem ooit ergens globaal gezet hebt zonder dat je dat nog weet. Op de server bestaat hij niet.</p>
+
+<p><b>Netwerkbeperkingen</b> op servers zijn strenger. Lokaal staat alles open. Op een productieserver blokkeert de firewall uitgaand verkeer naar bepaalde diensten, of de server heeft geen DNS-configuratie voor interne hostnamen.</p>
+
+<p>De structurele oplossing voor al deze problemen is <b>containerisatie</b>, iets waar we in de volgende module dieper op ingaan. Door je applicatie en zijn volledige omgeving samen in een container te verpakken wordt "het werkt op mijn machine" de garantie dat het ook op de server werkt, want de machine is overal dezelfde.</p>
+
+<p>Tot we daaraan toe zijn: <b>documenteer alles, ook je omgeving</b>. Zet de vereiste versies in een <span class="mono">README</span>. Gebruik een <span class="mono">.env.example</span> als template voor omgevingsvariabelen. Automatiseer de setupstappen in een script, als dat kan. Je toekomstige collega (en jij als je 5 maand later nog eens gaat kijken naar dat project) zullen je dankbaar zijn.</p>
+</div>
+
+<div class="container"><a id="6_5"></a>
+    <h3>6.5 Is de server dood?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Voordat je begint te graven in logs, configuraties en code, stel je één simpele vraag: is de server eigenlijk bereikbaar? Het antwoord heb je in tien seconden met <span class="mono">ping</span>.</p>
+
+<pre class="terminal">ping mijnserver.be</pre>
+
+<p>Reageert de server niet op ping? Dan is er een basisverbindingsprobleem: de server is offline, het IP-adres klopt niet, of de firewall blokkeert ICMP-verkeer (wat sommige servers doen, waardoor ping onbetrouwbaar wordt als enige test).</p>
+
+<p>Reageert ping wel maar is de applicatie niet bereikbaar? Dan is de server online maar is er iets mis met de applicatie of de firewall op poortniveau. Test dan specifiek de poort:</p>
+
+<pre class="terminal">nc -zv mijnserver.be 443</pre>
+
+<p>De <span class="mono">-z</span>-vlag bij netcat test alleen of de poort open staat, zonder data te sturen. De <span class="mono">-v</span>-vlag geeft verbose output zodat je het resultaat kunt lezen.</p>
+
+<p>Eenmaal op de server ingelogd via SSH, herhaal je dezelfde tests maar dan van binnenuit. Kan de server zichzelf bereiken op de applicatiepoort? Draait de applicatie? Luistert hij op de verwachte poort?</p>
+
+<pre class="terminal">curl localhost:3000
+netstat -tlnp | grep 3000</pre>
+
+<p>Die combinatie van buitenaf testen en van binnenuit testen vertel je precies waar het probleem zit: in het netwerk, in de firewall, of in de applicatie zelf.</p>
+</div>
+
+<div class="container"><a id="6_6"></a>
+    <h3>6.6 EHBD: Eerste Hulp Bij Deploymentissues
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Een deployment gaat ooit fout gaan. Het is geen kwesite van "if, but when" en meestal is de "when" op het slechtst mogelijke moment. Maar de fouten die gemaakt worden zijn verrassend voorspelbaar. En als je fouten al is hebt gezien zijn ze meestal gemakkelijker om de volgende keer op te lossen.</p>
+
+<p><b>Fout 1: Omgevingsvariabelen ontbreken of zijn verkeerd.</b> De applicatie crasht bij het starten met een vage fout, of draait maar kan geen verbinding maken met de database. Controleer altijd als eerste: zijn alle vereiste omgevingsvariabelen aanwezig op de server? Gebruik een <span class="mono">.env.example</span> als checklist en vergelijk dat met wat er effectief geconfigureerd is.</p>
+
+<p><b>Fout 2: Poort al in gebruik.</b> Je herstart de applicatie na een update, maar ze start niet op omdat de oude instantie nog draait op dezelfde poort. <span class="mono">netstat -tlnp | grep 3000</span> toont je welk proces de poort bezet.</p>
+
+<p><b>Fout 3: Permission errors.</b> De applicatie kan een bestand niet lezen of schrijven. Op Linux heeft elk bestand een eigenaar en permissies. Als je applicatie draait als gebruiker <span class="mono">www-data</span> maar het logfile eigendom is van <span class="mono">root</span> krijg je een permission fout. Controleer met <span class="mono">ls -la</span> en pas aan met <span class="mono">chown</span> of <span class="mono">chmod</span>.</p>
+
+<p><b>Fout 4: Firewall blokkeert de poort.</b> De applicatie draait en luistert correct, maar van buitenaf is er geen verbinding. Je hebt de poort vergeten te openen in <span class="mono">ufw</span> of de security group van je cloudprovider. <span class="mono">ufw status</span> en de consolepagina van je provider zijn je eerste stops.</p>
+
+<p><b>Fout 5: Nginx of reverse proxy misconfiguratie.</b> De nginx-configuratie verwijst naar de verkeerde poort, heeft een typfout in de servernaam, of de configuratie is aangepast maar nginx is niet herladen (<span class="mono">nginx -t</span> test de configuratie, <span class="mono">systemctl reload nginx</span> past hem toe zonder downtime).</p>
+
+<p><b>Fout 6: Database niet bereikbaar vanuit de applicatie.</b> De database luistert op <span class="mono">127.0.0.1</span> en is niet bereikbaar van een andere machine, of de firewall blokkeert de databasepoort. Controleer de <span class="mono">bind-address</span> in de databaseconfiguratie en de firewallregels. Overweeg een SSH-tunnel als de database niet publiek bereikbaar hoeft te zijn.</p>
+
+<p><b>Fout 7: SSL-certificaat verlopen of niet geconfigureerd.</b> Browsers weigeren de verbinding met een duidelijke foutpagina. <span class="mono">curl -v https://jouwdomein.be</span> toont de certificaatdetails. Let's Encrypt-certificaten verlopen na 90 dagen, stel automatische verlenging in met Certbot en verifieer dat de crontaak actief is.</p>
+
+<p>Elk van deze fouten heeft één gemeenschappelijke eigenschap: ze zijn volledig te vermijden met een deployment-checklist die je vóór elke deployment doorloopt. Maak die checklist. Gebruik hem. Pas hem aan wanneer je een nieuwe fout tegenkomt.</p>
+</div>
+
+
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 6" href="https://canvas.ehb.be/courses/47918/quizzes/73576">Module 6</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 6" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-6">Oefeningen Module 6</a>
+        </div>
+
+</div>

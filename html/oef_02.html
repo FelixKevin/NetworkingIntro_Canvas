@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="./02_module2.html#2_1">2.1 IP-adres</a><br>
+        <a href="./02_module2.html#2_2">2.2 IPv4</a><br>
+        <a href="./02_module2.html#2_3">2.3 Public vs private</a><br>
+        <a href="./02_module2.html#2_4">2.4 Subnetting, wat je moet kennen als developer</a><br>
+        <a href="./02_module2.html#2_5">2.5 DHCP, zo gemakkelijk maar ook zo lastig soms</a><br>
+        <a href="./02_module2.html#2_6">2.6 It's always a DNS-issue</a><br>
+        <a href="./02_module2.html#2_7">2.7 IPv6</a><br>
+    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>E1.</b> Voer <span class="mono">ipconfig /all</span> (Windows) of <span class="mono">ip a</span> (Linux/macOS) uit. Noteer je IP-adres, subnetmasker, standaard gateway en DNS-server(s). Welke van deze waarden zijn privaat en welke publiek?</p>
+
+<p><b>E2.</b> Surf naar <span class="mono">ifconfig.me</span> of <span class="mono">whatismyip.com</span>. Noteer je publieke IP-adres. Vergelijk het met je lokale IP-adres uit de vorige oefening. Wat valt je op?</p>
+
+<p><b>E3.</b> Voer <span class="mono">nslookup vrt.be</span> en <span class="mono">nslookup ehb.be</span> uit. Noteer de IP-adressen die teruggegeven worden. Voer daarna <span class="mono">ping vrt.be</span> uit. Klopt het IP-adres dat ping gebruikt overeen met wat nslookup gaf?</p>
+
+<p><b>E4.</b> Wat is het IPv6-equivalent van <span class="mono">127.0.0.1</span>? Wat is het IPv6-equivalent van "alle interfaces" (<span class="mono">0.0.0.0</span> in IPv4)? Zoek het op en noteer beide adressen.</p>
+
+<p><b>E5.</b> Wat is het verschil tussen een A-record en een AAAA-record in DNS? Zoek met <span class="mono">dig vrt.be A</span> en <span class="mono">dig vrt.be AAAA</span> of VRT zowel IPv4 als IPv6 ondersteunt.</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>M1.</b> Gebruik <span class="mono">dig</span> of <span class="mono">nslookup</span> om de DNS-records van <span class="mono">vub.be</span> op te vragen. Zoek het A-record, eventuele CNAME-records en het MX-record. Schrijf in één alinea op wat je kunt afleiden over de infrastructuur van VUB op basis van deze informatie.</p>
+
+<p><b>M2.</b> Simuleer een DNS-probleem door tijdelijk een foutieve DNS-server in te stellen op een je device. Documenteer symptomen, diagnose en herstel.</p>
+
+<p><b>M3.</b> Toon met een concreet voorbeeld waarom hardcoded IP-adressen in code onderhoudsproblemen geven.</p>
+
+<p><b>M4.</b> Onderzoek hoe je in een cloudomgeving een service publiek bereikbaar maakt zonder de interne private adressen bloot te geven.</p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>H1.</b> Ontwerp een IP-adresseringsplan voor een klein kantoor met de volgende vereisten: 30 werkstations, 5 servers (waaronder een database en een webserver), 10 IP-telefoons, en een gastnetwerk voor bezoekers. Gebruik het <span class="mono">192.168.0.0/16</span>-adresblok en verdeel het in logische subnetten. Onderbouw je keuzes voor de subnetgrootte.</p>
+
+<p><b>H2.</b> Onderzoek wat <b>DNSSEC</b> is en welk probleem het oplost. Wat is een DNS cache poisoning-aanval? Hoe beschermt DNSSEC ertegen? Is DNSSEC actief op <span class="mono">belgium.be</span>? Gebruik <span class="mono">dig +dnssec belgium.be</span> om dat te controleren.</p>
+
+<p><b>H3.</b> Je deployt een Node.js-applicatie op een VPS bij bijvoorbeeld Combell of OVH. De applicatie luistert op <span class="mono">127.0.0.1:3000</span>. Een collega zegt dat de applicatie "niet bereikbaar" is van buitenaf. Leg uit waarom, en beschrijf wat je moet aanpassen, zowel in de applicatiecode als eventueel in de serverinstellingen, om de applicatie publiek bereikbaar te maken.</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>AT1.</b> Kies een Belgische website naar keuze. Voer een volledig DNS-onderzoek uit: verzamel alle publiek beschikbare DNS-records (A, AAAA, CNAME, MX, TXT, NS), analyseer wat je kunt afleiden over de infrastructuur (hostingprovider, e-mailprovider, gebruik van CDN) en controleer of DNSSEC actief is. Gebruik <span class="mono">dig</span>, <span class="mono">nslookup</span> en eventueel online tools zoals <span class="mono">dnschecker.org</span>.</p>
+</div>
+
+        </div>
+        
+        

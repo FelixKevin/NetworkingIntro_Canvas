@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="./05_module5.html#5_1">5.1 FTP en SFTP: bestanden verplaatsen</a><br>
+        <a href="./05_module5.html#5_2">5.2 SSH</a><br>
+        <a href="./05_module5.html#5_3">5.3 Basic Security: wat nooit in Git mag</a><br>
+        <a href="./05_module5.html#5_4">5.4 WebSockets: HTTP maar eigenlijk niet helemaal?</a><br>
+        <a href="./05_module5.html#5_5">5.5 Requests. Wie zijn ze? Wat doen ze? Hoe werken ze?</a><br>
+    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>E1.</b> Leg in drie zinnen het verschil uit tussen FTP en SFTP. Geef één concreet voorbeeld van wanneer je welke kiest.</p>
+
+<p><b>E2.</b> Beschrijf in je eigen woorden wat een WebSocket-verbinding anders doet dan een gewone HTTP-request.</p>
+
+<p><b>E3.</b> Genereer een SSH-keypair op je eigen machine. Documenteer elke stap inclusief wat de twee bestanden zijn en waarvoor ze dienen.</p>
+
+<p><b>E4.</b> Verbind via SFTP met een server (gebruik een gratis testserver zoals <span class="mono">demo.wftpserver.com</span> of een eigen VPS). Navigeer naar een map, upload een tekstbestand en download het terug. Op welke poort liep de verbinding? Welk protocol draait eronder?</p>
+
+<p><b>E5.</b> Gebruik <span class="mono">curl -v https://httpbin.org/get</span> en bekijk de output. Identificeer: de TLS-versie die gebruikt wordt, de statuscode, en de <span class="mono">Content-Type</span> van de response. Hoe lang duurde de TLS-handshake? (Hint: kijk naar de timing in de output.)</p>
+
+<p><b>E6.</b> Je collega verstuurt een API-sleutel als query-parameter: <span class="mono">GET /data?api_key=abc123</span>. Jij verstuurt die via een <span class="mono">Authorization</span>-header. Noem twee concrete redenen waarom jouw aanpak veiliger is.</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>M1.</b> Stel een SSH-sleutelpaar in op een remote server (VPS of Raspberry Pi). Schakel daarna wachtwoordauthenticatie uit in <span class="mono">/etc/ssh/sshd_config</span> zodat alleen sleutelauthenticatie mogelijk is. Documenteer elke stap en verifieer dat wachtwoordinloggen inderdaad geweigerd wordt.</p>
+
+<p><b>M2.</b> Bouw een minimale WebSocket-server in Node.js (gebruik de <span class="mono">ws</span>-bibliotheek) en een HTML-pagina met een WebSocket-client. De server stuurt elke seconde de huidige servertijd naar alle verbonden clients. De client toont de tijd live op de pagina. Documenteer de code met uitleg van de netwerkconcepten.</p>
+
+<p><b>M3.</b> Stel een <span class="mono">~/.ssh/config</span>-bestand in met aliassen voor minstens twee servers. Gebruik opties zoals <span class="mono">User</span>, <span class="mono">IdentityFile</span>, <span class="mono">Port</span> en <span class="mono">ServerAliveInterval</span>. Documenteer wat elke optie doet en demonstreer dat je met de alias kunt verbinden.</p>
+
+<p><b>M4.</b> Analyseer een volledige paginaslading van <span class="mono">https://www.standaard.be</span> via DevTools. Identificeer: het aantal requests, de totale paginagrootte, de drie traagste requests, welke requests gecached zijn (304 of from cache), en of de pagina HTTP/2 gebruikt.</p>
+
+<p><b>M5.</b> Onderzoek wat <b>MIME-types</b> zijn en welke rol ze spelen in HTTP. Welk MIME-type gebruik je voor een JSON-response, een PDF-bijlage, een PNG-afbeelding en een CSV-bestand? Waar in de HTTP-headers verschijnt het MIME-type, en wat gebeurt er als het verkeerd is?</p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>H1.</b> Schrijf een technisch document over SSH hardening voor een productieserver: poortwijziging, key-only auth, fail2ban en loginbeperkingen.</p>
+
+<p><b>H2.</b> Analyseer hoe een man-in-the-middle-aanval eruit ziet op een onversleuteld FTP-verkeer. Leg uit wat TLS hieraan verandert.</p>
+
+<p><b>H3.</b> Onderzoek het concept <b>secret scanning</b>: geautomatiseerde tools die Git-repositories scannen op gelekte credentials. Wat zijn bekende tools (zowel van GitHub zelf als van derden)? Hoe configureer je GitHub secret scanning op een repository? Schrijf een pre-commit hook die lokaal controleert of er credentials in de staged bestanden staan voor je commit.</p>
+
+<p><b>H4.</b> SSH-tunneling kan gebruikt worden als een eenvoudige VPN-vervanging. Onderzoek het verschil tussen een SSH-tunnel (<span class="mono">-L</span>, <span class="mono">-R</span>, <span class="mono">-D</span>) en een echte VPN-verbinding op het vlak van werking, beveiliging en gebruikssituaties. Wanneer is een SSH-tunnel voldoende en wanneer heb je een echte VPN nodig? Implementeer een SOCKS5-proxy via SSH (<span class="mono">-D</span>-vlag) en test hem met een browser.</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>AT1. Volledige SSH-hardening van een server</b> <i>(4 à 6 uur)</i></p>
+
+<p>Neem een Ubuntu VPS (via een lokale virutele machine) en pas een volledige SSH-hardeningconfiguratie toe: schakel wachtwoordauthenticatie uit, verander de standaard SSH-poort, configureer <span class="mono">fail2ban</span> om brute-force pogingen te blokkeren, stel <span class="mono">AllowUsers</span> in zodat alleen specifieke gebruikers kunnen inloggen en schakel root-login via SSH uit. Documenteer elke stap inclusief hoe je verifieert dat de configuratie correct werkt zonder jezelf buitente sluiten. Schrijf een postmortem als je jezelf toch buitensluit — dat leert meer dan wanneer alles meteen lukt.</p>
+</div>
+
+        </div>
+        
+        

@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+
+<div class="container"><a id="2_1"></a>
+    <h3>2.1 IP-adres
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Als je een brief verstuurt zonder adres op de envelop, gaat die nergens naartoe. Hetzelfde geldt voor data op een netwerk. Elk apparaat dat communiceert heeft een <b>IP adres</b> (Internet Protocol-adres) nodig, een uniek nummer dat zegt wie je bent en waar je te bereiken bent. Je kan dus in je browser naar <span class="mono">www.vrt.be</span> surfen, maar intern zal dit toch omgezet worden naar een IP adres.</p>
+
+<p>Een IP-adres is geen naam maar een locatie. Het identificeert niet het apparaat zelf, maar de verbinding van dat apparaat met een netwerk. Sluit je je laptop aan op een ander netwerk, dan krijg je een ander IP-adres. Dat is een belangrijk onderscheid: IP-adressen zijn (meestal) dynamisch en contextafhankelijk, niet vastgekoppeld aan hardware. (Het MAC-adres doet dat wel, maar dat speelt op een andere laag.)</p>
+
+<p>Er zijn twee versies van IP-adressen in gebruik: <b>IPv4</b> en <b>IPv6</b>. IPv4 is wat je het vaakst tegenkomt en ziet er zo uit: <span class="mono">192.168.1.1</span>. IPv6 is de opvolger en ziet er zo uit: <span class="mono">2001:0db8:85a3::8a2e:0370:7334</span>. Waarom er twee versies zijn en wat het verschil betekent voor jou als developer, komen we straks op terug.</p>
+
+<p>Als developer werk je bijna dagelijks met IP-adressen — ook al merk je het niet altijd. Elke keer dat je code een verbinding maakt met een database, een API aanroept, of een server deployed, zit er een IP-adres achter. Begrijpen hoe die adressen werken, maakt het verschil tussen raden en weten.</p>
+</div>
+
+<div class="container"><a id="2_2"></a>
+    <h3>2.2 IPv4
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Een IPv4-adres bestaat uit vier getallen tussen 0 en 255, gescheiden door punten: <span class="mono">192.168.1.105</span>. Vier maal 8 bits geeft 32 bits in totaal en dat betekent dat er maximaal 2³², of dus ongeveer <b>4,3 miljard</b> unieke IPv4-adressen bestaan.</p>
+
+<p>Klinkt als veel. En in de jaren 80 toen IPv4 bedacht werd was dat ook zo. Ondertussen zijn er meer apparaten met internetverbinding dan mensen op aarde en is het duidelijk dat 4,3 miljard adressen absoluut niet meer volstaan. Dat probleem heeft geleid tot twee oplossingen: <b>NAT</b> (Network Address Translation) als een soort tussenoplossing en <b>IPv6</b> als structurele oplossing.</p>
+
+<p>Een IPv4-adres bestaat uit twee delen: het <b>netwerkgedeelte</b> en het <b>hostgedeelte</b>. Het netwerkgedeelte zegt in welk netwerk je zit; het hostgedeelte zegt welk specifiek apparaat je bent binnen dat netwerk. Hoeveel bits voor het netwerk zijn en hoeveel voor de host, bepaalt het <b>subnetmasker</b>.</p>
+
+<p>Enkele bijzondere adressen die je als developer moet kennen: <span class="mono">127.0.0.1</span> is het <b>loopback-adres</b>, ook wel <span class="mono">localhost</span> genoemd. Dit is het adres van je eigen machine, gebruikt om lokaal te testen. <span class="mono">0.0.0.0</span> betekent "alle beschikbare interfaces" en gebruik je wanneer je een server wil laten luisteren op alle netwerkadressen van je machine. <span class="mono">255.255.255.255</span> is het <b>broadcast-adres</b>: een pakket dat hiernaar verstuurd wordt, gaat naar alle apparaten in het netwerk.</p>
+</div>
+
+<div class="container"><a id="2_3"></a>
+    <h3>2.3 Public vs private
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Stel dat elk device in elk huis wereldwijd een uniek IP-adres nodig had. Dat zijn miljarden adressen en zoals je weet zijn er daar niet meer genoeg van. De oplossing was een slimme opdeling: <b>publieke</b> en <b>private</b> IP-adressen.</p>
+
+<p><b>Private IP-adressen</b> zijn gereserveerd voor gebruik binnen een lokaal netwerk. Ze zijn niet bereikbaar van buitenaf en worden ook niet doorgestuurd over het internet. Drie reeksen zijn hiervoor vastgelegd:</p>
+
+<ul>
+
+<li><span class="mono">10.0.0.0</span> -&gt; <span class="mono">10.255.255.255</span></li>
+
+<li><span class="mono">172.16.0.0</span> -&gt; <span class="mono">172.31.255.255</span></li>
+
+<li><span class="mono">192.168.0.0</span> -&gt; <span class="mono">192.168.255.255</span></li>
+
+</ul>
+
+<p>Herken je die laatste reeks? Dat is het adres van je thuisrouter. Miljoenen routers wereldwijd gebruiken <span class="mono">192.168.1.1</span> als gateway en dat is geen probleem, want die adressen zijn alleen geldig binnen hun eigen lokale netwerk.</p>
+
+<p><b>Publieke IP-adressen</b> zijn uniek over het hele internet. Je internetprovider kent jouw thuisnetwerk één publiek IP-adres toe, dat is het adres dat de buitenwereld ziet. Alle apparaten in je thuisnetwerk delen dat ene publieke adres, dankzij <b>NAT</b>. NAT is de techniek waarbij je router bijhoudt welk apparaat welke verbinding heeft opgestart, zodat het antwoord van een server bij het juiste toestel terechtkomt.</p>
+
+<p>Als developer is dit onderscheid cruciaal. Wanneer je een server lokaal draait op <span class="mono">192.168.1.105</span>, is die server niet bereikbaar van buitenaf tenzij je aan de router instelt dat extern verkeer doorgestuurd wordt naar dat adres. Wil je weten welk publiek IP-adres jouw verbinding heeft? Surf naar bijvoorbeeld <span class="mono">ifconfig.me</span> of <span class="mono">whatismyip.com</span>.</p>
+</div>
+
+<div class="container"><a id="2_4"></a>
+    <h3>2.4 Subnetting, wat je moet kennen als developer
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Subnetting klinkt als iets voor netwerkbeheerders. Dat is voor negentig procent ook zo. Maar er zijn situaties waar jij als developer niet omheen kunt: Docker-netwerken, cloudconfiguraties, firewallregels, VPN-instellingen, ... Wie subnetting niet begrijpt, kopieert netwerkconfiguraties zonder te weten wat ze doen. Dat eindigt meestal vroeg of laat slecht.</p>
+
+<p>Een <b>subnetmasker</b> bepaalt welk deel van een IP-adres het netwerk aanduidt en welk deel de host. Het masker <span class="mono">255.255.255.0</span> betekent dat de eerste drie octetten het netwerk identificeren en het laatste octet de host. In het netwerk <span class="mono">192.168.1.0/24</span> kunnen dus 254 hosts bestaan (van <span class="mono">192.168.1.1</span> tot <span class="mono">192.168.1.254</span> — <span class="mono">.0</span> is het networkadres, <span class="mono">.255</span> is broadcast).</p>
+
+<p>Die <span class="mono">/24</span> notatie heet <b>CIDR</b> (Classless Inter-Domain Routing). Het getal na de slash zegt hoeveel bits gereserveerd zijn voor het netwerkgedeelte. <span class="mono">/24</span> betekent 24 bits voor het netwerk, 8 bits voor hosts. <span class="mono">/16</span> geeft je meer hosts (65.534), <span class="mono">/30</span> geeft je er maar 2 — handig voor een point-to-point verbinding.</p>
+
+<p>Wat je concreet moet kunnen als developer:</p>
+
+<p>Een <span class="mono">/24</span>-netwerk herkennen als "256 adressen, waarvan 254 bruikbaar". Begrijpen dat twee machines in hetzelfde subnet rechtstreeks met elkaar kunnen praten, maar dat machines in verschillende subnetten via een router moeten. En weten dat <span class="mono">192.168.1.50/24</span> en <span class="mono">192.168.2.50/24</span> in <b>verschillende</b> netwerken zitten, ook al lijken ze op elkaar.</p>
+
+<p>Moet je subnetberekeningen uit je hoofd doen? Nee. Gebruik een tool zoals <span class="mono">ipcalc</span> of een online subnetcalculator. Maar je moet de output kunnen lezen en interpreteren. Een configuratie blind kopiëren zonder te begrijpen wat het subnetmasker doet, is een fout die je vroeg of laat duur betaalt.</p>
+</div>
+
+<div class="container"><a id="2_5"></a>
+    <h3>2.5 DHCP, zo gemakkelijk maar ook zo lastig soms
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Elke keer dat je verbindt met een WiFi-netwerk, krijg je automatisch een IP-adres. Je hebt daar niets voor ingesteld. Dat is <b>DHCP</b> aan het werk: het <b>Dynamic Host Configuration Protocol</b>.</p>
+
+<p>DHCP is een service die draait op je router (of op een aparte server in grotere netwerken). Wanneer een nieuw apparaat verbindt, stuurt dat apparaat een broadcast-bericht met de vraag: "Ne goeiendag, ik zou graag willen verbinden maar ik heb een config nodig?" De DHCP-server antwoordt met een aanbod: een IP-adres, een subnetmasker, het adres van de gateway en (meestal) de DNS-server die het apparaat moet gebruiken. Die vier waarden vormen samen de volledige netwerkconfiguratie van je toestel.</p>
+
+<p>Een DHCP-adres is niet permanent. Het wordt uitgedeeld voor een bepaalde periode, de <b>lease time</b>. Na afloop vraagt het apparaat het adres opnieuw aan, meestal krijgt het hetzelfde adres terug, maar dat is niet gegarandeerd. Dat is precies waarom servers en apparaten die altijd op hetzelfde adres bereikbaar moeten zijn (zoals een printer, een NAS, of een ontwikkelomgeving) een <b>statisch IP-adres</b> krijgen. Dat stel je ofwel in op het apparaat zelf, ofwel via een <b>DHCP-reservatie</b> in je router, waarbij het MAC-adres van het apparaat gekoppeld wordt aan een vast IP.</p>
+
+<p>Als developer betekent dit: je lokale machine krijgt waarschijnlijk een dynamisch adres. Als je wil dat iets op een vast adres bereikbaar is in je ontwikkelomgeving (een lokale database, een testserver, een Raspberry Pi, ...) configureer dan een statisch adres of een reservatie. Zo voorkom je dat je configuratie elke week breekt omdat het IP-adres veranderd is.</p>
+</div>
+
+<div class="container"><a id="2_6"></a>
+    <h3>2.6 It's always a DNS-issue
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Niemand typt <span class="mono">142.250.184.78</span> in in de browser om naar Google te gaan. Je typt gewoon <span class="mono">google.com</span>. Die vertaling, van een leesbare domeinnaam naar een IP-adres zal door <b>DNS</b> gebeuren: het <b>Domain Name System</b>.</p>
+
+<p>DNS werkt als een databank van domeinnamen en hun bijhorende IP-adressen, dat op verschillende plaatsen gedupliceerd. Wanneer je <span class="mono">google.com</span> intypt, stuurt je computer een vraag naar een <b>DNS-resolver</b> (meestal je router of de DNS-server van je provider). Als die het antwoord niet weet, vraagt hij het door aan een hoger liggende server, tot er een <b>authoritative nameserver</b> wordt bereikt die het definitieve antwoord heeft.</p>
+
+<p>Dat systeem is hiërarchisch opgebouwd. Bovenaan staan de <b>root nameservers</b> (er zijn er 13 logische, verspreid over honderden fysieke servers wereldwijd). Daaronder de <b>TLD-servers</b> (Top Level Domain), één per domeinextensie zoals <span class="mono">.com</span>, <span class="mono">.be</span>, <span class="mono">.org</span>. Daaronder de nameservers van de domeinen zelf.</p>
+
+<p>Als developer kom je DNS in meerdere contexten tegen. Je configureert een domein voor een klant en moet weten wat een <b>A-record</b> is (koppelt een naam aan een IPv4-adres), een <b>AAAA-record</b> (IPv6), een <b>CNAME</b> (alias naar een andere naam) of een <b>MX-record</b> (voor e-mailverkeer). Je debugt een deployment en vraagt je af waarom je nieuwe server nog niet bereikbaar is, dat is de <b>TTL</b> (Time To Live) die bepaalt hoe lang DNS-antwoorden gecached worden. Aanpassingen aan DNS-records kunnen tot 24 uur nodig hebben om wereldwijd door te pushen.</p>
+
+<p>Wil je snel DNS-informatie opvragen? Gebruik <span class="mono">nslookup google.com</span> of <span class="mono">dig google.com</span> in je terminal. Die tools tonen je welk IP-adres aan een domeinnaam gekoppeld is en via welke server dat antwoord gekomen is.</p>
+</div>
+
+<div class="container"><a id="2_7"></a>
+    <h3>2.7 IPv6
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>IPv4 zit vol. Dat is geen toekomstprobleem, maar dat is nu al het geval. De officiële pool van vrije IPv4-adressen is in 2011 uitgeput. Sindsdien worden adressen herverdeeld, verhuurd en gerecycleerd, maar de structurele, langdurige, oplossing is <b>IPv6</b>.</p>
+
+<p>Een IPv6-adres bestaat uit 128 bits in plaats van 32 en ziet er zo uit: <span class="mono">2001:0db8:85a3:0000:0000:8a2e:0370:7334</span>. Dat zijn acht groepen van vier hexadecimale cijfers, gescheiden door dubbele punten. Opeenvolgende groepen van nullen mogen afgekort worden met <span class="mono">::</span>, waardoor het adres hierboven ook als <span class="mono">2001:db8:85a3::8a2e:370:7334</span> geschreven kan worden. Met 128 bits zijn er 2¹²⁸ mogelijke adressen, een getal zo groot dat elk zandkorrel op aarde er miljoenen zou kunnen krijgen.</p>
+
+<p>IPv6 brengt ook enkele conceptuele verschillen mee. Er is geen NAT: elk apparaat kan een uniek publiek adres krijgen. Broadcast bestaat niet meer; in de plaats is er <b>multicast</b> en <b>anycast</b>. En een apparaat kan meerdere IPv6-adressen tegelijk hebben, een link-local adres (begint altijd met <span class="mono">fe80::</span>) voor communicatie binnen het lokale netwerk en een globaal adres voor het internet.</p>
+
+<p>Als developer ga je IPv6 steeds vaker tegenkomen. Cloudproviders als AWS, Azure en Google Cloud ondersteunen het volledig. Mobiele netwerken gebruiken het al uitgebreid. Je hoeft geen IPv6-expert te zijn, maar je moet het adresformaat herkennen, weten dat <span class="mono">::1</span> het IPv6-equivalent is van <span class="mono">127.0.0.1</span> (localhost) en begrijpen dat een applicatie die alleen naar IPv4 luistert, IPv6-verbindingen weigert. Dat laatste is een niet altijd voor de hand liggend probleem dat voor verwarrende fouten zorgt.</p>
+</div>
+
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 2" href="https://canvas.ehb.be/courses/47918/quizzes/73572">Module 2</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 2" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-2">Oefeningen Module 2</a>
+        </div>
+
+
+</div>

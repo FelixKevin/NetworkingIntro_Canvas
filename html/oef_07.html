@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="./07_module7.html#7_1">7.1 Het probleem: afhankelijkheden en omgevingen</a><br>
+        <a href="./07_module7.html#7_2">7.2 Servers? VMs? Containers?</a><br>
+        <a href="./07_module7.html#7_3">7.3 Maar wat is die container dan juist?</a><br>
+        <a href="./07_module7.html#7_4">7.4 De basics van Docker</a><br>
+        <a href="./07_module7.html#7_5">7.5 Hello container</a><br>
+        <a href="./07_module7.html#7_6">7.6 Docker is precies wel cool</a><br>
+    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>E1.</b> Installeer Docker op je machine en voer <span class="mono">docker run hello-world</span> uit. Beschrijf wat er gebeurt.</p>
+
+<p><b>E2.</b> Maak een container van een bestaande image van Docker Hub, start die container en stop die. Noteer de commando's die je gebruikt hebt.</p>
+
+<p><b>E3.</b> Leg uit waarom data verloren gaat als je een container stopt en hoe je dat oplost.</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>M1.</b> Maak een container aan voor een MySQL database, zorg ervoor dat de data in de database bewaard blijft, zelfs al reboot je de container.</p>
+
+<p><b>M2.</b> Zoek op wat Docker Desktop juist doet en bekijk wat de verschillen zijn tussen de desktop-versie en de CLI.</p>
+
+<p><b>M3.</b> Schrijf een handleiding voor het opstarten, debuggen en stoppen van een container stack in een Dockerfile voor een junior developer.</p>
+
+<p><b>M4.</b> Onderzoek hoe Docker-logging werkt. Hoe bekijk je logs van een draaiende container?</p>
+
+<p><b>M5.</b> Maak zelf een container met een nginx of Apache webserver en laat er een voorbeeldoefening vanuit Static Web in draaien zodat deze toegankelijk is door naar https://localhost te surfen.</p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><i>Zijn hard en @Home oefeningen nodig hier, aaangezien in Desktop Computing docker uitgebreider aan bod komt?</i></p>
+
+<p><b>H1.</b> Een collega heeft een <span class="mono">docker-compose.yml</span> geschreven waarbij de databasecontainer zijn poort (5432) publiek beschikbaar stelt via port mapping. De API communiceert ook via <span class="mono">localhost:5432</span> in plaats van via de containernaam. Identificeer alle problemen in deze configuratie, leg uit waarom elk een probleem is en schrijf een verbeterde versie.</p>
+
+<p><b>H2.</b> Schrijf een production "waardige" <span class="mono">docker-compose.yml</span> voor een webapplicatie met de volgende vereisten: automatische herstart bij crash, geheugen en CPU-limieten per service, een gezondheidscontrole voor elke service, logging naar een centraal systeem en geen enkele databasepoort publiek beschikbaar.</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>AT1.</b> Bouw een volledige pipeline van lokale ontwikkeling tot productiedeployment met containers. Startpunt: een applicatie die lokaal draait via <span class="mono">docker compose up</span>. Eindpunt: dezelfde applicatie die automatisch gedeployed wordt op een VPS via GitHub Actions bij elke push naar <span class="mono">main</span>.</p>
+
+<p>Tussenstappen:</p>
+
+<ul>
+
+<li>schrijf een productie-Dockerfile met multi-stage build</li>
+
+<li>configureer de GitHub Actions-pipeline</li>
+
+<li>stel Docker Hub in als imageregister</li>
+
+<li>configureer de VPS om de nieuwe image te downloaden en te starten bij elke deployment.</li>
+
+</ul>
+
+<p>Documenteer elk onderdeel van de pipeline en schrijf een README file om alle stappen voor een volgende developer heel duidelijk uit te leggen.</p>
+</div>
+
+        </div>
+        
+        

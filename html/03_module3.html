@@ -1,0 +1,218 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+
+<div class="container"><a id="3_0"></a>
+    <h3>3.0 Tools en terminal
+    <a href="#top">Terug naar boven</a></h3>
+
+<p>Net zoals dat een doktor al zijn instrumenten in zijn draagtas moeten steken alvorens hij op huisbezoek gaan moeten wij ook al onze tools in orde hebben alvorens wij beginnen. Bij ons zijn de tools gewoon iets anders dan een stethoscoop of scalpel.</p>
+
+<p>De commando's in deze cursus veronderstellen dat je comfortabel bent met een terminal. Geen paniek als dat nog niet helemaal het geval is, de commando's zijn eenvoudig en je leert ze kennen door ze te gebruiken. In het vak Desktop Computing gaan we ook iets dieper in deze dingen duiken.</p>
+
+<p><b>Windows</b> gebruikers werken bij voorkeur met <b>Windows Terminal</b> en <b>PowerShell</b>. <b>macOS</b> en <b>Linux</b> gebruikers hebben alles al aan op voorhand geinstalleerd. Open Terminal en je bent klaar.</p>
+
+<p>De tools die je in deze module gebruikt:</p>
+
+<p><span class="mono">netstat</span>: Toont actieve netwerkverbindingen en de poorten waarop je machine luistert. Op nieuwere systemen is <span class="mono">ss</span> het modernere alternatief met dezelfde functie.</p>
+
+<p><span class="mono">curl</span>: Stuurt HTTP-verzoeken vanuit de terminal en toont de response. Onmisbaar voor het testen van API's zonder een browser of Postman te openen.</p>
+
+<p><span class="mono">telnet</span>: Maakt een quick-and-dirty TCP-verbinding naar een host en poort. Handig om te testen of een poort open staat. Op Windows moet je het apart installeren via "Windows Features".</p>
+
+<p><span class="mono">nc</span> (netcat): Is het Zwitserse zakmes van netwerktesting: poorten testen, data sturen, minimale servers opzetten.</p>
+
+<p><span class="mono">lsof -i</span> (Linux/macOS): Toont welk proces op welke poort luistert. Op Windows gebruik je <span class="mono">netstat -ano</span> in combinatie met Task Manager.</p>
+</div>
+
+<div class="container"><a id="3_1"></a>
+    <h3>3.1 Wat is een poort?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Je weet al dat een IP-adres aangeeft waar een machine te bereiken is op het netwerk. Maar een machine draait tientallen processen tegelijk zoals een webserver, database, mailclient of SSH-daemon. Maar hoe weet een binnenkomend pakket voor welk proces het bedoeld is? Dat regelt de <b>port</b> (of poort).</p>
+
+<p>Je kan die machine zien als een apparementsgebouw met één adres, maar wel met allemaal verschillende deuren. Het IP-adres is het gebouw. De poort is de juiste deur.</p>
+
+<p>Een netwerkverbinding wordt altijd volledig beschreven door vier elementen: het IP-adres van de afzender, de poort van de afzender, het IP-adres van de ontvanger, en de poort van de ontvanger. Die combinatie noemen we een <b>socket</b>.</p>
+
+<p>Poorten worden verdeeld in drie categorieën. De <b>well-known ports</b> (0–1023) zijn gereserveerd voor veelgebruikte diensten: HTTP op 80, HTTPS op 443, SSH op 22, ... Op de meeste systemen heb je admin (of root) nodig om een service op deze poorten te starten.</p>
+
+<p>De <b>registered ports</b> (1024–49151) worden gebruikt door specifieke applicaties: MySQL op 3306, PostgreSQL op 5432, Redis op 6379, ...</p>
+
+<p>De <b>dynamic ports</b> of <b>ephemeral ports</b> (49152–65535) worden tijdelijk toegewezen wanneer jouw machine een verbinding initieert: de poort van jouw browser die een HTTP-verzoek stuurt, is zo'n tijdelijke poort.</p>
+
+<p>Poorten zijn ook protocolspecifiek. Poort 80 op <b>TCP</b> en poort 80 op <b>UDP</b> zijn technisch gezien verschillende poorten. Het meeste webverkeer gebruikt TCP; realtime toepassingen zoals DNS-queries of videogesprekken gebruiken vaak UDP. Het verschil: TCP garandeert dat data aankomt en in de juiste volgorde (maar is trager), UDP garandeert niets maar is sneller.</p>
+</div>
+
+<div class="container"><a id="3_2"></a>
+    <h3>3.2 Bekende poorten
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Het is een beetje nutteloos om alle 65535 poorten en hun nut van buiten te kennen. Maar er zijn er wel een stuk of twintig die je altijd gaat zien terugkomen dat je ze herkent voordat je erover nadenkt. Daar is het wel nuttig om die even vanbuiten te leren.</p>
+
+<p><b>Web traffic:</b> HTTP draait op <b>poort 80</b>, HTTPS op <b>poort 443</b>. Als je een website bezoekt zonder poortnummer in de URL, gebruikt je browser automatisch 80 of 443 afhankelijk van het protocol. Een development-server draait vaak op <b>3000</b>, <b>8000</b> of <b>8080</b>. Dat is geen vaste standaard, maar die getallen zie je het vaakst in tutorials en frameworks (bvb standaard 3000 voor Node.js en 8000 voor Laravel).</p>
+
+<p><b>Databases:</b> MySQL/MariaDB luisteren op <b>poort 3306</b>, PostgreSQL op <b>5432</b>, MongoDB op <b>27017</b>, Redis op <b>6379</b>, Microsoft SQL Server op <b>1433</b>. Weet je niet meer op welke poort je database draait? Dit zijn de <i>defaults</i>. Je kunt ze aanpassen in de configuratie, maar de meeste developers laten ze staan tenzij er een goede reden is om te wijzigen.</p>
+
+<p><b>Remote access en file transfers:</b> SSH draait op <b>poort 22</b>. FTP gebruikt <b>poort 21</b> voor de controleverbinding en <b>poort 20</b> voor de dataoverdracht. <b>SFTP</b> (SSH File Transfer Protocol) loopt via SSH en gebruikt dus ook poort 22.</p>
+
+<p><b>Mail:</b> SMTP (verzenden) op <b>poort 25</b> (of 587 voor authenticatie), IMAP (ontvangen) op <b>143</b> (of 993 voor IMAP over TLS).</p>
+
+<p><b>Andere belangrijke:</b> DNS op <b>poort 53</b> (UDP én TCP), RDP (Remote Desktop) op <b>3389</b>.</p>
+
+<p>Wanneer een verbinding mislukt en je foutmelding zegt "<i>connection refused</i>" of "<i>connection timed out</i>", is de eerste vraag altijd: luistert de service op de verwachte poort en staat die poort open in de firewall?</p>
+</div>
+
+<div class="container"><a id="3_3"></a>
+    <h3>3.3 There's no place like 127.0.0.1
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Elke machine heeft een netwerk met zichzelf. We kunnen die gaan linken aan diep filosofische overtuigingen over eenzaamheid enzo, of we kunnen het praktisch bekijken: wanneer je een server start op je eigen device en er verbinding mee maakt vanop dat device gebruik je het <b>loopback-netwerk</b>.</p>
+
+<p>Het adres <span class="mono">127.0.0.1</span> is het <b>loopback-adres</b> voor IPv4, verkeer dat hiernaar gestuurd wordt verlaat de machine nooit en komt rechtstreeks terug. De naam <span class="mono">localhost</span> is de standaard hostnaam die naar <span class="mono">127.0.0.1</span> verwijst (of naar <span class="mono">::1</span> in IPv6).</p>
+
+<p>Je kunt ze door elkaar gebruiken, al is er één subtiel verschil: <span class="mono">localhost</span> is een DNS-naam die opgezocht wordt, <span class="mono">127.0.0.1</span> is een direct adres. Op de meeste systemen maakt dat geen praktisch verschil, maar in omgevingen waar DNS traag of kapot is, werkt <span class="mono">127.0.0.1</span> altijd.</p>
+
+<p>Het volledige loopback-blok is <span class="mono">127.0.0.0/8</span>. Dat betekent dat alle adressen van <span class="mono">127.0.0.1</span> tot <span class="mono">127.255.255.254</span> naar jezelf verwijzen. In de praktijk gebruik je alleen <span class="mono">127.0.0.1</span>, maar in sommige configuraties (meerdere lokale services die elk een eigen adres nodig hebben) zie je ook <span class="mono">127.0.0.2</span> of <span class="mono">127.0.0.3</span> opduiken.</p>
+
+<p>Wanneer je een server start op <span class="mono">localhost:3000</span>, is die server <b>alleen bereikbaar vanaf je eigen machine</b>. Wil je dat andere machines in je netwerk er ook mee kunnen verbinden, dan moet je de server laten luisteren op <span class="mono">0.0.0.0:3000</span>, dat betekent "alle beschikbare netwerkinterfaces". Als er ooit al eens een moment was waarop je lastig werd tijdens het debuggen omdat bij u alles werkt, maar andere mensen er niet aankunnen heeft dit er wel misschien iets mee te maken.</p>
+</div>
+
+<div class="container"><a id="3_4"></a>
+    <h3>3.4 Sockets
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Tot nu toe heb je netwerken bekeken vanuit het perspectief van adressen en poorten. Maar hoe maakt code eigenlijk gebruik van dat netwerk? Het antwoord is met een <b>socket</b>.</p>
+
+<p>Een socket is een eindpunt van een netwerkverbinding: een object in je code dat je kunt openen, naar schrijven, van lezen en sluiten, net zoals een bestand. Gelukkig is het wel iets waar het besturingssysteem (meestal) het beheer van zal doen.</p>
+
+<p>Jij werkt met de socket als abstractie. Wanneer je een HTTP-verzoek doet in Python, JavaScript of Java, wordt ergens onderliggend een socket aangemaakt, de verbinding opgezet, data verstuurd en ontvangen en de socket gesloten.</p>
+
+<p>Er zijn twee types sockets waar je het verschil tussen moet weten. Een <b>TCP-socket</b> (stream socket) zorgt voor een betrouwbare verbinding: data komt aan in de juiste volgorde en zonder verlies. Een <b>UDP-socket</b> (datagram socket) verstuurt afzonderlijke packets zonder garantie op volgorde of aankomst, maar met minder overhead.</p>
+
+<p>In de meeste programmeertalen werk je niet rechtstreeks met sockets, voor webverkeer zal je bvb gebruik maken van HTTP dat het zware werk voor je doet. Maar zodra je met WebSockets, raw TCP-verbindingen, of protocollen lager dan HTTP werkt, kom je direct in aanraking met socket-programmering. In Node.js zit de <span class="mono">net</span>-module ingebouwd voor raw TCP-sockets; Python heeft de <span class="mono">socket</span>-module.</p>
+
+<p>Een minimaal voorbeeld om te voelen hoe het werkt, een TCP-server in Python:</p>
+
+<pre class="terminal">import socket
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('0.0.0.0', 9000))
+server.listen(1)
+
+conn, addr = server.accept()
+print(f"Verbinding van {addr}")
+conn.sendall(b"Hallo van de server!\n")
+conn.close()</pre>
+
+<p>Dit is enkel een voorbeeld om te laten zien wat we eigenlijk doen. We gaan letterlijk zeggen dat de server moet luisteren op <i>IP adres</i> <span class="mono">0.0.0.0</span> en <i>poort</i> <span class="mono">9000</span>. Oftewel: we krijgen een socket door een adres en poort aan elkaar te vinden (<span class="mono">bind</span>), het wacht op verbindingen (<span class="mono">listen</span>) en zal content terugsturen (<span class="mono">send</span>).</p>
+</div>
+
+<div class="container"><a id="3_5"></a>
+    <h3>3.5 The big firewall filter
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Simpel samengevat: de firewall beslist of netwerkverkeer wel en niet mag passeren. Dat klinkt eenvoudig, maar de details bepalen of je applicatie (of server) bereikbaar is of niet én vooral of je server <i>veilig</i> is of niet.</p>
+
+<p>Iets minder samengevat: een <b>firewall</b> analyseert inkomend en uitgaand verkeer op basis van regels. Die regels kijken typisch naar het IP-adres van de zender, het IP-adres waar het naartoe moet, de poort, en het protocol (TCP of UDP). Een regel kan zijn:</p>
+
+<ul>
+
+<li>"sta verkeer toe van overal naar poort 443" =&gt; want je wilt een website via HTTPS beschikbaar maken voor 'het internet'</li>
+
+<li>"blokkeer al het inkomend verkeer op poort 22 behalve van IP-adres 195.130.3.12" =&gt; want iemand moet via SSH op je server kunnen verbinden behalve verbindingen via 195.130.3.12 (het IP-adres van je kantoor of campus)</li>
+
+<li>"hou al het inkomend verkeer tegen van IP-adres 30.2.x.x" =&gt; want er is een brute-force login aanval aan de gang vanuit die range</li>
+
+</ul>
+
+<p>Er zijn twee plaatsen waar een firewall relevant is voor jou als developer. De <b>host-based firewall</b> draait op de server zelf. Op Linux is dat (meestal) <span class="mono">ufw</span> (Uncomplicated Firewall) of <span class="mono">iptables</span>. Op Windows is dat de ingebouwde Windows Firewall. Wanneer je een nieuwe poort opent op een server, moet je die ook openen in de host-based firewall, anders bereikt het verkeer de poort nooit.</p>
+
+<p>De <b>netwerkfirewall</b> zit tussen het internet en je server, typisch beheerd door je hostingprovider, IT-dienst of op je router thuis. Bij clouddiensten zoals AWS of Azure heet dit een <b>security group</b> of <b>network security group</b>. Hier gelden dezelfde principes: je definieert welk verkeer mag binnen- en buitenkomen.</p>
+
+<p>Een veelgemaakte fout: je start een service op poort 8080, de service luistert correct, maar de verbinding mislukt. Je controleert je code, geen fout. Je controleert de poort, aan het luisteren. Wat vergeet je? <i>De firewall</i>. Controleer altijd beide lagen: de host-based firewall én de netwerkfirewall. Op een nieuwe VPS staan standaard alleen poort 22 (SSH) en soms 80/443 open. Al het andere moet je expliciet toestaan.</p>
+
+<p>Het principe achter goede firewallconfiguratie: <b>whitelist, niet blacklist</b>. Blokkeer alles standaard en laat alleen toe wat nodig is. Niet andersom.</p>
+</div>
+
+<div class="container"><a id="3_6"></a>
+    <h3>3.6 Port forwarding
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Stel: je wilt zelf een MineCraft server hosten om samen met wat vrienden te bouwen aan een mega constructie. Je hebt de server geconfigged, kan zelf lokaal verbinden, hebt poort 25565 toegevoegd aan de firewall, maar nog altijd kunnen je vrienden niet verbinden op je server. Wat is het probleem?</p>
+
+<p>Je thuisrouter heeft één publiek IP-adres. Achter die router zitten verschillende apparaten waaronder de machine met je server, elk met een intern IP. Wanneer iemand van buitenaf verbinding wil maken met jouw lokale server, weet de router niet naar welk apparaat hij het verkeer moet sturen. Tenzij je <b>port forwarding</b> configureert.</p>
+
+<p>Port forwarding is een instelling in je router waarbij je zegt: "Verkeer dat binnenkomt op poort X, stuur je door naar IP-adres Y op poort Z." Concreet voor je MineCraft server: "Alles wat binnenkomt op poort 25565, stuur door naar <span class="mono">192.168.1.105:25565</span>": het IP-adres van je computer waarop de MineCraft server draait.</p>
+
+<p>De stappen zijn altijd hetzelfde.</p>
+
+<ol>
+
+<li>Geef je machine een statisch IP-adres of DHCP-reservatie, anders verandert het IP na een reboot en werkt je port forwarding-regel niet meer.</li>
+
+<li>Log in op je router en zoek de port forwarding-instellingen (soms onder "NAT", "Virtual Server" of "Port Mapping").</li>
+
+<li>Stel de regel in met het externe poortnummer, het interne IP-adres en het interne poortnummer.</li>
+
+<li>Test vanuit een extern netwerk, bvb via GSM als je niet met je WiFi verbonden bent.</li>
+
+</ol>
+
+<p>Er zijn twee varianten. <b>Port forwarding</b> werkt voor één specifieke poort. <b>DMZ</b> (Demilitarized Zone) stuurt al het verkeer door naar één intern apparaat, handig voor een homelab, maar gevaarlijk. Een apparaat in de DMZ staat volledig bloot aan het internet en heeft geen routerbeveiliging meer.</p>
+
+<p>Weet wat je doet wanneer je port forwarding instelt. Je opent letterlijk een deur in je netwerk. Zorg dat de service achter die deur up-to-date is, een sterk wachtwoord heeft en niet meer blootstelt dan nodig.</p>
+</div>
+
+<div class="container"><a id="3_7"></a>
+    <h3>3.7 EHBOS: Eerste Hulp Bij Onbereikbare Servers
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>"Waarom kan mijn app de database niet bereiken?" is een vraag die elke developer vroeg of laat stelt. Het antwoord zit bijna altijd in één van dezelfde vijf categorieën. Leer ze herkennen en je lost dit soort problemen in minuten op in plaats van uren.</p>
+
+<p><b>1. De service luistert niet:</b> Je database is gestart, maar luistert op <span class="mono">127.0.0.1</span> in plaats van <span class="mono">0.0.0.0</span>. Of de service is helemaal niet gestart. Controleer met <span class="mono">netstat -tlnp | grep 5432</span> (voor PostgreSQL) of de poort actief is en op welk adres.</p>
+
+<p><b>2. De firewall blokkeert de verbinding:</b> De service luistert correct, maar de firewall laat het verkeer niet door. Onderscheid "<i>connection refused</i>" (de poort is bereikbaar maar weigert) van "<i>connection timed out</i>" (de poort is niet bereikbaar, waarschijnlijk geblokkeerd door firewall). <span class="mono">connection refused</span> = service probleem. <span class="mono">timed out</span> = firewallprobleem.</p>
+
+<p><b>3. Verkeerd IP-adres of hostnaam:</b> Je connectiestring verwijst naar <span class="mono">localhost</span> maar de database draait in een Docker-container met een eigen netwerk. Of je hebt een typfout in het IP-adres. Controleer de exacte connectiestring en vergelijk met het werkelijke adres van de service.</p>
+
+<p><b>4. Verkeerde poort:</b> Je hebt de standaardpoort aangenomen maar de service is geconfigureerd op een andere poort. Of je verwart MySQL (3306) met PostgreSQL (5432). Controleer de configuratie van de service zelf.</p>
+
+<p><b>5. Authenticatiefout die eruitziet als verbindingsfout:</b> De verbinding lukt, maar de database weigert de gebruiker. Sommige foutmeldingen zijn hier niet duidelijk over. Test de verbinding eerst met een database-client (bv. <span class="mono">psql</span> of <span class="mono">mysql</span> in de Terminal) om authenticatie los te koppelen van de netwerkverbinding.</p>
+
+<p>Het debuggingproces volgt altijd dezelfde logica: bevestig eerst dat de service draait en op de juiste poort luistert. Test daarna de verbinding lokaal (vanaf de server zelf). Test pas daarna van buitenaf. Zo sluit je laag voor laag mogelijke oorzaken uit.</p>
+</div>
+
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 3" href="https://canvas.ehb.be/courses/47918/quizzes/73573">Module 3</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 3" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-3">Oefeningen Module 3</a>
+        </div>
+
+
+</div>

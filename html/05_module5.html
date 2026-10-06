@@ -1,0 +1,169 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+
+<div class="container"><a id="5_1"></a>
+    <h3>5.1 FTP en SFTP: bestanden verplaatsen
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Ooit al eens een bestand naar een webserver moeten uploaden via een tool als FileZilla of WinSCP? Dan is de kans reëel dat je FTP of SFTP gebruikt hebt, willen of niet.</p>
+
+<p><b>FTP</b> staat voor <b>File Transfer Protocol</b> en bestaat al sinds 1971. Dat is geen leuk wistjedatje dat je tijdens de DT Zaalquiz kan gebruiken om punten te scoren, maar het is een verklaring waarom het er zo (oudbollig) uitziet. FTP gebruikt twee aparte TCP-verbindingen: een <b>controleverbinding</b> op poort 21 voor commando's en een <b>dataverbinding</b> voor de eigenlijke bestandsoverdracht. Die tweeledige structuur veroorzaakt het klassieke FTP-probleem: je kunt inloggen en de mappenstructuur zien, maar zodra je een bestand probeert te downloaden, time-out de verbinding. Dat is vrijwel altijd een <b>active/passive mode</b>-conflict met een firewall.</p>
+
+<p>Maar het grootste probleem is niet de complexiteit maar de beveiliging. FTP verstuurt alles als onversleutelde tekst, inclusief je gebruikersnaam en wachtwoord. Op een gedeeld netwerk zijn je credentials meteen leesbaar voor iedereen die luistert.</p>
+
+<p><b>SFTP</b> (SSH File Transfer Protocol) is de oplossing. Hoewel je enkel afgaand op de afkorting zou denken dat het gewoon "secure FTP" is heeft SFTP eigenlijk niets te maken met FTP. Het is een volledig ander protocol dat bovenop SSH draait. Eén verbinding, poort 22, alles versleuteld. De praktische conclusie is kort: gebruik altijd SFTP.</p>
+
+<p>Maar waarom dan nog spreken over FTP? Heel simpel, FTP komt gewoon nog veel voor in legacy-systemen en gaat soms de enige manier zijn om te deployen naar de infrastructuur die je als developer voor handen krijgt. Plus, FTP en SFTP zijn soms ook gewoon handige protocollen om snel iets te testen of over te zetten.</p>
+</div>
+
+<div class="container"><a id="5_2"></a>
+    <h3>5.2 SSH
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Stel, je hebt een website gemaakt en gaat deze willen deployen op het internet. Je hebt dus nood aan een server waar deze bestanden kunnen staan op een locatie waar andere mensen toegang hebben tot het resultaat. Je zal dan waarschijnlijk ergens een server moeten huren, maar waar precies die staat maakt niet uit. Het maakt uit dat deze server niet voor u neus staat en dat je er niet op kan †ypen, dus hoe kan je daar dingen op deployen? SSH is hoe je dat doet.</p>
+
+<p><b>SSH</b> staat voor <b>Secure Shell</b>. Het zet een versleutelde verbinding op over een onveilig netwerk, standaard op <b>poort 22</b>. Via die verbinding open je een shell op de remote machine en voer je commando's uit alsof je er zelf voor zit.</p>
+
+<p>De moderne standaard manier om in te loggen is via een <b>keypair</b>: een <b>private key</b> die alleen jij hebt en een <b>public key</b> die op de server staat. Wanneer je verbindt, bewijst de server dat hij jouw public key kent en bewijst jij dat je de bijbehorende private key bezit, zonder die sleutel ooit over het netwerk te sturen. Veiliger dan een wachtwoord, dat onderschept of geraden kan worden.</p>
+
+<p>Hoe precies die authenticatie juist gebeurd is out of scope van dit vak, maar je kan meer informatie vinden op https://tls12.xargs.org</p>
+
+<p>Een sleutelpaar maak je aan met:</p>
+
+<pre class="terminal">ssh-keygen -t ed25519 -C "Naam van de key"</pre>
+
+<p>Dit genereert <span class="mono">~/.ssh/id_ed25519</span> (private key: <b>nooit delen, nooit kwijtraken</b>) en <span class="mono">~/.ssh/id_ed25519.pub</span> (public key: zet deze op de server in <span class="mono">~/.ssh/authorized_keys</span>). Verbinden doe je dan met:</p>
+
+<pre class="terminal">ssh user@serveradres</pre>
+
+<p>Drie extra SSH-mogelijkheden die je als developer regelmatig nodig hebt. <b>SCP</b> (Secure Copy) kopieert bestanden via SSH: <span class="mono">scp bestand.txt user@server:/path/</span>. <b>SSH tunneling</b> stuurt lokaal verkeer via SSH door naar een remote host, de standaardmanier om een database te bereiken die niet publiek toegankelijk is (meer in de oefeningen). En <b>SSH config</b> (<span class="mono">~/.ssh/config</span>) laat je aliassen opslaan zodat <span class="mono">ssh mijnserver</span> volstaat in plaats van het volledige commando telkens opnieuw te typen.</p>
+
+<p><b>E�n waarschuwing die je serieus moet nemen</b>: de eerste keer dat je verbindt met een server toont SSH een <b>fingerprint</b>. Die bevestig je bijna altijd blind, maar als je die fingerprint niet verifieert via een ander kanaal, open je de deur voor een <b>man-in-the-middle-aanval</b>. In een professionele context verifieer je de fingerprint via de admin panel van je hostingprovider voor je bevestigt.</p>
+</div>
+
+<div class="container"><a id="5_3"></a>
+    <h3>5.3 Basic Security: wat nooit in Git mag
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Je bouwt een applicatie die de Google Maps API gebruikt. Je plakt je API-sleutel in je code, pusht naar GitHub en tien minuten later krijg je een email van Google dat je sleutel misbruikt wordt, of erger nog je krijgt op het einde van de maand een factuur van Google voor alle gemaakte API-calls. Dit is geen scenario dat bijna niet voorkomt, het is schering en inslag en de schade kan oplopen tot honderden euro's aan onverwachte facturen.</p>
+
+<p>Een <b>API-sleutel</b> is een geheime string die jou identificeert bij een externe dienst. Het is vergelijkbaar met een wachtwoord: wie de sleutel heeft, kan de dienst gebruiken op jouw kosten en met jouw rechten. Het verschil met een wachtwoord is dat API-sleutels vaak automatisch door bots gescand worden op publieke Git-repositories.</p>
+
+<p>De regel is absoluut: <b>geheimen horen nooit in je code en nooit in Git.</b> Dat wilt zeggen API-sleutels, databasewachtwoorden, JWT-secrets, OAuth-tokens, private keys, ... Geen uitzonderingen, <i>ook niet in privérepositories</i>.</p>
+
+<p>De correcte aanpak is werken met <b>environment variables</b>. Je slaat de waarde op buiten je code, in een <span class="mono">.env</span>-bestand lokaal, of in de omgevingsinstellingen van je server en je leest hem op in je code (bijvoorbeeld in JavaScript of Python):</p>
+
+<pre class="terminal">// Node.js
+const apiKey = process.env.MAPS_API_KEY;</pre>
+
+<pre class="terminal"># Python
+import os
+api_key = os.environ.get("MAPS_API_KEY")</pre>
+
+<p>Het <span class="mono">.env</span>-bestand zelf zet je in <span class="mono">.gitignore</span> zodat het nooit meegecommit wordt. Wat je wel in Git kan zetten, is een <span class="mono">.env.example</span> met de namen van alle vereiste variabelen maar zonder de waarden:</p>
+
+<pre class="terminal">MAPS_API_KEY=
+DATABASE_URL=
+JWT_SECRET=</pre>
+
+<p>Zo weet elke developer in het team welke variabelen nodig zijn, zonder dat de waarden ooit publiek worden.</p>
+
+<p>Als je per ongeluk een sleutel gepusht hebt: delete hem onmiddellijk in het dashboard van de dienst en maak een nieuwe key aan. De sleutel in Git verwijderen via een nieuwe commit is niet voldoende, de geschiedenis blijft beschikbaar en wordt ook actief gescand.</p>
+</div>
+
+<div class="container"><a id="5_4"></a>
+    <h3>5.4 WebSockets: HTTP maar eigenlijk niet helemaal?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>HTTP werkt volgens een vast patroon: de client vraagt, de server antwoordt, done. Dat werkt perfect voor het laden van pagina's en het ophalen van data. Maar wat als de server iets wil sturen zonder dat de client het moet vragen? Denk aan een chatbericht of een notification, de server weet dat die notification er is en moet dat op één of andere manier aan de client laten weten.</p>
+
+<p>De klassieke noodoplossing was <b>polling</b>: de client vraagt elke paar seconden "hebt ge al iets voor mij?" Dat werkt, maar het is niet echt efficiënt aangezien de meeste antwoorden "nee" gaat zijn. Een volgende stap was <b>long polling</b>: de client stuurt een request en de server houdt die verbinding open tot er iets te melden is. Beter, maar nog altijd omslachtig.</p>
+
+<p><b>WebSockets</b> lossen dit op door een volwaardige verbinding in beide richtingen op te zetten die open blijft. De verbinding start als een gewone HTTP-request met een <span class="mono">Upgrade</span>-header:</p>
+
+<pre class="terminal">GET /chat HTTP/1.1
+Upgrade: websocket
+Connection: Upgrade</pre>
+
+<p>De server antwoordt met <span class="mono">101 Switching Protocols</span> en vanaf dat moment kunnen zowel client als server op elk moment berichten sturen zonder telkens een nieuwe request. De verbinding blijft open tot één van beide kanten ze sluit.</p>
+
+<p>In JavaScript kan je gebruik maken van de ingebouwde <span class="mono">WebSocket</span>-API:</p>
+
+<pre class="terminal">const ws = new WebSocket('wss://server.voorbeeld.be/chat');
+
+ws.onopen = () =&gt; ws.send('Hallo server!');
+ws.onmessage = (event) =&gt; console.log('Ontvangen:', event.data);
+ws.onclose = () =&gt; console.log('Verbinding gesloten');</pre>
+
+<p><span class="mono">wss://</span> is WebSocket over TLS — gebruik altijd <span class="mono">wss://</span> in productie, net zoals je altijd <span class="mono">https://</span> gebruikt.</p>
+
+<p>Er zijn nog andere alternatieven voor eenrichtingsverkeer van de server naar de client zoals <b>Server-Sent Events</b> (SSE), maar dit valt out of scope van dit OLOD en gaat later in de opleiding nog aan bod komen.</p>
+</div>
+
+<div class="container"><a id="5_5"></a>
+    <h3>5.5 Requests. Wie zijn ze? Wat doen ze? Hoe werken ze?
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Het klinkt eigenlijk wel simpel, je typt <span class="mono">https://www.vrt.be</span> in je browser en drukt op Enter en enkele momenten later komt er een website tevoorschijn (die u mogelijk iets over de Planckaerts, voetbal, of andere domme dingen wilt vertellen). Maar wat er in die momenten tussen de Enter en het verschijnen van de pagina gebeurd is een samenspel van alles wat we tot nutoe al hebben gezien in deze cursus. Een overzicht in grote lijnen:</p>
+
+<ol>
+
+<li><b>DNS-resolution:</b> De browser weet niet waar <span class="mono">www.vrt.be</span> is. Hij vraagt het aan de DNS-resolver van het systeem, die het IP-adres teruggeeft. Als het antwoord al gecached is (in de browser, het OS, of de resolver) wordt deze stap overgeslagen.</li>
+
+<li><b>TCP-verbinding:</b> De browser opent een TCP-verbinding met het IP-adres op poort 443 via een three-way handshake: <span class="mono">SYN</span> -&gt; <span class="mono">SYN-ACK</span> -&gt; <span class="mono">ACK</span>.</li>
+
+<li><b>TLS-handshake:</b> Omdat het HTTPS is, volgt de TLS-handshake. De server toont zijn certificaat. De browser verifieert het. Beide kanten spreken een sessiesleutel af. Alle verdere communicatie is versleuteld.</li>
+
+<li><b>HTTP-request:</b> De browser stuurt het versleutelde HTTP-verzoek:</li>
+
+</ol>
+
+<pre class="terminal">GET / HTTP/2
+Host: www.vrt.be
+Accept: text/html</pre>
+
+<ol>
+
+<li><b>Server magie:</b> De server ontvangt de request en stuurt HTML terug. (Stiekem zit er wel meer achter de schermen. Typisch staat er een reverse proxy voor de applicatie die TLS afhandelt en het verzoek doorstuurt. De backend haalt data op, rendert een template, doet andere dingen, levert de HTML af)</li>
+
+<li><b>HTTP-response:</b> De server stuurt de response terug: statuscode <span class="mono">200 OK</span>, headers en de HTML-body.</li>
+
+<li><b>Verdere requests:</b> De browser parsed de HTML en ontdekt dat er extra resources nodig zijn: CSS, JavaScript, afbeeldingen. Voor elke extra resource wordt een nieuwe request gestart, stappen 4 tot 6 herhalen zich, parallel voor meerdere resources tegelijk.</li>
+
+<li><b>Rendering:</b> Zodra genoeg resources geladen zijn, begint de browser met renderen. JavaScript kan zelf extra API-requests starten, opnieuw via hetzelfde patroon.</li>
+
+</ol>
+
+<p>That's it. Eén URL, één Enter-toets, tientallen requests, tientallen stappen. Elk van die stappen kan mislopen, vertraagd zijn of gecached zijn. Dit zijn alle dingen waar je rekening mee moet houden als iets "niet laadt".</p>
+</div>
+
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 5" href="https://canvas.ehb.be/courses/47918/quizzes/73575">Module 5</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 5" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-5">Oefeningen Module 5</a>
+        </div>
+
+
+</div>

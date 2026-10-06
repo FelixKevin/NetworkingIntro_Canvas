@@ -1,0 +1,91 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="./03_module3.html#3_0">3.0 Tools en terminal</a><br>
+        <a href="./03_module3.html#3_1">3.1 Wat is een poort?</a><br>
+        <a href="./03_module3.html#3_2">3.2 Bekende poorten</a><br>
+        <a href="./03_module3.html#3_3">3.3 There's no place like 127.0.0.1</a><br>
+        <a href="./03_module3.html#3_4">3.4 Sockets</a><br>
+        <a href="./03_module3.html#3_5">3.5 The big firewall filter</a><br>
+        <a href="./03_module3.html#3_6">3.6 Port forwarding</a><br>
+        <a href="./03_module3.html#3_7">3.7 EHBOS: Eerste Hulp Bij Onbereikbare Servers</a><br>
+    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>E1.</b> Controleer op je eigen machine (voer <span class="mono">netstat -tlnp</span> (Linux/macOS) of <span class="mono">netstat -ano</span> (Windows) uit) welke processen luisteren op netwerkpoorten. Noteer drie processen met poortnummer en vermoedelijke rol.</p>
+
+<p><b>E2.</b> Draai lokaal een simpele webserver (bvb met XAMPP) en test die via localhost en via je lokale IP-adres. Vergelijk de resultaten.</p>
+
+<p><b>E3.</b> Zoek uit welke firewall actief is op je machine. Noteer waar je regels kan bekijken.</p>
+
+<p><b>E4.</b> Zoek op welke poorten de volgende services standaard gebruiken: MySQL, Redis, MongoDB, RabbitMQ, Elasticsearch. Noteer de poort en het protocol (TCP/UDP) voor elk.</p>
+
+<p><b>E5.</b> Voer <span class="mono">curl -v http://google.be</span> uit. Lees de output. Identificeer het IP-adres waarmee verbinding gemaakt wordt, de poort, en de HTTP-statuscode die teruggegeven wordt.</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>M1.</b> Zet een lokale database op en verbind ermee vanuit een aparte testapp. Toon dat verbinding op localhost werkt en leg uit wat je moet veranderen voor verbinding vanaf een tweede toestel.</p>
+
+<p><b>M2.</b> Onderzoek de impact van een hostfirewallregel die inkomend verkeer op één poort blokkeert.</p>
+
+<p><b>M3.</b> Maak een overzicht van poorten die een web project gebruikt, inclusief service, protocol en risico bij blootstelling.</p>
+
+<p><b>M4.</b> Start een eenvoudige TCP-server met <span class="mono">nc -l 9000</span> (netcat). Maak vanuit een tweede terminal verbinding met <span class="mono">nc localhost 9000</span>. Stuur een tekst van de ene terminal naar de andere. Beschrijf wat er op netwerkniveau gebeurt bij elke stap.</p>
+
+<p><b>M5.</b> Gebruik <span class="mono">ufw</span> (Linux) of de ingebouwde Windows Firewall om een specifieke poort te blokkeren op je machine. Test of de blokkering werkt met <span class="mono">nc</span> of <span class="mono">telnet</span>. Verwijder de regel daarna.</p>
+
+<p><b>M6.</b> Onderzoek het concept <b>reverse proxy</b>. Wat doet een reverse proxy, en welke rol spelen poorten daarin? Geef een concreet voorbeeld van hoe nginx als reverse proxy ingezet wordt voor een Node.js-applicatie op een server.</p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>H1.</b> Ontwerp een veilige netwerkopstelling voor een webapp met database in een kleine Belgische kmo. Motiveer poortkeuzes, firewallregels en toegangsbeleid.</p>
+
+<p><b>H2.</b> Vergelijk drie strategieën om een lokale service extern bereikbaar te maken: port forwarding, vpn en tunnelservice. Evalueer veiligheid, beheer en complexiteit.</p>
+
+<p><b>H3.</b> Schrijf een korte gids voor developers over hoe je incidentcommunicatie doet tijdens een netwerkstoring: wat meld je, wanneer, en met welke technische bewijsstukken.</p>
+
+<p><b>H4.</b> Een collega stelt voor om de SSH-poort te verplaatsen van 22 naar een willekeurig hoog poortnummer als beveiligingsmaatregel ("security through obscurity"). Schrijf een onderbouwde reactie: wat zijn de voor- en nadelen van deze aanpak?</p>
+
+<p><b>H5.</b> Analyseer de beveiligingsrisico's van de volgende configuratie: een developer heeft zijn hele thuisnetwerk in een DMZ gezet zodat hij makkelijk van buitenaf aan zijn projecten kan werken. Welke risico's introduceert dit? Welke alternatieven bestaan er die hetzelfde doel bereiken zonder de beveiliging volledig te omzeilen?</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>AT1.</b> Maak een volledig overzicht van alle poorten die op jouw machine actief in gebruik zijn. Identificeer voor elke poort: het poortnummer, het protocol (TCP/UDP), het adres waarop geluisterd wordt (localhost of 0.0.0.0), het proces dat de poort in gebruik heeft, en of die poort intern of extern bereikbaar is. Beoordeel daarna je firewallconfiguratie: welke poorten zijn onnodig blootgesteld? Welke services hadden beter alleen op <span class="mono">127.0.0.1</span> mogen luisteren? Schrijf een rapport met bevindingen en aanbevelingen.</p>
+</div>
+
+        </div>
+        
+        

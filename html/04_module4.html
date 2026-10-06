@@ -1,0 +1,163 @@
+<link rel="stylesheet" href="../css/style.css">
+
+@@include sidebar_menu.html
+
+<div class="wrapper">
+
+<div class="container"><a id="4_1"></a>
+    <h3>4.1 Wij moeten eens praten
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Je klikt op een link en een pagina laadt. Eenvoudig genoeg. Maar onder die klik zit een heel gesprek: jouw browser stuurt een <b>request</b> (verzoek) naar een server, en de server antwoordt met een <b>response</b> (antwoord). Dat is alles wat HTTP is: een protocol voor dat gesprek.</p>
+
+<p><b>HTTP</b> staat voor <b>HyperText Transfer Protocol</b>. Het is een tekstgebaseerd protocol dat werkt bovenop TCP: de browser bouwt eerst een TCP-verbinding op met de server en stuurt daarna een leesbaar tekstbericht. Een minimale HTTP-request ziet er zo uit:</p>
+
+<pre class="terminal">GET /index.html HTTP/1.1
+Host: www.voorbeeldwebsite.be</pre>
+
+<p>Twee regels, meer is er niet nodig om "het internet" te laten werken. De eerste zegt wat je wil doen (<span class="mono">GET</span>), welke resource je wil (<span class="mono">/index.html</span>) en welke versie van HTTP je gebruikt (<span class="mono">HTTP/1.1</span>). De tweede zegt naar welke server je de request gaat sturen. De server antwoordt met een <b>response</b>:</p>
+
+<pre class="terminal">HTTP/1.1 200 OK
+Content-Type: text/html
+
+&lt;html&gt;...&lt;/html&gt;</pre>
+
+<p>Eerst de statusregel (versie + statuscode + beschrijving), dan headers, dan een lege regel, dan de body met de eigenlijke content. Dat patroon van request met methode, pad en headers; response met statuscode, headers en body is de backbone van het web. Alles wat je doet als developer gaat dit patroon volgen.</p>
+
+<p>HTTP is <b>stateless</b>: elke request staat op zichzelf. De server onthoudt niets van vorige requests, dus weet ook niet of twee requests van dezelfde persoon komen. Dat is een beperking, maar het is ook de reden waarom HTTP zo eenvoudig en schaalbaar is. In andere web-gerelateerde opleidingsonderdelen gaan we kijken naar oplossingen voor dit stateless probleem.</p>
+</div>
+
+<div class="container"><a id="4_2"></a>
+    <h3>4.2 GET, POST en anderen
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Een HTTP-request begint altijd met een <b>method</b> (methode), het werkwoord dat zegt wat je wil doen. Die keuze is wel belangrijk, hoewel dat dat niet altijd zichtbaar is. Elke method heeft een betekenis en deze correct gebruiken maakt het developpen (zeker APIs) gemakkelijker.</p>
+
+<p><b>GET</b> vraagt data op. Een GET-request heeft geen body en verandert niets op de server. Je kunt een GET-request onbeperkt herhalen zonder bijwerkingen. Gebruik GET voor alles wat je ophaalt: een lijst van producten, een profiel, een zoekopdracht, ...</p>
+
+<p><b>POST</b> stuurt data naar de server om iets nieuws aan te maken. Een POST heeft wel een body. Twee identieke POST-requests maken twee objecten aan. Gebruik POST wanneer je een nieuw record aanmaakt, een formulier indient, ...</p>
+
+<p><b>PUT</b> vervangt een bestaande resource volledig. Je stuurt de volledige nieuwe versie mee. <b>PATCH</b> past een resource gedeeltelijk aan, je stuurt alleen de velden die veranderen. In een API voor gebruikersbeheer gebruik je PUT om een heel profiel te vervangen en PATCH om bvb alleen het e-mailadres bij te werken.</p>
+
+<p><b>DELETE</b> verwijdert een resource. Net als GET heeft het typisch geen body.</p>
+
+<p><b>HEAD</b> werkt als GET, maar de server stuurt alleen de headers terug, geen body. Handig om te controleren of een resource bestaat of hoe groot hij is zonder hem volledig te downloaden (denk aan grotere afbeeldingen of PDF bestanden).</p>
+
+<p><b>OPTIONS</b> vraagt welke methods de server ondersteunt voor een bepaalde URL.</p>
+
+<p>In de praktijk zit de grootste valkuil hier: sommige developers gebruiken GET voor alles, inclusief acties die data wijzigen. Dat is verkeerd want GET-requests worden gecached, gelogd en kunnen opnieuw uitgevoerd worden door browsers en proxies. In de web-vakken gaan we trouwens dieper in op deze verschillen.</p>
+</div>
+
+<div class="container"><a id="4_3"></a>
+    <h3>4.3 Je moet je headers erbij houden
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Een HTTP-bericht bestaat uit meer dan alleen een method en een body. De <b>headers</b> zijn de metadata (informatie over de informatie): hoe moet de boodschap geïnterpreteerd worden, wie stuurt ze, welk antwoord verwachten ze, ... Ze zijn onzichtbaar voor de eindgebruiker maar zijn voor onsals  developer wel belangrijk.</p>
+
+<p>Headers zijn key/value-pairs, één per regel. Hier een voorbeeld:</p>
+
+<pre class="terminal">Content-Type: application/json
+Authorization: Bearer eyJhbGc...
+Accept: application/json
+Cache-Control: no-cache</pre>
+
+<p>Een aantal headers zijn, net zoals poorten, echt overal terug te vinden dus is het goed om te weten wat ze precies doen:</p>
+
+<ul>
+
+<li><b>Content-Type</b>: Zegt in welk formaat de body van het bericht is. <span class="mono">application/json</span> voor JSON-data, <span class="mono">text/html</span> voor HTML, <span class="mono">multipart/form-data</span> voor bestandsuploads. Je zegt aan de ontvanger hoe de data moet bekeken worden.</li>
+
+<li><b>Authorization</b>: Draagt authenticatiegegevens. De meest voorkomende vorm is een <b>Bearer token</b>: <span class="mono">Authorization: Bearer &lt;token&gt;</span>. Dit zie je bij JWT-authenticatie en OAuth. De server controleert dit token bij elke request.</li>
+
+<li><b>Accept</b>: Zegt in welk formaat de client het antwoord wil. <span class="mono">Accept: application/json</span> vraagt de server om JSON terug te sturen. Een server die meerdere formaten ondersteunt, gebruikt dit om te beslissen wat hij stuurt.</li>
+
+<li><b>Cache-Control</b>: Bepaalt of en hoe lang een response gecached mag worden. <span class="mono">Cache-Control: no-cache</span> zegt dat de response niet gecached mag worden. <span class="mono">Cache-Control: max-age=3600</span> zegt dat hij een uur geldig is.</li>
+
+<li><b>CORS-headers</b>: Regelen toegang vanuit andere origins. <span class="mono">Access-Control-Allow-Origin: *</span> laat alle origins toe.</li>
+
+</ul>
+
+<p>Naast request-headers zijn er ook <b>response-headers</b>. <span class="mono">Location</span> vertelt de client waar hij naartoe moet na een redirect. <span class="mono">Set-Cookie</span> plaatst een cookie. <span class="mono">Content-Length</span> zegt hoe groot de body is.</p>
+</div>
+
+<div class="container"><a id="4_4"></a>
+    <h3>4.4 De origine van de 404 moppen
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>De server antwoordt altijd met een getal van drie cijfers. Dat getal is de <b>statuscode</b>, de snelste manier om te zien of een request gelukt is, mislukt is, of iets anders vereist. Ze zijn gegroepeerd per honderdtal, waarbij elke honderd responses een andere "categorië" aanduiden.</p>
+
+<p><b>1xx, Informatief:</b> De server heeft de request ontvangen en is bezig. In de praktijk gaan we deze boodschappen amper te zien krijgen.</p>
+
+<p><b>2xx, Succes:</b> <span class="mono">200 OK</span> is de standaard succesmelding. <span class="mono">201 Created</span> gebruik je na een POST die iets nieuws aanmaakt. Het bevestigt dat de resource aangemaakt is en stuurt vaak de URL van het nieuwe object mee in de <span class="mono">Location</span>-header.</p>
+
+<p><b>3xx, Redirect:</b> De resource is ergens anders. <span class="mono">301 Moved Permanently</span> zegt dat de resource definitief verhuisd is, browsers en zoekmachines onthouden dit. <span class="mono">302 Found</span> is een tijdelijke redirect. <span class="mono">304 Not Modified</span> betekent dat de gecachte versie nog geldig is en de server geen nieuwe body stuurt.</p>
+
+<p><b>4xx, Fout van de client:</b> <span class="mono">400 Bad Request</span>, de server begrijpt de request niet (ontbrekende of ongeldige data). <span class="mono">401 Unauthorized</span>, je bent niet geauthenticeerd (geen of ongeldig token). <span class="mono">403 Forbidden</span>, je bent geauthenticeerd, maar hebt geen toegang tot deze resource. <span class="mono">404 Not Found</span>, de resource bestaat niet. <span class="mono">405 Method Not Allowed</span>, de methode is niet toegestaan op dit eindpunt.</p>
+
+<p><b>5xx, Fout van de server:</b> <span class="mono">500 Internal Server Error</span>, er is iets fout gegaan aan de serverkant en de server weet zelf niet precies wat. <span class="mono">502 Bad Gateway</span>, de server fungeerde als proxy en het achterliggende systeem reageerde fout. <span class="mono">503 Service Unavailable</span>, de server is tijdelijk niet beschikbaar (overbelasting of onderhoud).</p>
+
+<p>Het verschil tussen 401 en 403 is een klassieker: 401 zegt "ik weet niet wie je bent", 403 zegt "ik weet wie je bent, maar je mag dit niet". In een goed gebouwde API gebruikt elke statuscode precies de juiste code voor de situatie. Dat maakt het debuggen en de communicatie met andere developers een stuk eenvoudiger.</p>
+
+<p>Dit is ook maar een kleine greep uit het aanbod van alle HTTP status codes. Zoek zelf bijvoorbeeld eens "<span class="mono">HTTP error 418</span>" op en zeg dan maar dat developers geen gevoel voor humor hebben!</p>
+</div>
+
+<div class="container"><a id="4_5"></a>
+    <h3>4.5 Lock it up!
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Zoals we al daarjust hebben gezegd, HTTP verstuurt alles als leesbare tekst. Dat heeft wel enkele implicaties, bijvoorbeeld dat iedereen die het verkeer kan onderscheppen (op een publiek wifi-netwerk, bij je internetprovider, ergens onderweg in het netwerk, ...) je wachtwoorden, sessietokens en persoonlijke data gewoon kan lezen. <b>HTTPS</b> lost dat op.</p>
+
+<p><b>HTTPS</b> is HTTP over <b>TLS</b> (Transport Layer Security, vroeger bekend als <b>SSL</b>). TLS voegt een versleutelde laag toe tussen TCP en HTTP. Voordat er ook maar één byte aan HTTP-data verstuurd wordt, voeren de client en server een <b>TLS handshake</b> uit: ze spreken een encryptiemethode af, de server toont zijn <b>certificaat</b> (een digitaal bewijs van identiteit) en beide kanten genereren samen een geheime sleutel waarmee alle verdere communicatie versleuteld wordt.</p>
+
+<p>Een <b>TLS-certificaat</b> bevat de domeinnaam van de server en een digitale handtekening van een <b>Certificate Authority</b>, een vertrouwde organisatie die bevestigt dat de server is wie hij beweert te zijn. Je browser heeft een lijst van vertrouwde CA's ingebouwd. Staat de handtekening van een onbekende of verlopen CA op het certificaat, dan zie je een waarschuwing in de aard van "uw verbinding is niet privé".</p>
+
+<p>Als developer zijn er twee praktische gevolgen. Eerste en vooral, gebruik altijd HTTPS, ook in staging en testomgevingen. Browsers markeren HTTP-sites steeds vaker als "niet veilig" en sommige browser API's (zoals geolocation) weigeren te werken zonder HTTPS. Tools zoals <b>Let's Encrypt</b> geven gratis en automatisch verlengbare certificaten.</p>
+
+<p>Ten tweede, begrijp dat HTTPS de inhoud van het verkeer verbergt, maar niet het feit dat er verkeer is. Je internetprovider (of eigenaar van het publieke netwerk waarop je aan het surven bent) ziet nog steeds met welke server je verbindt (via de domeinnaam in het certificaat en via DNS), maar niet wat je precies stuurt of ontvangt.</p>
+</div>
+
+<div class="container"><a id="4_6"></a>
+    <h3>4.6 Piep eens achter de schermen
+    <a href="#top">Terug naar boven</a></h3>
+
+
+
+<p>Je moet HTTP niet zomaar geloven op basis van uitleg. Je kunt elke request en elke response die je browser maakt live bekijken, inspecteren en analyseren. De <b>DevTools</b> van je browser laten je toe om eens onder de motorkap van het internet te kijken.</p>
+
+<p>Open DevTools in Chrome, Edge of Firefox met <span class="mono">F12</span> of <span class="mono">Ctrl+Shift+I</span> (Windows/Linux) of <span class="mono">Cmd+Option+I</span> (macOS). Ga naar het tabblad <b>Network</b>. Laad een pagina opnieuw. Je ziet elk request dat de browser stuurt: de URL, de method, de statuscode, de grootte, de laadtijd.</p>
+
+<p>Klik op een request om de details te zien. Je vindt er de <b>Request Headers</b>, alles wat de browser meestuurt, inclusief cookies, Authorization-headers en Content-Type. Je vindt de <b>Response Headers</b>, wat de server teruggestuurd heeft. Je vindt de <b>Preview</b> of <b>Response</b>, de eigenlijke inhoud van de response en je vindt de <b>Timing</b>, hoeveel tijd elke fase van de verbinding duurde (DNS-lookup, TCP-verbinding, TLS-handshake, wachten op de server, downloaden van de response).</p>
+
+<p>Filters maken DevTools bruikbaar bij drukke pagina's. Gebruik <span class="mono">XHR</span> of <span class="mono">Fetch</span> om alleen API-calls te zien. Gebruik <span class="mono">Doc</span> voor HTML-documenten, <span class="mono">JS</span> voor scripts, <span class="mono">Img</span> voor afbeeldingen. Je kunt ook filteren op statuscode of domeinnaam.</p>
+
+<p>De knop <b>Preserve log</b> zorgt dat requests niet gewist worden bij een paginanavigatie, ideaal om formuliersubmissies of redirects te debuggen. <b>Disable cache</b> zorgt dat de browser altijd de laatste versie ophaalt in plaats van een gecachte versie te tonen.</p>
+
+<p><span class="mono">curl</span> is het CLI alaternatief. Hoewel DevTools visueel is en interactief heeft <span class="mono">curl</span> ook wat voordelen, het is namelijk scriptbaar en preciezer. <span class="mono">curl -v https://api.example.com/users</span> toont de volledige request en response inclusief headers. <span class="mono">curl -X POST -H "Content-Type: application/json" -d '{"name":"Jan"}' https://api.example.com/users</span> stuurt een POST met JSON-body.</p>
+</div>
+
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196265/preview" alt="oefening logo">
+            </div>
+            <h4>Test Jezelf</h4>
+            <p><a target="_blank" title="Test Jezelf Module 4" href="https://canvas.ehb.be/courses/47918/quizzes/73574">Module 4</a></p>
+        </div>
+        
+        <div class="oefening container">
+            <div class="oef_logo">
+                <img src="https://canvas.ehb.be/courses/47918/files/4196259/preview" alt="oefening logo">
+            </div>
+            <a class="oeflink" target="_blank" title="Oefeningen Module 4" href="https://canvas.ehb.be/courses/47918/pages/oefeningen-module-4">Oefeningen Module 4</a>
+        </div>
+
+</div>

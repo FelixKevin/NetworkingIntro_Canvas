@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="../css/style.css">
+
+<div class="outline"><a id="top"></a>
+    <h3>Challenges</h3>
+    <p>
+            <a href="#easy">Easy</a><br>
+            <a href="#medium">Medium</a><br>
+            <a href="#hard">Hard</a><br>
+            <a href="#home">Challenge@home</a><br>
+    </p>
+
+    <h3>Relevante cursusinformatie</h3>
+    <p>
+        <a href="./06_module6.html#6_1">6.1 Staat het nu wel op mijn eigen machine?</a><br>
+        <a href="./06_module6.html#6_2">6.2 Hoe krijg ik dezelfde data bij verschillende users?</a><br>
+        <a href="./06_module6.html#6_3">6.3 Wat gebeurt er als je iets deployt?</a><br>
+        <a href="./06_module6.html#6_4">6.4 "Maar het werkt bij mij thuis"</a><br>
+        <a href="./06_module6.html#6_5">6.5 Is de server dood?</a><br>
+        <a href="./06_module6.html#6_6">6.6 EHBD: Eerste Hulp Bij Deploymentissues</a><br>
+    </p>
+
+        <br>
+        <a href="https://canvas.ehb.be/courses/43147/pages/changelog"><h5>Changelog</h5></a>
+    
+</div>
+
+
+        <div class="wrapper">
+
+            <div class="container"><a id="easy"></a>
+                <h3 class="easy">Easy Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>E1.</b> Voer <span class="mono">ping</span> uit naar een bekende server en naar een onbestaand adres. Beschrijf het verschil in output.</p>
+
+<p><b>E2.</b> Beschrijf het verschil tussen een ontwikkelomgeving, een testomgeving en een productieomgeving in vijf zinnen.</p>
+
+<p><b>E3.</b> Leg het verschil uit tussen <span class="mono">curl http://example.com</span> en <span class="mono">ping example.com</span> als diagnosetools.</p>
+
+<p><b>E4.</b> Wat is een <span class="mono">.env</span>-bestand? Waarom mag het nooit in een Git-repository terechtkomen? Wat is een <span class="mono">.env.example</span> en hoe gebruik je het in een team?</p>
+
+<p><b>E5.</b> Leg het verschil uit tussen een <b>webserver</b> (zoals nginx) en een <b>applicatieserver</b> (zoals een Node.js-proces of een Python WSGI-server). Waarom gebruik je beide in een productieomgeving?</p>
+
+            </div>
+
+        <div class="container"><a id="medium"></a>
+            <h3>Medium Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>M1.</b> Maak een overzicht van omgevingsverschillen tussen jouw lokale machine en een typische Linux-productieserver.</p>
+
+<p><b>M2.</b> Onderzoek hoe je de actieve versie van een draaiende app herkent zonder je broncode te openen.</p>
+
+<p><b>M3.</b> Schrijf een deployment-checklist voor een eenvoudige webapplicatie. Geordend van pre-deployment tot post-deployment. Elke stap beschrijft wat er gecontroleerd of uitgevoerd wordt en hoe je verifieert dat het gelukt is.</p>
+
+<p><b>M4.</b> Onderzoek hoe <b>systemd</b>-services werken op Linux. Schrijf een <span class="mono">.service</span>-bestand voor een Node.js-applicatie dat: de applicatie automatisch start bij serverherstart, de applicatie herstart bij een crash, en logs schrijft naar journald. Test de service en documenteer de gebruikte commando's.</p>
+        </div>
+
+
+        <div class="container"><a id="hard"></a>
+            <h3 class="hard">Hard Challenges
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>H1.</b> Een applicatie in productie is plots niet meer bereikbaar. Je hebt SSH-toegang tot de server. Beschrijf alle stappen die je gaat ondernemen van het moment dat je het probleem melding krijgt tot het moment dat je de oorzaak gevonden en opgelost hebt. Gebruik concrete commando's bij elke stap.</p>
+
+<p><b>H2.</b> Onderzoek het concept van een <b>CI/CD-pipeline</b> (Continuous Integration / Continuous Deployment). Wat zijn de stappen in zo'n pipeline, van een <span class="mono">git push</span> tot een werkende deployment op de server? Bouw een minimale pipeline met GitHub Actions die automatisch deployt naar een server bij een push naar de <span class="mono">main</span>-branch. Documenteer elke stap van de pipeline.</p>
+
+<p><b>H3.</b> Een applicatie werkt correct op de stagingserver maar niet op productie. De code is identiek. De server heeft dezelfde Ubuntu-versie. Beschrijf systematisch hoe je de omgevingsverschillen opspoort. Welke tools gebruik je, welke configuratiebestanden vergelijk je, en hoe sluit je hypothesen een voor een uit?</p>
+
+<p><b>H4.</b> Onderzoek het verschil tussen <b>verticaal</b> en <b>horizontaal schalen</b> van een server. Wanneer kies je voor welke aanpak? Wat zijn de netwerk- en architectuurimplicaties van horizontaal schalen — denk aan sessiestate, databaseverbindingen en loadbalancing? Beschrijf hoe een <b>load balancer</b> past in een horizontaal geschaalde architectuur.</p>
+
+        </div>
+
+        <div class="container"><a id="home"></a>
+            <h3 class="home">Challenge@home
+                <a href="#top">Terug naar boven</a></h3>
+
+<p><b>AT1. Volledige deployment van een eigen applicatie</b></p>
+
+<p>Neem een applicatie die je eerder gebouwd hebt, een API, een webapplicatie, of een eenvoudige website, en deploy die volledig naar een VPS. Doorloop alle stappen: serversetup, SSH-hardening, nginx-configuratie, TLS-certificaat, procesmanagement met PM2 of systemd, en omgevingsvariabelen. De applicatie moet bereikbaar zijn via een domeinnaam (gebruik een gratis subdomein via DuckDNS als je geen eigen domein hebt) en HTTPS. Documenteer elke stap en elke fout die je tegenkwam, inclusief hoe je die oploste.</p>
+</div>
+
+        </div>
+        
+        
